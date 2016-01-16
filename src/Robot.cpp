@@ -1,20 +1,42 @@
 #include "WPILib.h"
+#include <string>
+#include "CameraServer.h"
+
+
 
 class Robot: public IterativeRobot
 {
 private:
-	LiveWindow *lw = LiveWindow::GetInstance();
+	LiveWindow * lw;
 	SendableChooser *chooser;
+	CameraServer * cameraUSB;
 	const std::string autoNameDefault = "Default";
 	const std::string autoNameCustom = "My Auto";
 	std::string autoSelected;
 
+
+public:
+	Robot()
+	{
+		lw = NULL;
+		chooser = NULL;
+		cameraUSB = NULL;
+	};
+
 	void RobotInit()
 	{
+		lw = LiveWindow::GetInstance();
 		chooser = new SendableChooser();
+		cameraUSB = CameraServer::GetInstance();
+		//cameraUSB->StartAutomaticCapture("cam0");
+		cameraUSB->SetQuality(1);
+		cameraUSB->StartAutomaticCapture();
+
 		chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
 		chooser->AddObject(autoNameCustom, (void*)&autoNameCustom);
+
 		SmartDashboard::PutData("Auto Modes", chooser);
+
 	}
 
 
@@ -42,9 +64,12 @@ private:
 
 	void AutonomousPeriodic()
 	{
-		if(autoSelected == autoNameCustom){
+		if(autoSelected == autoNameCustom)
+		{
 			//Custom Auto goes here
-		} else {
+		}
+		else
+		{
 			//Default Auto goes here
 		}
 	}
