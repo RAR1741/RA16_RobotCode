@@ -1,12 +1,15 @@
 #include "WPILib.h"
-#include <string>
+//#include <string>
+#include <iostream>
 #include "CameraServer.h"
 
-
+using namespace std;
 
 class Robot: public IterativeRobot
 {
 private:
+	Joystick * joy1;
+	Victor * motor1;
 	LiveWindow * lw;
 	SendableChooser *chooser;
 	CameraServer * cameraUSB;
@@ -18,6 +21,8 @@ private:
 public:
 	Robot()
 	{
+		motor1 = NULL;
+		joy1=NULL;
 		lw = NULL;
 		chooser = NULL;
 		cameraUSB = NULL;
@@ -30,16 +35,18 @@ public:
 		chooser = new SendableChooser();
 		cameraUSB = CameraServer::GetInstance();
 		//cameraUSB->StartAutomaticCapture("cam0");
-		cameraUSB->SetQuality(1);
+		cameraUSB->SetQuality(2);
 		cameraUSB->StartAutomaticCapture();
 
 		gyro = new AnalogGyro(1);
 
-		chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
-		chooser->AddObject(autoNameCustom, (void*)&autoNameCustom);
+		//chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
+		//chooser->AddObject(autoNameCustom, (void*)&autoNameCustom);
 
 		SmartDashboard::PutData("Auto Modes", chooser);
-		lw->AddSensor("Main", "Gyro", *gyro);
+		lw->AddSensor((const std::string)"Main", 0, gyro);
+		joy1 = new Joystick(0);
+		motor1 = new Victor(0);
 	}
 
 
@@ -84,6 +91,8 @@ public:
 
 	void TeleopPeriodic()
 	{
+		motor1->Set(joy1->GetX());
+		cout << gyro->GetAngle() << endl;
 	}
 
 	void TestPeriodic()
