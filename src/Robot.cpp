@@ -13,7 +13,7 @@ private:
 	const std::string autoNameDefault = "Default";
 	const std::string autoNameCustom = "My Auto";
 	std::string autoSelected;
-
+    AnalogGyro * gyro;
 
 public:
 	Robot()
@@ -21,6 +21,7 @@ public:
 		lw = NULL;
 		chooser = NULL;
 		cameraUSB = NULL;
+		gyro = NULL;
 	};
 
 	void RobotInit()
@@ -32,11 +33,13 @@ public:
 		cameraUSB->SetQuality(1);
 		cameraUSB->StartAutomaticCapture();
 
+		gyro = new AnalogGyro(1);
+
 		chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
 		chooser->AddObject(autoNameCustom, (void*)&autoNameCustom);
 
 		SmartDashboard::PutData("Auto Modes", chooser);
-
+		lw->AddSensor("Main", "Gyro", *gyro);
 	}
 
 
@@ -81,7 +84,6 @@ public:
 
 	void TeleopPeriodic()
 	{
-
 	}
 
 	void TestPeriodic()
