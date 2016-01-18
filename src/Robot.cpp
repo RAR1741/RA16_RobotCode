@@ -18,18 +18,21 @@ private:
 	const std::string autoNameCustom = "My Auto";
 	std::string autoSelected;
     AnalogGyro * gyro;
-    const char * const JAVA = "/usr/local/frc/JRE/bin/java";
-    const char * const GRIP_JAR = "/home/lvuser/GRIP.jar";
-    const char * const GRIP_PROJECT = "/home/lvuser/everything.grip";
+    const char *JAVA = "/usr/local/frc/JRE/bin/java";
+    std::string profile = "everything";
+    char* nope = '\0';
+    //string *nope = NULL;
+    char * GRIP_ARGS[5] = {"java" , "-jar" , "/home/lvuser/GRIP.jar" ,
+    		"/home/lvuser/everything.grip",
+			nope};
+    //std::string GRIP_ARGS = "java -jar /home/lvuser/GRIP.jar /home/lvuser/" + profile + ".grip";
 
     std::shared_ptr<NetworkTable> grip = NetworkTable::GetTable("GRIP");
 
 public:
 	Robot()
 	{
-        //execl(JAVA, JAVA, "-jar", GRIP_JAR, GRIP_PROJECT, nullptr);
             //wpi_setErrnoErrorWithContext("Failed to run GRIP");
-
 		motor1 = NULL;
 		joy1=NULL;
 		lw = NULL;
@@ -38,8 +41,13 @@ public:
 		gyro = new AnalogGyro(1);// = NULL;
 	};
 
-	void RobotInit()
+	void RobotInit() override
 	{
+        if (fork() == 0) {
+            if (execv(JAVA, GRIP_ARGS) == -1) {
+                perror("Error running GRIP");
+            }
+        }
 		lw = LiveWindow::GetInstance();
 		chooser = new SendableChooser();
 		cameraUSB = CameraServer::GetInstance();
@@ -107,10 +115,9 @@ public:
 	         xs    = grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>()),
 	         ys    = grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
 
-	    for (unsigned int i = 0; i < areas.size(); i++) {
-	        double area = areas[i], x = xs[i], y = ys[i];
-	        std::cout << "Got contour: area=" << area << ", x=" << x << ", y=" << y << std::endl;
-	    }
+        for (auto area : areas) {
+            std::cout << "Got contour with area=" << area << std::endl;
+        }
 	}
 
 	void TestPeriodic()
