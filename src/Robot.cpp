@@ -102,7 +102,7 @@ public:
 	{
 		//motor1->Set(joy1->GetX());
 		//cout << gyro->GetAngle() << endl;
-
+		//ewhfu
 	    auto areas = grip->GetNumberArray("myContoursReport/area", llvm::ArrayRef<double>()),
 	         xs    = grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>()),
 	         ys    = grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
