@@ -57,10 +57,10 @@ public:
         }*/
 		//lw = LiveWindow::GetInstance();
 		chooser = new SendableChooser();
-		cameraUSB = CameraServer::GetInstance();
-		cameraUSB->StartAutomaticCapture("cam0");
-		cameraUSB->SetQuality(2);
-		cameraUSB->StartAutomaticCapture();
+		//cameraUSB = CameraServer::GetInstance();
+		//cameraUSB->StartAutomaticCapture("cam0");
+		//cameraUSB->SetQuality(2);
+		//cameraUSB->StartAutomaticCapture();
 
 		//gyro = new AnalogGyro(1);
 
