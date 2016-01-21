@@ -22,9 +22,9 @@ private:
     std::string profile = "everything";
     char* nope = '\0';
     //string *nope = NULL;
-    char * GRIP_ARGS[5] = {"java" , "-jar" , "/home/lvuser/GRIP.jar" ,
-    		"/home/lvuser/everything.grip",
-			nope};
+//    char * GRIP_ARGS[5] = {"java" , "-jar" , "/home/lvuser/GRIP.jar" ,
+//    		"/home/lvuser/everything.grip",
+//			nope};
     //std::string GRIP_ARGS = "java -jar /home/lvuser/GRIP.jar /home/lvuser/" + profile + ".grip";
 
     std::shared_ptr<NetworkTable> grip = NetworkTable::GetTable("GRIP");
@@ -43,11 +43,11 @@ public:
 
 	void RobotInit() override
 	{
-        if (fork() == 0) {
+        /*if (fork() == 0) {
             if (execv(JAVA, GRIP_ARGS) == -1) {
                 perror("Error running GRIP");
             }
-        }
+        }*/
 		lw = LiveWindow::GetInstance();
 		chooser = new SendableChooser();
 		cameraUSB = CameraServer::GetInstance();
@@ -111,13 +111,13 @@ public:
 		//motor1->Set(joy1->GetX());
 		//cout << gyro->GetAngle() << endl;
 		//ewhfu
-	    auto areas = grip->GetNumberArray("myContoursReport/area", llvm::ArrayRef<double>()),
-	         xs    = grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>()),
-	         ys    = grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
-
-        for (auto area : areas) {
-            std::cout << "Got contour with area=" << area << std::endl;
-        }
+//		auto areas = grip->GetNumberArray("myContoursReport/area", llvm::ArrayRef<double>()),
+//				xs    = grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>()),
+//				ys    = grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
+//
+//		for (auto area : areas) {
+//			std::cout << "Got contour with area=" << area << std::endl;
+//		}
 	}
 
 	void TestPeriodic()
