@@ -15,6 +15,7 @@ public:
 	Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLimit, DigitalInput *aLimit);
 	void Train();
 	void Set(int index);
+	void ResetTrain();
 	//Manipulation(const Manipulation&);
 private:
 	bool ReadMotion(int in);

@@ -70,3 +70,10 @@ void Manipulation::Set(int in)
 		ArmMotor->Set(pos.at(1));
 	}
 }
+
+void Manipulation::ResetTrain()
+{
+	std::ofstream ofs;
+	ofs.open("/home/lvuser/train.csv", std::ofstream::out | std::ofstream::trunc);
+	ofs.close();
+}
