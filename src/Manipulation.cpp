@@ -44,7 +44,7 @@ void Manipulation::ReadPostions()
 				temp.push_back(stof(val));
 			}
 			positions.push_back(temp);
-			cout << to_string(temp.at(0)) + "," + to_string(temp.at(1)) << endl;
+			cout << temp.size() << endl;
 			row++;
 		}
 	}
@@ -54,7 +54,7 @@ void Manipulation::Train()
 {
 	fstream train;
 	train.open("/home/lvuser/train.csv", std::ios_base::app);
-	string out = std::to_string(BaseMotor->GetEncPosition()) + "," + std::to_string(ArmMotor->GetEncPosition()) + "\n";
+	string out = std::to_string(BaseMotor->GetEncPosition()) + "," + std::to_string(ArmMotor->GetEncPosition()) + ",\n";
 	train << out;
 	train.close();
 	ReadPostions();
