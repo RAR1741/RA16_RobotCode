@@ -44,6 +44,7 @@ void Manipulation::ReadPostions()
 				temp.push_back(stof(val));
 			}
 			positions.push_back(temp);
+			cout << to_string(temp.at(0)) + "," + to_string(temp.at(1)) << endl;
 			row++;
 		}
 	}
