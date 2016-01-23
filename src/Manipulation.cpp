@@ -22,7 +22,7 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 
 void Manipulation::ReadPostions()
 {
-	ifstream file("train.csv");
+	ifstream file("/home/lvuser/train.csv");
 	int row = 0;
 	if(!file.good())
 	{
@@ -52,7 +52,7 @@ void Manipulation::ReadPostions()
 void Manipulation::Train()
 {
 	fstream train;
-	train.open("train.csv", std::ios_base::app);
+	train.open("/home/lvuser/train.csv", std::ios_base::app);
 	string out = BaseMotor->GetEncPosition() + "," + ArmMotor->GetEncPosition();
 	train << out;
 	train.close();
