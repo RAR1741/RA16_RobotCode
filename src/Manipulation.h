@@ -8,7 +8,7 @@
 #ifndef SRC_MANIPULATION_H_
 #define SRC_MANIPULATION_H_
 #include "WPILib.h"
-
+using namespace std;
 class Manipulation
 {
 public:
@@ -16,10 +16,12 @@ public:
 	void Train(int Index);
 	void Set(int index);
 private:
+	bool ReadMotion(int in);
 	CANTalon *BaseMotor;
 	CANTalon *ArmMotor;
 	DigitalInput *ArmLimit;
 	DigitalInput *BaseLimit;
+	vector <vector<float[2]>> movements;
 };
 
 #endif /* SRC_MANIPULATION_H_ */
