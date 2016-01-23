@@ -24,7 +24,7 @@ void Manipulation::ReadPostions()
 {
 	ifstream file("/home/lvuser/train.csv");
 	int row = 0;
-	if(!file.good())
+	if(file.good())
 	{
 		while(!file.eof())
 		{
@@ -32,10 +32,10 @@ void Manipulation::ReadPostions()
 			std::getline(file, line);
 			if ( !file.good() )
 				break;
-
+			cout << "did a thing" << endl;
 			std::stringstream iss(line);
 			vector<float> temp;
-			for (int col = 0; col < 2; ++col)
+			for (int col = 0; col < 2; col++)
 			{
 				std::string val;
 				std::getline(iss, val, ',');
@@ -53,7 +53,7 @@ void Manipulation::Train()
 {
 	fstream train;
 	train.open("/home/lvuser/train.csv", std::ios_base::app);
-	string out = BaseMotor->GetEncPosition() + "," + ArmMotor->GetEncPosition() + "\n";
+	string out = std::to_string(BaseMotor->GetEncPosition()) + "," + std::to_string(ArmMotor->GetEncPosition()) + "\n";
 	train << out;
 	train.close();
 	ReadPostions();
