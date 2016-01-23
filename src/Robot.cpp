@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <ctime>
 #include "Logger.h"
+#include "Gamepad.h"
 
 using namespace std;
 
@@ -12,7 +13,11 @@ class Robot: public IterativeRobot
 {
 private:
 	Joystick * joy1;
-	Victor * motor1;
+	CANTalon * motorFL;
+	CANTalon * motorFR;
+	CANTalon * motorBL;
+	CANTalon * motorBR;
+	Gamepad *gamepad;
 	LiveWindow * lw;
 	SendableChooser *chooser;
 	CameraServer * cameraUSB;
@@ -36,9 +41,12 @@ private:
 public:
 	Robot()
 	{
-            //wpi_setErrnoErrorWithContext("Failed to run GRIP");
-		motor1 = NULL;
-		joy1=NULL;
+        gamepad = NULL;
+		motorFL = NULL;
+		motorFR = NULL;
+		motorBL = NULL;
+		motorBR = NULL;
+		joy1 = NULL;
 		lw = NULL;
 		chooser = NULL;
 		cameraUSB = NULL;
@@ -61,31 +69,23 @@ public:
 		//cameraUSB->StartAutomaticCapture("cam0");
 		//cameraUSB->SetQuality(2);
 		//cameraUSB->StartAutomaticCapture();
-
+		gamepad = new Gamepad(0);
 		//gyro = new AnalogGyro(1);
 
 		//chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
 		//chooser->AddObject(autoNameCustom, (void*)&autoNameCustom);
 
-		SmartDashboard::PutData("Auto Modes", chooser);
+		//SmartDashboard::PutData("Auto Modes", chooser);
 		//lw->AddSensor((const std::string)"Main", 0, gyro);
 		joy1 = new Joystick(0);
-		motor1 = new Victor(0);
+		motorFL = new CANTalon(0);
+		motorFR = new CANTalon(1);
+		motorBL = new CANTalon(2);
+		motorBR = new CANTalon(3);
 		logTime = new Timer;
 		logTime->Start();
 		logger = new Logger();
-		time_t t = time(0);
-		struct tm *now = localtime(&t);
-		//don't touch it
-		std::string name = "/media/sda/log-" +
-				std::to_string(now->tm_year + 1900) +
-				"-\0" +
-				std::to_string(now->tm_mon + 1) +
-				"-\0" + std::to_string(now->tm_mday) + "_\0" +
-				std::to_string(now->tm_hour) + ":\0" + std::to_string(now->tm_min) + ":\0" + std::to_string(now->tm_sec) + ".csv";
-		cout << name << endl;
-		logger->Open(name);
-		SetupLogging();
+		//StartLogging("init");
 		OutputTroll(cout);
 	}
 
@@ -101,32 +101,40 @@ public:
 	 */
 	void AutonomousInit()
 	{
-		autoSelected = *((std::string*)chooser->GetSelected());
+		StartLogging("auto");
+		//autoSelected = *((std::string*)chooser->GetSelected());
 		//std::string autoSelected = SmartDashboard::GetString("Auto Selector", autoNameDefault);
-		std::cout << "Auto selected: " << autoSelected << std::endl;
+		//std::cout << "Auto selected: " << autoSelected << std::endl;
 
-		if(autoSelected == autoNameCustom){
+		//if(autoSelected == autoNameCustom){
 			//Custom Auto goes here
-		} else {
+		//} else {
 			//Default Auto goes here
-		}
+		//}
 	}
 
 	void AutonomousPeriodic()
 	{
-		if(autoSelected == autoNameCustom)
-		{
-			//Custom Auto goes here
-		}
-		else
-		{
-			//Default Auto goes here
-		}
+//		if(autoSelected == autoNameCustom)
+//		{
+//			//Custom Auto goes here
+//		}
+//		else
+//		{
+//			//Default Auto goes here
+//		}
+		Log();
 	}
 
 	void TeleopInit()
 	{
+		StartLogging("teleop");
 		cout << "thing" << endl;
+	}
+
+	void DisabledInit()
+	{
+		logger->Close();
 	}
 
 	void TeleopPeriodic()
@@ -144,9 +152,32 @@ public:
 //		}
 	}
 
+	void TestInit()
+	{
+		StartLogging("test");
+	}
+
 	void TestPeriodic()
 	{
-		lw->Run();
+		Log();
+		//lw->Run();
+	}
+
+	void StartLogging(string mode)
+	{
+		logger->Close();
+		time_t t = time(0);
+		struct tm *now = localtime(&t);
+		//don't touch it
+		std::string name = "/media/sda/log-" +
+				std::to_string(now->tm_year + 1900) +
+				"-\0" +
+				std::to_string(now->tm_mon + 1) +
+				"-\0" + std::to_string(now->tm_mday) + "_\0" +
+				std::to_string(now->tm_hour) + "-\0" +
+				std::to_string(now->tm_min) + "-\0" + std::to_string(now->tm_sec) + mode + ".csv";
+		cout << name << endl;
+		logger->Open(name);
 	}
 
 	void SetupLogging()
@@ -158,6 +189,7 @@ public:
 	void Log()
 	{
 		logger->Log("Time", logTime->Get());
+		logger->WriteLine();
 		cout << logTime->Get() << endl;
 	}
 
