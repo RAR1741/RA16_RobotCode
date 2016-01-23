@@ -53,7 +53,7 @@ void Manipulation::Train()
 {
 	fstream train;
 	train.open("/home/lvuser/train.csv", std::ios_base::app);
-	string out = BaseMotor->GetEncPosition() + "," + ArmMotor->GetEncPosition();
+	string out = BaseMotor->GetEncPosition() + "," + ArmMotor->GetEncPosition() + "\n";
 	train << out;
 	train.close();
 	ReadPostions();
