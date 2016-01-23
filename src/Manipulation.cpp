@@ -17,31 +17,35 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 	ArmMotor = aMotor;
 	BaseLimit = bLimit;
 	ArmLimit = aLimit;
+	ReadPostions();
 }
 
 void Manipulation::ReadPostions()
 {
 	ifstream file("train.csv");
 	int row = 0;
-	while(!file.eof())
+	if(!file.good())
 	{
-	    std::string line;
-	    std::getline(file, line);
-	    if ( !file.good() )
-	        break;
+		while(!file.eof())
+		{
+			std::string line;
+			std::getline(file, line);
+			if ( !file.good() )
+				break;
 
-	    std::stringstream iss(line);
-	    vector<float> temp;
-	    for (int col = 0; col < 2; ++col)
-	    {
-	        std::string val;
-	        std::getline(iss, val, ',');
-	        if ( !iss.good() )
-	            break;
-	        temp.push_back(stof(val));
-	    }
-	    positions.push_back(temp);
-	    row++;
+			std::stringstream iss(line);
+			vector<float> temp;
+			for (int col = 0; col < 2; ++col)
+			{
+				std::string val;
+				std::getline(iss, val, ',');
+				if ( !iss.good() )
+					break;
+				temp.push_back(stof(val));
+			}
+			positions.push_back(temp);
+			row++;
+		}
 	}
 }
 
@@ -52,6 +56,7 @@ void Manipulation::Train()
 	string out = BaseMotor->GetEncPosition() + "," + ArmMotor->GetEncPosition();
 	train << out;
 	train.close();
+	ReadPostions();
 }
 
 void Manipulation::Set(int in)

@@ -40,12 +40,12 @@ private:
     std::string profile = "everything";
     char* nope = '\0';
     //string *nope = NULL;
-//    char * GRIP_ARGS[5] = {"java" , "-jar" , "/home/lvuser/GRIP.jar" ,
-//    		"/home/lvuser/everything.grip",
-//			nope};
+    char * GRIP_ARGS[5] = {"java" , "-jar" , "/home/lvuser/grip.jar" ,
+    		"/home/lvuser/project.grip",
+			'\0'};
     //std::string GRIP_ARGS = "java -jar /home/lvuser/GRIP.jar /home/lvuser/" + profile + ".grip";
 
-    //std::shared_ptr<NetworkTable> grip = NetworkTable::GetTable("GRIP");
+    std::shared_ptr<NetworkTable> grip = NetworkTable::GetTable("GRIP");
 
 public:
 	Robot()
@@ -68,11 +68,11 @@ public:
 	void RobotInit()
 	{
 
-        /*if (fork() == 0) {
+        if (fork() == 0) {
             if (execv(JAVA, GRIP_ARGS) == -1) {
                 perror("Error running GRIP");
             }
-        }*/
+        }
 		lw = LiveWindow::GetInstance();
 		//chooser = new SendableChooser();
 		//cameraUSB = CameraServer::GetInstance();
@@ -158,17 +158,14 @@ public:
 
 	void TeleopPeriodic()
 	{
+		auto areas = grip->GetNumberArray("myContoursReport/area", llvm::ArrayRef<double>()),
+				xs    = grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>()),
+				ys    = grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
+
+		for (auto area : areas) {
+			std::cout << "Got contour with area=" << area << std::endl;
+		}
 		Log();
-		//motor1->Set(joy1->GetX());
-		//cout << gyro->GetAngle() << endl;
-		//ewhfu
-//		auto areas = grip->GetNumberArray("myContoursReport/area", llvm::ArrayRef<double>()),
-//				xs    = grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>()),
-//				ys    = grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
-//
-//		for (auto area : areas) {
-//			std::cout << "Got contour with area=" << area << std::endl;
-//		}
 	}
 
 	void TestInit()
@@ -197,6 +194,7 @@ public:
 				std::to_string(now->tm_min) + "-\0" + std::to_string(now->tm_sec) + mode + ".csv";
 		cout << name << endl;
 		logger->Open(name);
+		SetupLogging();
 	}
 
 	void SetupLogging()
@@ -209,7 +207,7 @@ public:
 	{
 		logger->Log("Time", logTime->Get());
 		logger->WriteLine();
-		cout << logTime->Get() << endl;
+		//cout << logTime->Get() << endl;
 	}
 
 	void OutputTroll(ostream & out)
