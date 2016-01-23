@@ -12,21 +12,30 @@ using namespace std;
 class Robot: public IterativeRobot
 {
 private:
-	Joystick * joy1;
+	Gamepad *driver;
+	///////////////////
 	CANTalon * motorFL;
 	CANTalon * motorFR;
 	CANTalon * motorBL;
 	CANTalon * motorBR;
-	Gamepad *gamepad;
+	/////////////////////
+	CANTalon * motorMan1;
+	CANTalon * motorMan2;
+	////////////////////
 	LiveWindow * lw;
-	SendableChooser *chooser;
 	CameraServer * cameraUSB;
-	const std::string autoNameDefault = "Default";
-	const std::string autoNameCustom = "My Auto";
-	std::string autoSelected;
+	////////////////////////////
+	//SendableChooser *chooser;
+	//const std::string autoNameDefault = "Default";
+	//const std::string autoNameCustom = "My Auto";
+	//std::string autoSelected;
+	//////////////////////////////
     AnalogGyro * gyro;
+    ////////////////////////////
     Logger *logger;
     Timer *logTime;
+
+
     const char *JAVA = "/usr/local/frc/JRE/bin/java";
     std::string profile = "everything";
     char* nope = '\0';
@@ -41,14 +50,15 @@ private:
 public:
 	Robot()
 	{
-        gamepad = NULL;
+        driver = NULL;
 		motorFL = NULL;
 		motorFR = NULL;
 		motorBL = NULL;
 		motorBR = NULL;
-		joy1 = NULL;
+		motorMan1 = NULL;
+		motorMan2 = NULL;
 		lw = NULL;
-		chooser = NULL;
+		//chooser = NULL;
 		cameraUSB = NULL;
 		logger = NULL;
 		logTime = NULL;
@@ -63,13 +73,13 @@ public:
                 perror("Error running GRIP");
             }
         }*/
-		//lw = LiveWindow::GetInstance();
-		chooser = new SendableChooser();
+		lw = LiveWindow::GetInstance();
+		//chooser = new SendableChooser();
 		//cameraUSB = CameraServer::GetInstance();
 		//cameraUSB->StartAutomaticCapture("cam0");
 		//cameraUSB->SetQuality(2);
 		//cameraUSB->StartAutomaticCapture();
-		gamepad = new Gamepad(0);
+		driver = new Gamepad(0);
 		//gyro = new AnalogGyro(1);
 
 		//chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
@@ -77,11 +87,20 @@ public:
 
 		//SmartDashboard::PutData("Auto Modes", chooser);
 		//lw->AddSensor((const std::string)"Main", 0, gyro);
-		joy1 = new Joystick(0);
+		cout << "Arm initializing\n";
+		motorMan1 = new CANTalon(1);
+		motorMan1->SetControlMode(CANSpeedController::kPosition);
+		motorMan1->SetPID(5,.0001,0);
+		motorMan2 = new CANTalon(3);
+		motorMan2->SetControlMode(CANSpeedController::kPosition);
+		motorMan2->SetPID(1,0,0);
+		cout << "Arm set to pos: " << motorMan2->GetEncPosition();
+
 		motorFL = new CANTalon(0);
 		motorFR = new CANTalon(1);
 		motorBL = new CANTalon(2);
 		motorBR = new CANTalon(3);
+
 		logTime = new Timer;
 		logTime->Start();
 		logger = new Logger();
