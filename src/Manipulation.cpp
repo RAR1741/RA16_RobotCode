@@ -22,7 +22,7 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 bool Manipulation::ReadMotion(int in)
 {
 	vector <float[2]> data;
-	ifstream file("train" + std::to_string(in) + ".csv");
+	ifstream file("motion" + std::to_string(in) + ".csv");
 	if(!file.good())
 	{
 		return false;
@@ -50,4 +50,50 @@ bool Manipulation::ReadMotion(int in)
 	}
 	movements.push_back(data);
 	return true;
+}
+
+void Manipulation::ReadPostions()
+{
+	ifstream file("train.csv");
+	int row = 0;
+	while(!file.eof())
+	{
+	    std::string line;
+	    std::getline(file, line);
+	    if ( !file.good() )
+	        break;
+
+	    std::stringstream iss(line);
+	    float temp[2];
+	    for (int col = 0; col < 2; ++col)
+	    {
+	        std::string val;
+	        std::getline(iss, val, ',');
+	        if ( !iss.good() )
+	            break;
+	        temp[col] = stof(val);
+	    }
+	    positions.push_back(temp);
+	    row++;
+	}
+}
+
+void Manipulation::Train()
+{
+	fstream train;
+	train.open("train.csv", std::ios_base::app);
+	string out = BaseMotor->GetEncPosition() + "," + ArmMotor->GetEncPosition();
+	train << out;
+	train.close();
+}
+
+void Manipulation::Set(int in)
+{
+	float pos[2];
+	if(in < positions.size() && in >= 0)
+	{
+		pos = positions.at(in);
+		BaseMotor->Set(pos[0]);
+		ArmMotor->Set(pos[1]);
+	}
 }
