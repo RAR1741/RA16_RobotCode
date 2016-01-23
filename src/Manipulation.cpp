@@ -65,7 +65,7 @@ void Manipulation::Set(int in)
 	if((unsigned)in < positions.size() && in >= 0)
 	{
 		pos = positions.at(in);
-		BaseMotor->Set(pos[0]);
-		ArmMotor->Set(pos[1]);
+		BaseMotor->Set(pos.at(0));
+		ArmMotor->Set(pos.at(1));
 	}
 }
