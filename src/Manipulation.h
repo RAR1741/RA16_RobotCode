@@ -16,6 +16,7 @@ public:
 	void Train();
 	void Set(int index);
 	void ResetTrain();
+	bool EditTrain(int index, float val[2]);
 	//Manipulation(const Manipulation&);
 private:
 	bool ReadMotion(int in);
