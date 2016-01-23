@@ -34,15 +34,16 @@ private:
     ////////////////////////////
     Logger *logger;
     Timer *logTime;
-
+    Servo *xServo;
+    Servo *yServo;
 
     const char *JAVA = "/usr/local/frc/JRE/bin/java";
     std::string profile = "everything";
     char* nope = '\0';
     //string *nope = NULL;
-    char * GRIP_ARGS[5] = {"java" , "-jar" , "/home/lvuser/grip.jar" ,
-    		"/home/lvuser/project.grip",
-			'\0'};
+//    char * GRIP_ARGS[5] = {"java" , "-jar" , "/home/lvuser/grip.jar" ,
+//    		"/home/lvuser/project.grip",
+//			'\0'};
     //std::string GRIP_ARGS = "java -jar /home/lvuser/GRIP.jar /home/lvuser/" + profile + ".grip";
 
     std::shared_ptr<NetworkTable> grip = NetworkTable::GetTable("GRIP");
@@ -62,17 +63,19 @@ public:
 		cameraUSB = NULL;
 		logger = NULL;
 		logTime = NULL;
+		xServo = NULL;
+		yServo = NULL;
 		gyro = new AnalogGyro(1);// = NULL;
 	};
 
 	void RobotInit()
 	{
 
-        if (fork() == 0) {
-            if (execv(JAVA, GRIP_ARGS) == -1) {
-                perror("Error running GRIP");
-            }
-        }
+//        if (fork() == 0) {
+//            if (execv(JAVA, GRIP_ARGS) == -1) {
+//                perror("Error running GRIP");
+//            }
+//        }
 		lw = LiveWindow::GetInstance();
 		//chooser = new SendableChooser();
 		//cameraUSB = CameraServer::GetInstance();
@@ -100,6 +103,9 @@ public:
 		motorFR = new CANTalon(1);
 		motorBL = new CANTalon(2);
 		motorBR = new CANTalon(3);
+
+		xServo = new Servo(0);
+		yServo = new Servo(1);
 
 		logTime = new Timer;
 		logTime->Start();
@@ -158,13 +164,14 @@ public:
 
 	void TeleopPeriodic()
 	{
-		auto areas = grip->GetNumberArray("myContoursReport/area", llvm::ArrayRef<double>()),
-				xs    = grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>()),
-				ys    = grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
+//		auto areas = grip->GetNumberArray("myContoursReport/area", llvm::ArrayRef<double>()),
+//				xs    = grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>()),
+//				ys    = grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
+//
+//		for (auto area : areas) {
+//			std::cout << "Got contour with area=" << area << std::endl;
+//		}
 
-		for (auto area : areas) {
-			std::cout << "Got contour with area=" << area << std::endl;
-		}
 		Log();
 	}
 

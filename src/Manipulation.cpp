@@ -80,14 +80,14 @@ void Manipulation::ResetTrain()
 
 bool Manipulation::EditTrain(int index, float val[2])
 {
-	if(index < positions.size() && index >= 0)
+	if((unsigned)index < positions.size() && (unsigned)index >= 0)
 	{
 		fstream train;
 		train.open("/home/lvuser/train.csv", std::ios_base::out);
 		for (unsigned int i; i < positions.size(); i++)
 		{
 			string out;
-			if(i != index)
+			if(i != (unsigned)index)
 			{
 				out = to_string(positions.at(i).at(0)) + "," + to_string(positions.at(i).at(1)) + ",\n";
 			}
