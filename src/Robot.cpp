@@ -19,8 +19,8 @@ private:
 	CANTalon * motorBL;
 	CANTalon * motorBR;
 	/////////////////////
-	CANTalon * motorMan1;
-	CANTalon * motorMan2;
+	CANTalon * motorBase;
+	CANTalon * motorArm;
 	////////////////////
 	LiveWindow * lw;
 	CameraServer * cameraUSB;
@@ -36,6 +36,7 @@ private:
     Timer *logTime;
     Servo *xServo;
     Servo *yServo;
+    Manipulation *arm;
 
     const char *JAVA = "/usr/local/frc/JRE/bin/java";
     std::string profile = "everything";
@@ -56,8 +57,8 @@ public:
 		motorFR = NULL;
 		motorBL = NULL;
 		motorBR = NULL;
-		motorMan1 = NULL;
-		motorMan2 = NULL;
+		motorBase = NULL;
+		motorArm = NULL;
 		lw = NULL;
 		//chooser = NULL;
 		cameraUSB = NULL;
@@ -65,6 +66,7 @@ public:
 		logTime = NULL;
 		xServo = NULL;
 		yServo = NULL;
+		arm = NULL;
 		gyro = new AnalogGyro(1);// = NULL;
 	};
 
@@ -78,10 +80,10 @@ public:
 //        }
 		lw = LiveWindow::GetInstance();
 		//chooser = new SendableChooser();
-		//cameraUSB = CameraServer::GetInstance();
-		//cameraUSB->StartAutomaticCapture("cam0");
-		//cameraUSB->SetQuality(2);
-		//cameraUSB->StartAutomaticCapture();
+		cameraUSB = CameraServer::GetInstance();
+		cameraUSB->StartAutomaticCapture("cam0");
+		cameraUSB->SetQuality(2);
+		cameraUSB->StartAutomaticCapture();
 		driver = new Gamepad(0);
 		//gyro = new AnalogGyro(1);
 
@@ -91,13 +93,14 @@ public:
 		//SmartDashboard::PutData("Auto Modes", chooser);
 		//lw->AddSensor((const std::string)"Main", 0, gyro);
 		cout << "Arm initializing\n";
-		motorMan1 = new CANTalon(1);
-		motorMan1->SetControlMode(CANSpeedController::kPosition);
-		motorMan1->SetPID(5,.0001,0);
-		motorMan2 = new CANTalon(3);
-		motorMan2->SetControlMode(CANSpeedController::kPosition);
-		motorMan2->SetPID(1,0,0);
-		cout << "Arm set to pos: " << motorMan2->GetEncPosition();
+		motorBase = new CANTalon(1);
+		motorBase->SetControlMode(CANSpeedController::kPosition);
+		motorBase->SetPID(5,.0001,0);
+		motorArm = new CANTalon(3);
+		motorArm->SetControlMode(CANSpeedController::kPosition);
+		motorArm->SetPID(1,0,0);
+		cout << "Arm set to pos: " << motorArm->GetEncPosition();
+		arm = new Manipulation(motorBase, motorArm, NULL, NULL);
 
 		motorFL = new CANTalon(0);
 		motorFR = new CANTalon(1);
@@ -171,7 +174,8 @@ public:
 //		for (auto area : areas) {
 //			std::cout << "Got contour with area=" << area << std::endl;
 //		}
-
+		xServo->Set((driver->GetRightX() + 1) / 2);
+		yServo->Set((driver->GetRightY() + 1) / 2);
 		Log();
 	}
 
