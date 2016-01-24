@@ -6,6 +6,8 @@
 #include <ctime>
 #include "Logger.h"
 #include "Gamepad.h"
+#include "Manipulation.h"
+#include "Drive.h"
 
 using namespace std;
 
