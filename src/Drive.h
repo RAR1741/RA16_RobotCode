@@ -15,6 +15,7 @@ public:
 	Drive(CANTalon * r1, CANTalon * r2, CANTalon * l1, CANTalon * l2);
 	~Drive();
 	void HaloDrive(float x, float y);
+	void TankDrive(float l, float r);
 private:
 	CANTalon * dR1;
 	CANTalon * dR2;

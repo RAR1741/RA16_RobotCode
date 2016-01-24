@@ -104,13 +104,13 @@ public:
 		motorFR = new CANTalon(1);
 		motorBL = new CANTalon(2);
 		motorBR = new CANTalon(3);
-		motorFR->SetInverted(true);
-		motorBL->SetInverted(true);
+		motorFL->SetInverted(true);
+		motorBR->SetInverted(true);
 
-		drive = new Drive(motorFL, motorFR, motorBR, motorBL);
+		drive = new Drive(motorBR, motorFR, motorFL, motorBL);
 
-		xServo = new Servo(0);
-		yServo = new Servo(1);
+		//xServo = new Servo(0);
+		//yServo = new Servo(1);
 
 		logTime = new Timer;
 		logTime->Start();

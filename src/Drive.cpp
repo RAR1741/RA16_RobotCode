@@ -25,3 +25,11 @@ void Drive::HaloDrive(float x, float y)
 	dL1->Set(left);
 	dL2->Set(left);
 }
+
+void Drive::TankDrive(float l, float r)
+{
+	dR1->Set(r);
+	dR2->Set(r);
+	dL1->Set(l);
+	dL2->Set(l);
+}
