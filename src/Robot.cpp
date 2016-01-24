@@ -37,6 +37,7 @@ private:
     Servo *xServo;
     Servo *yServo;
     Manipulation *arm;
+    Drive *drive;
 
     const char *JAVA = "/usr/local/frc/JRE/bin/java";
     std::string profile = "everything";
@@ -67,6 +68,7 @@ public:
 		xServo = NULL;
 		yServo = NULL;
 		arm = NULL;
+		drive = NULL;
 		gyro = new AnalogGyro(1);// = NULL;
 	};
 
@@ -80,10 +82,10 @@ public:
 //        }
 		lw = LiveWindow::GetInstance();
 		//chooser = new SendableChooser();
-		cameraUSB = CameraServer::GetInstance();
-		cameraUSB->StartAutomaticCapture("cam0");
-		cameraUSB->SetQuality(2);
-		cameraUSB->StartAutomaticCapture();
+//		cameraUSB = CameraServer::GetInstance();
+//		cameraUSB->StartAutomaticCapture("cam0");
+//		cameraUSB->SetQuality(2);
+//		cameraUSB->StartAutomaticCapture();
 		driver = new Gamepad(0);
 		//gyro = new AnalogGyro(1);
 
@@ -92,20 +94,24 @@ public:
 
 		//SmartDashboard::PutData("Auto Modes", chooser);
 		//lw->AddSensor((const std::string)"Main", 0, gyro);
-		cout << "Arm initializing\n";
-		motorBase = new CANTalon(1);
-		motorBase->SetControlMode(CANSpeedController::kPosition);
-		motorBase->SetPID(5,.0001,0);
-		motorArm = new CANTalon(3);
-		motorArm->SetControlMode(CANSpeedController::kPosition);
-		motorArm->SetPID(1,0,0);
-		cout << "Arm set to pos: " << motorArm->GetEncPosition();
-		arm = new Manipulation(motorBase, motorArm, NULL, NULL);
+//		cout << "Arm initializing\n";
+//		motorBase = new CANTalon(1);
+//		motorBase->SetControlMode(CANSpeedController::kPosition);
+//		motorBase->SetPID(5,.0001,0);
+//		motorArm = new CANTalon(3);
+//		motorArm->SetControlMode(CANSpeedController::kPosition);
+//		motorArm->SetPID(1,0,0);
+//		cout << "Arm set to pos: " << motorArm->GetEncPosition();
+//		arm = new Manipulation(motorBase, motorArm, NULL, NULL);
 
 		motorFL = new CANTalon(0);
 		motorFR = new CANTalon(1);
 		motorBL = new CANTalon(2);
 		motorBR = new CANTalon(3);
+		motorFL->SetInverted(true);
+		motorBL->SetInverted(true);
+
+		drive = new Drive(motorFL, motorFR, motorBR, motorBL);
 
 		xServo = new Servo(0);
 		yServo = new Servo(1);
@@ -174,8 +180,9 @@ public:
 //		for (auto area : areas) {
 //			std::cout << "Got contour with area=" << area << std::endl;
 //		}
-		xServo->Set((driver->GetRightX() + 1) / 2);
-		yServo->Set((driver->GetRightY() + 1) / 2);
+//		xServo->Set((driver->GetRightX() + 1) / 2);
+//		yServo->Set((driver->GetRightY() + 1) / 2);
+		drive->HaloDrive(driver->GetRightX(), -driver->GetLeftY());
 		Log();
 	}
 
@@ -211,12 +218,20 @@ public:
 	void SetupLogging()
 	{
 		logger->AddAttribute("Time");
+		logger->AddAttribute("FLVolatge");
+		logger->AddAttribute("FRVolatge");
+		logger->AddAttribute("BLVolatge");
+		logger->AddAttribute("BRVolatge");
 		logger->WriteAttributes();
 	}
 
 	void Log()
 	{
 		logger->Log("Time", logTime->Get());
+		logger->Log("FLVolatge", motorFL->GetBusVoltage());
+		logger->Log("FRVolatge", motorFR->GetBusVoltage());
+		logger->Log("BLVolatge", motorBL->GetBusVoltage());
+		logger->Log("BRVolatge", motorBR->GetBusVoltage());
 		logger->WriteLine();
 		//cout << logTime->Get() << endl;
 	}
