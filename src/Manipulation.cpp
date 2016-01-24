@@ -106,3 +106,16 @@ bool Manipulation::EditTrain(int index, float val[2])
 		return false;
 	}
 }
+
+void Manipulation::Update()
+{
+	if(BaseLimit->Get() == true)
+	{
+		BaseMotor->Set(BaseMotor->GetEncPosition());
+	}
+
+	if(ArmLimit->Get() == true)
+	{
+		ArmMotor->Set(ArmMotor->GetEncPosition());
+	}
+}
