@@ -2,6 +2,8 @@
 //#include <string>
 #include <iostream>
 #include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <ctime>
 #include "Logger.h"
 #include "Gamepad.h"
@@ -193,7 +195,16 @@ public:
 		time_t t = time(0);
 		struct tm *now = localtime(&t);
 		//don't touch it
-		std::string name = "/media/sda/log-" +
+		std::string dir = "/home/lvuser";
+		struct stat st;
+		if(stat("/media/sda",&st) == 0)
+		{
+		    if(st.st_mode & S_IFDIR != 0)
+		    {
+		    	dir = "/media/sda";
+		    }
+		}
+		std::string name = dir + "/log-" +
 				std::to_string(now->tm_year + 1900) +
 				"-\0" +
 				std::to_string(now->tm_mon + 1) +
