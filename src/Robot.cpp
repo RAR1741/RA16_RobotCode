@@ -108,7 +108,7 @@ public:
 		motorFR = new CANTalon(1);
 		motorBL = new CANTalon(2);
 		motorBR = new CANTalon(3);
-		motorFL->SetInverted(true);
+		motorFR->SetInverted(true);
 		motorBL->SetInverted(true);
 
 		drive = new Drive(motorFL, motorFR, motorBR, motorBL);
@@ -218,20 +218,28 @@ public:
 	void SetupLogging()
 	{
 		logger->AddAttribute("Time");
-		logger->AddAttribute("FLVolatge");
-		logger->AddAttribute("FRVolatge");
-		logger->AddAttribute("BLVolatge");
-		logger->AddAttribute("BRVolatge");
+		logger->AddAttribute("FLVoltage");
+		logger->AddAttribute("FRVoltage");
+		logger->AddAttribute("BLVoltage");
+		logger->AddAttribute("BRVoltage");
+		logger->AddAttribute("FLCurrent");
+		logger->AddAttribute("FRCurrent");
+		logger->AddAttribute("BLCurrent");
+		logger->AddAttribute("BRCurrent");
 		logger->WriteAttributes();
 	}
 
 	void Log()
 	{
 		logger->Log("Time", logTime->Get());
-		logger->Log("FLVolatge", motorFL->GetBusVoltage());
-		logger->Log("FRVolatge", motorFR->GetBusVoltage());
-		logger->Log("BLVolatge", motorBL->GetBusVoltage());
-		logger->Log("BRVolatge", motorBR->GetBusVoltage());
+		logger->Log("FLVoltage", motorFL->GetBusVoltage());
+		logger->Log("FRVoltage", motorFR->GetBusVoltage());
+		logger->Log("BLVoltage", motorBL->GetBusVoltage());
+		logger->Log("BRVoltage", motorBR->GetBusVoltage());
+		logger->Log("FLCurrent", motorFL->GetOutputCurrent());
+		logger->Log("FRCurrent", motorFR->GetOutputCurrent());
+		logger->Log("BLCurrent", motorBL->GetOutputCurrent());
+		logger->Log("BRCurrent", motorBR->GetOutputCurrent());
 		logger->WriteLine();
 		//cout << logTime->Get() << endl;
 	}
