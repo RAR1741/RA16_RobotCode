@@ -174,7 +174,14 @@ public:
 
 //		xServo->Set((driver->GetRightX() + 1) / 2);
 //		yServo->Set((driver->GetRightY() + 1) / 2);
-		drive->HaloDrive(driver->GetRightX(), -driver->GetLeftY());
+		if(driver->GetRightBumper())
+		{
+			drive->HaloDrive(driver->GetRightX()* 0.6, -driver->GetLeftY());
+		}
+		else
+		{
+			drive->HaloDrive(driver->GetRightX() * 0.6, -driver->GetLeftY() * 0.6);
+		}
 		Log();
 	}
 
