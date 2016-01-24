@@ -1,13 +1,13 @@
 #include "WPILib.h"
 //#include <string>
 #include <iostream>
-#include "CameraServer.h"
 #include <unistd.h>
 #include <ctime>
 #include "Logger.h"
 #include "Gamepad.h"
 #include "Manipulation.h"
 #include "Drive.h"
+#include "Targeting.h"
 
 using namespace std;
 
@@ -25,7 +25,6 @@ private:
 	CANTalon * motorArm;
 	////////////////////
 	LiveWindow * lw;
-	CameraServer * cameraUSB;
 	////////////////////////////
 	//SendableChooser *chooser;
 	//const std::string autoNameDefault = "Default";
@@ -40,17 +39,15 @@ private:
     Servo *yServo;
     Manipulation *arm;
     Drive *drive;
+    Targeting *targeting;
+    Relay *light;
 
-    const char *JAVA = "/usr/local/frc/JRE/bin/java";
+
     std::string profile = "everything";
     char* nope = '\0';
     //string *nope = NULL;
-//    char * GRIP_ARGS[5] = {"java" , "-jar" , "/home/lvuser/grip.jar" ,
-//    		"/home/lvuser/project.grip",
-//			'\0'};
-    //std::string GRIP_ARGS = "java -jar /home/lvuser/GRIP.jar /home/lvuser/" + profile + ".grip";
 
-    std::shared_ptr<NetworkTable> grip = NetworkTable::GetTable("GRIP");
+    //std::string GRIP_ARGS = "java -jar /home/lvuser/GRIP.jar /home/lvuser/" + profile + ".grip";
 
 public:
 	Robot()
@@ -64,7 +61,6 @@ public:
 		motorArm = NULL;
 		lw = NULL;
 		//chooser = NULL;
-		cameraUSB = NULL;
 		logger = NULL;
 		logTime = NULL;
 		xServo = NULL;
@@ -72,22 +68,20 @@ public:
 		arm = NULL;
 		drive = NULL;
 		gyro = new AnalogGyro(1);// = NULL;
+		targeting = NULL;
+		light = NULL;
 	};
 
 	void RobotInit()
 	{
-
-//        if (fork() == 0) {
-//            if (execv(JAVA, GRIP_ARGS) == -1) {
-//                perror("Error running GRIP");
-//            }
-//        }
 		lw = LiveWindow::GetInstance();
 		//chooser = new SendableChooser();
-//		cameraUSB = CameraServer::GetInstance();
-//		cameraUSB->StartAutomaticCapture("cam0");
-//		cameraUSB->SetQuality(2);
-//		cameraUSB->StartAutomaticCapture();
+
+		light = new Relay(0);
+
+		// turn this on once we have a camera connected
+		// targeting = new Targeting(light);
+
 		driver = new Gamepad(0);
 		//gyro = new AnalogGyro(1);
 
@@ -175,13 +169,7 @@ public:
 
 	void TeleopPeriodic()
 	{
-//		auto areas = grip->GetNumberArray("myContoursReport/area", llvm::ArrayRef<double>()),
-//				xs    = grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>()),
-//				ys    = grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
-//
-//		for (auto area : areas) {
-//			std::cout << "Got contour with area=" << area << std::endl;
-//		}
+
 //		xServo->Set((driver->GetRightX() + 1) / 2);
 //		yServo->Set((driver->GetRightY() + 1) / 2);
 		drive->HaloDrive(driver->GetRightX(), -driver->GetLeftY());
