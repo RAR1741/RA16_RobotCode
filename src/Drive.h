@@ -12,14 +12,14 @@
 class Drive
 {
 public:
-	Drive(CANTalon * fl, CANTalon * fr, CANTalon * br, CANTalon * bl);
+	Drive(CANTalon * r1, CANTalon * r2, CANTalon * l1, CANTalon * l2);
 	~Drive();
 	void HaloDrive(float x, float y);
 private:
-	CANTalon * dFL;
-	CANTalon * dFR;
-	CANTalon * dBL;
-	CANTalon * dBR;
+	CANTalon * dR1;
+	CANTalon * dR2;
+	CANTalon * dL1;
+	CANTalon * dL2;
 };
 
 #endif /* SRC_DRIVE_H_ */
