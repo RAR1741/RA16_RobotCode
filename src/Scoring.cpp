@@ -8,7 +8,7 @@
 #include "WPILib.h"
 #include "Scoring.h"
 
-Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, CANTalon *lMotor, CANTalon *rMotor)
+Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor)
 {
 	AngleMotor = aMotor;
 	TensionMotor = tMotor;

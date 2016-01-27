@@ -16,7 +16,7 @@ public:
     {
         kLoading, kReady, kShooting, kWaiting
     } State;
-	Scoring(CANTalon *aMotor, CANTalon *tMotor, CANTalon *lMotor, CANTalon *rMotor);
+	Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor);
 	void Update();
 	void SetAngle(float angle);
 	float GetAngle();
@@ -28,8 +28,8 @@ private:
 	State state;
 	CANTalon *AngleMotor;
 	CANTalon *TensionMotor;
-	CANTalon *LFlyMotor;
-	CANTalon *RFlyMotor;
+	Victor *LFlyMotor;
+	Victor *RFlyMotor;
 };
 
 #endif /* SRC_SCORING_H_ */
