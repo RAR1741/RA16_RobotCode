@@ -18,6 +18,9 @@ public:
 	void ResetTrain();
 	bool EditTrain(int index, float val[2]);
 	void Update();
+	void CreateMotion(int pos[], int size);
+	void StartMotion(int index);
+	void ContinueMotion();
 	//Manipulation(const Manipulation&);
 private:
 	bool ReadMotion(int in);
@@ -26,8 +29,10 @@ private:
 	CANTalon *ArmMotor;
 	DigitalInput *ArmLimit;
 	DigitalInput *BaseLimit;
-	//vector <vector<float[2]>> movements;
+	vector <vector<int>> movements;
 	vector <vector<float>> positions;
+	int currentMov;
+	int place;
 };
 
 #endif /* SRC_MANIPULATION_H_ */

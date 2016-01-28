@@ -119,3 +119,28 @@ void Manipulation::Update()
 		ArmMotor->Set(ArmMotor->GetEncPosition());
 	}
 }
+
+void Manipulation::CreateMotion(int pos[], int size)
+{
+	vector<int> temp;
+	for (int i = 0; i<size; i++)
+	{
+		temp.push_back(pos[i]);
+	}
+	movements.push_back(temp);
+}
+
+void Manipulation::StartMotion(int index)
+{
+	place = 0;
+	currentMov = index;
+	Set(movements.at(currentMov).at(place));
+}
+void Manipulation::ContinueMotion()
+{
+	place++;
+	if(movements.at(place).size() >= place)
+	{
+		Set(movements.at(currentMov).at(place));
+	}
+}
