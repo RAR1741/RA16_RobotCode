@@ -106,8 +106,8 @@ public:
 		motorFR = new CANTalon(1);
 		motorBL = new CANTalon(2);
 		motorBR = new CANTalon(3);
-		motorFL->SetInverted(true);
-		motorBR->SetInverted(true);
+		motorFR->SetInverted(true);
+		motorBL->SetInverted(true);
 
 		drive = new Drive(motorBR, motorFR, motorFL, motorBL);
 
@@ -206,7 +206,7 @@ public:
 		struct stat st;
 		if(stat("/media/sda",&st) == 0)
 		{
-		    if(st.st_mode & S_IFDIR != 0)
+		    if(st.st_mode & (S_IFDIR != 0))
 		    {
 		    	dir = "/media/sda";
 		    }

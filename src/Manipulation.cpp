@@ -139,7 +139,7 @@ void Manipulation::StartMotion(int index)
 void Manipulation::ContinueMotion()
 {
 	place++;
-	if(movements.at(place).size() >= place)
+	if(movements.at(place).size() >= (unsigned)place)
 	{
 		Set(movements.at(currentMov).at(place));
 	}
