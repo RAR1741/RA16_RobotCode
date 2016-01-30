@@ -27,7 +27,7 @@ using namespace std;
 class Autonomous
 {
 public:
-	Autonomous(Drive d, Manipulation m, Scoring s);
+	Autonomous(Drive * d, Manipulation * m, Scoring * s, Logger * l, Timer t);
 	~Autonomous();
 
 
@@ -36,12 +36,14 @@ public:
 	void ReloadConfig();
 
 	//void SetupLogging(Logger *Log); //starts logging
-	//void Log(Logger *Log); //logs
+	void Log(); //logs
 
 private:
-
-	//int AutonomousNumber;
-	//int autonum;
+	Drive * drive;
+	Manipulation * manipulation;
+	Scoring * scoring;
+	Logger * logger;
+	Timer * logtimer;
 
 	string autonomousState;
 
