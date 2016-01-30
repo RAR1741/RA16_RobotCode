@@ -8,6 +8,7 @@
 #ifndef SRC_DRIVE_H_
 #define SRC_DRIVE_H_
 #include "WPILib.h"
+#include "Logger.h"
 
 class Drive
 {
@@ -16,12 +17,13 @@ public:
 	~Drive();
 	void HaloDrive(float x, float y);
 	void TankDrive(float l, float r);
+	void Log(Logger * logger);
+
+private:
 	CANTalon * FL;
 	CANTalon * BL;
 	CANTalon * FR;
 	CANTalon * BR;
-private:
-
 };
 
 #endif /* SRC_DRIVE_H_ */

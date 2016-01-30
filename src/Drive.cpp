@@ -7,6 +7,7 @@
 
 #include "Drive.h"
 #include "WPILib.h"
+#include "Logger.h"
 
 Drive::Drive(CANTalon * fr, CANTalon * br, CANTalon * fl, CANTalon * bl)
 {
@@ -14,6 +15,7 @@ Drive::Drive(CANTalon * fr, CANTalon * br, CANTalon * fl, CANTalon * bl)
 	BR = br;
 	FL = fl;
 	BL = bl;
+
 }
 
 void Drive::HaloDrive(float x, float y)
@@ -32,4 +34,19 @@ void Drive::TankDrive(float l, float r)
 	BR->Set(1);
 	FL->Set(l);
 	BL->Set(0);
+}
+
+void Drive::Log(Logger* logger)
+{
+
+	//logger->Log("Time", logtimer->Get());
+	logger->Log("FLVoltage", FL->GetBusVoltage());
+	logger->Log("FRVoltage", FR->GetBusVoltage());
+	logger->Log("BLVoltage", BL->GetBusVoltage());
+	logger->Log("BRVoltage", BR->GetBusVoltage());
+	logger->Log("FLCurrent", FL->GetOutputCurrent());
+	logger->Log("FRCurrent", FR->GetOutputCurrent());
+	logger->Log("BLCurrent", BL->GetOutputCurrent());
+	logger->Log("BRCurrent", BR->GetOutputCurrent());
+	logger->WriteLine();
 }

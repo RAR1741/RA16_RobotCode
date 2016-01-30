@@ -43,23 +43,15 @@ void Autonomous::ReloadConfig()
 
 }
 
+void Log()
+{
+
+}
 //void Autonomous::SetupLogging(Logger *Log)
 //{
 //	//todo change all attributes
 //
 //}
 //
-void Autonomous::Log()
-{
-	logger->Log("Time", logtimer->Get());
-	logger->Log("FLVoltage", drive->FL->GetBusVoltage());
-	logger->Log("FRVoltage", drive->FR->GetBusVoltage());
-	logger->Log("BLVoltage", drive->BL->GetBusVoltage());
-	logger->Log("BRVoltage", drive->BR->GetBusVoltage());
-	logger->Log("FLCurrent", drive->FL->GetOutputCurrent());
-	logger->Log("FRCurrent", drive->FR->GetOutputCurrent());
-	logger->Log("BLCurrent", drive->BL->GetOutputCurrent());
-	logger->Log("BRCurrent", drive->BR->GetOutputCurrent());
-	logger->WriteLine();
-}
+
 
