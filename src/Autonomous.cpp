@@ -19,7 +19,7 @@
 #include <iostream>
 using namespace std;
 
-Autonomous::Autonomous(Drive * d, Manipulation * m, Scoring * s, Logger * l, Timer t)
+Autonomous::Autonomous(Drive * d, Manipulation * m, Scoring * s, Logger * l, Timer * t)
 {
 	drive = d;
 	manipulation = m;

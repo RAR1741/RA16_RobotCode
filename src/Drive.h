@@ -16,11 +16,12 @@ public:
 	~Drive();
 	void HaloDrive(float x, float y);
 	void TankDrive(float l, float r);
-private:
 	CANTalon * dR1;
 	CANTalon * dR2;
 	CANTalon * dL1;
 	CANTalon * dL2;
+private:
+
 };
 
 #endif /* SRC_DRIVE_H_ */

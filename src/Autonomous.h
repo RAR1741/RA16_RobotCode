@@ -21,13 +21,14 @@
 #include "Drive.h"
 #include "Scoring.h"
 #include "Manipulation.h"
+#include "Logger.h"
 
 using namespace std;
 
 class Autonomous
 {
 public:
-	Autonomous(Drive * d, Manipulation * m, Scoring * s, Logger * l, Timer t);
+	Autonomous(Drive * d, Manipulation * m, Scoring * s, Logger * l, Timer * t);
 	~Autonomous();
 
 
