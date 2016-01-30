@@ -15,6 +15,7 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	LFlyMotor = lMotor;
 	RFlyMotor = rMotor;
 	AngleMotor->SetControlMode(CANTalon::kPosition);
+	TensionMotor->SetControlMode(CANTalon::kPosition);
 	state = State::kWaiting;
 }
 
@@ -22,14 +23,22 @@ void Scoring::Update()
 {
 	if(state == kLoading)
 	{
-		//Do loading things
-		//set to kReady if loaded
+		TensionMotor->Set(180);
+		if(TensionMotor->GetEncPosition() > 179 && TensionMotor->GetEncPosition() < 180)
+		{
+			state = kReady;
+		}
 	}
 	else if(state == kShooting)
 	{
 		SetFlySpeed(-1);
-		//Do shooting things
-		//set to kWaiting if done
+		TensionMotor->Set(360);
+		if(TensionMotor->GetEncPosition() > 359 && TensionMotor->GetEncPosition() < 360)
+		{
+			state = kWaiting;
+			TensionMotor->Set(0);
+			TensionMotor->SetEncPosition(0);
+		}
 	}
 }
 
