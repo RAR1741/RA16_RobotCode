@@ -29,27 +29,31 @@ void Scoring::Update()
 			break;
 		case Scoring::State::kLoading:
 			TensionMotor->Set(180);//Near the Index
-			TensionMotor->EnableZeroSensorPositionOnIndex(true,HomeSensor->Get());
-			if(TensionMotor->GetEncPosition()==0)
+			if(TensionMotor->GetEncPosition()== 0)//change to a range
 			{
 				state = kIndexing;
 			}
 			break;
 		case Scoring::State::kIndexing:
 			TensionMotor->Set(10);//Get to Exact Position
+			if(fabs(TensionMotor->GetClosedLoopError())< 20)
+			{
+				state = kArmed;
+			}
 			break;
 
 		case Scoring::State::kArmed:
 			//JUST DO IT
 
+
 			break;
 		case Scoring::State::kTrigger:
 			SetFlySpeed(-1);
 			TensionMotor->Set(20);//Just past Trigger point
-
+			state = kFiring;
 			break;
-		case Scoring::State::kFire:
-
+		case Scoring::State::kFiring:
+			//Timer for waiting for fire to happen
 			break;
 		case Scoring::State::kReset:
 			if(false)//Some condition that confirms home

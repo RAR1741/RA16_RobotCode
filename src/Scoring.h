@@ -14,7 +14,13 @@ class Scoring
 public:
     typedef enum
     {
-    	kWaiting, kLoading, kIndexing, kArmed, kTrigger, kFire, kReset
+    	kWaiting = 0,
+		kLoading,
+		kIndexing,
+		kArmed,
+		kTrigger,
+		kFiring,
+		kReset
     } State;
 	Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *homeSensor);
 	void Update();
