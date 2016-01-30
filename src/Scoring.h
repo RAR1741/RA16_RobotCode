@@ -14,9 +14,9 @@ class Scoring
 public:
     typedef enum
     {
-        kLoading, kReady, kShooting, kWaiting
+    	kWaiting, kLoading, kIndexing, kArmed, kTrigger, kFire, kReset
     } State;
-	Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor);
+	Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *homeSensor);
 	void Update();
 	void SetAngle(float angle);
 	float GetAngle();
@@ -30,6 +30,7 @@ private:
 	CANTalon *TensionMotor;
 	Victor *LFlyMotor;
 	Victor *RFlyMotor;
+	DigitalInput *HomeSensor;
 };
 
 #endif /* SRC_SCORING_H_ */

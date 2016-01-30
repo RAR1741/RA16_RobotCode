@@ -8,7 +8,7 @@
 #include "WPILib.h"
 #include "Scoring.h"
 
-Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor)
+Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *homeSensor)
 {
 	AngleMotor = aMotor;
 	TensionMotor = tMotor;
@@ -16,29 +16,47 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	RFlyMotor = rMotor;
 	AngleMotor->SetControlMode(CANTalon::kPosition);
 	TensionMotor->SetControlMode(CANTalon::kPosition);
+	HomeSensor = homeSensor;
 	state = State::kWaiting;
 }
 
 void Scoring::Update()
 {
-	if(state == kLoading)
+	switch (state)
 	{
-		TensionMotor->Set(180);
-		if(TensionMotor->GetEncPosition() > 179 && TensionMotor->GetEncPosition() < 180)
-		{
-			state = kReady;
-		}
-	}
-	else if(state == kShooting)
-	{
-		SetFlySpeed(-1);
-		TensionMotor->Set(360);
-		if(TensionMotor->GetEncPosition() > 359 && TensionMotor->GetEncPosition() < 360)
-		{
-			state = kWaiting;
-			TensionMotor->Set(0);
-			TensionMotor->SetEncPosition(0);
-		}
+		case Scoring::State::kWaiting:
+
+			break;
+		case Scoring::State::kLoading:
+			TensionMotor->Set(180);//Near the Index
+			TensionMotor->EnableZeroSensorPositionOnIndex(true,HomeSensor->Get());
+			if(TensionMotor->GetEncPosition()==0)
+			{
+				state = kIndexing;
+			}
+			break;
+		case Scoring::State::kIndexing:
+			TensionMotor->Set(10);//Get to Exact Position
+			break;
+
+		case Scoring::State::kArmed:
+			//JUST DO IT
+
+			break;
+		case Scoring::State::kTrigger:
+			SetFlySpeed(-1);
+			TensionMotor->Set(20);//Just past Trigger point
+
+			break;
+		case Scoring::State::kFire:
+
+			break;
+		case Scoring::State::kReset:
+			if()//Some condition that confirms home
+			{
+				state = kWaiting;
+			}
+			break;
 	}
 }
 
@@ -52,9 +70,9 @@ void Scoring::Load()
 
 void Scoring::Fire()
 {
-	if(state == kReady)
+	if(state == kArmed)
 	{
-		state = kShooting;
+		state = kTrigger;
 	}
 }
 
