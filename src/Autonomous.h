@@ -18,13 +18,16 @@
 #include <fstream>
 //#include "Robot.cpp"
 //#include "Config.h"
+#include "Drive.h"
+#include "Scoring.h"
+#include "Manipulation.h"
 
 using namespace std;
 
 class Autonomous
 {
 public:
-	//Autonomous(Robot * r);
+	Autonomous(Drive d, Manipulation m, Scoring s);
 	~Autonomous();
 
 
@@ -36,46 +39,11 @@ public:
 	//void Log(Logger *Log); //logs
 
 private:
-//	Lift *Lifter;
-//	ContainerPlacer *Placer;
-//	DriveTrain *Drive;
-	Timer *AutoTime;
-	Timer *WaitTime;
-//	Collection *PlasticMagnet;
-	DigitalInput *LeftLimit;
-	CANTalon * FourBarMotor;
-	DoubleSolenoid * ArmBrake;
-	DoubleSolenoid *Grabber;
 
-	int AutonomousNumber;
-	int autonum;
-	int totesPickedUp;
+	//int AutonomousNumber;
+	//int autonum;
 
-	float autoPlaceTime;
-	float autoDriveTime;
-	float autoDriveSpeed;
-	float autoTurnTime;
-	float autoTurnSpeed;
-
-	float contDriveBackShortTime;
-	float contDriveBackShortSpeed;
-	float contDriveSpeed;
-	float contDriveTime;
-	float contDrive2Speed;
-	float contDrive2Time;
-	float contDrive3Speed;
-	float contDrive3Time;
-	float contDrive4Time;
-	float contDrive4Speed;
-	float contDrive5Time;
-	float contDrive5Speed;
-	float contTurnTime;
-	float contTurnSpeed;
 	string autonomousState;
-
-	//float autoDriveTime; // = Config::GetSetting("auto_drive_time", 2);
-	//float autoDriveSpeed; //  = Config::GetSetting("auto_drive_speed", 0.29);
-
 
 };
 

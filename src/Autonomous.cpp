@@ -19,10 +19,10 @@
 #include <iostream>
 using namespace std;
 
-//Autonomous::Autonomous(Robot r)
-//{
-//
-//}
+Autonomous::Autonomous(Drive d, Manipulation m, Scoring s)
+{
+
+}
 
 Autonomous::~Autonomous()
 {
