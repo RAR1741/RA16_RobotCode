@@ -52,14 +52,14 @@ void Autonomous::ReloadConfig()
 void Autonomous::Log()
 {
 	logger->Log("Time", logtimer->Get());
-	logger->Log("FLVoltage", drive->dL1->GetBusVoltage());
-	logger->Log("FRVoltage", drive->dR1->GetBusVoltage());
-	logger->Log("BLVoltage", drive->dL2->GetBusVoltage());
-	logger->Log("BRVoltage", drive->dR2->GetBusVoltage());
-	logger->Log("FLCurrent", drive->dL1->GetOutputCurrent());
-	logger->Log("FRCurrent", drive->dR1->GetOutputCurrent());
-	logger->Log("BLCurrent", drive->dL2->GetOutputCurrent());
-	logger->Log("BRCurrent", drive->dR2->GetOutputCurrent());
+	logger->Log("FLVoltage", drive->FL->GetBusVoltage());
+	logger->Log("FRVoltage", drive->FR->GetBusVoltage());
+	logger->Log("BLVoltage", drive->BL->GetBusVoltage());
+	logger->Log("BRVoltage", drive->BR->GetBusVoltage());
+	logger->Log("FLCurrent", drive->FL->GetOutputCurrent());
+	logger->Log("FRCurrent", drive->FR->GetOutputCurrent());
+	logger->Log("BLCurrent", drive->BL->GetOutputCurrent());
+	logger->Log("BRCurrent", drive->BR->GetOutputCurrent());
 	logger->WriteLine();
 }
 
