@@ -117,6 +117,12 @@ public:
 		logTime = new Timer;
 		logTime->Start();
 		logger = new Logger();
+
+		//Scoring THINGS//////////////////////////////////////////////////////////////////////////
+		//motor->EnableZeroSensorPositionOnIndex(true, true);
+		//motor->SetAllowableClosedLoopErr(20);//This is the error for the scoring encoder in PID
+		//////////////////////////////////////////////////////////////////////////////////////////
+
 		//StartLogging("init");
 		OutputTroll(cout);
 	}
