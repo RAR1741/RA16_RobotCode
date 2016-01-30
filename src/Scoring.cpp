@@ -52,7 +52,7 @@ void Scoring::Update()
 
 			break;
 		case Scoring::State::kReset:
-			if()//Some condition that confirms home
+			if(false)//Some condition that confirms home
 			{
 				state = kWaiting;
 			}
