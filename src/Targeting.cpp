@@ -27,7 +27,7 @@ Targeting::Targeting(Relay* light) :
 	}
 
 	m_Server = CameraServer::GetInstance();
-	m_Server->StartAutomaticCapture("cam0");
+	//m_Server->StartAutomaticCapture("cam0");
 	m_Server->SetQuality(2);
 	m_Server->StartAutomaticCapture();
 

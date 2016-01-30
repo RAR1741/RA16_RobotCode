@@ -13,6 +13,8 @@
 
 using namespace std;
 
+#define TESTBED (1)
+
 class Robot: public IterativeRobot
 {
 private:
@@ -102,6 +104,7 @@ public:
 //		cout << "Arm set to pos: " << motorArm->GetEncPosition();
 //		arm = new Manipulation(motorBase, motorArm, NULL, NULL);
 
+#if !TESTBED
 		motorFL = new CANTalon(0);
 		motorBL = new CANTalon(2);
 		motorBL->SetControlMode(CANTalon::ControlMode::kFollower);
@@ -111,6 +114,7 @@ public:
 		motorBR->SetControlMode(CANTalon::ControlMode::kFollower);
 
 		drive = new Drive(motorFR, motorBR, motorFL, motorBL);
+#endif
 
 		//xServo = new Servo(0);
 		//yServo = new Servo(1);
@@ -178,7 +182,7 @@ public:
 
 	void TeleopPeriodic()
 	{
-
+#if !TESTBED
 //		xServo->Set((driver->GetRightX() + 1) / 2);
 //		yServo->Set((driver->GetRightY() + 1) / 2);
 		if(driver->GetRightBumper())
@@ -189,6 +193,7 @@ public:
 		{
 			drive->HaloDrive(driver->GetRightX() * 0.6, -driver->GetLeftY() * 0.6);
 		}
+#endif
 		Log();
 	}
 
@@ -249,7 +254,7 @@ public:
 		drive->Log(logger);
 
 		logger->Log("Time", logTime->Get());
-		/*
+#if !TESTBED
 		logger->Log("FLVoltage", motorFL->GetBusVoltage());
 		logger->Log("FRVoltage", motorFR->GetBusVoltage());
 		logger->Log("BLVoltage", motorBL->GetBusVoltage());
@@ -258,8 +263,9 @@ public:
 		logger->Log("FRCurrent", motorFR->GetOutputCurrent());
 		logger->Log("BLCurrent", motorBL->GetOutputCurrent());
 		logger->Log("BRCurrent", motorBR->GetOutputCurrent());
+#endif
 		logger->WriteLine();
-		//cout << logTime->Get() << endl;*/
+		//cout << logTime->Get() << endl;
 	}
 
 	void OutputTroll(ostream & out)
