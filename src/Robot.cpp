@@ -246,7 +246,10 @@ public:
 
 	void Log()
 	{
+		drive->Log(logger);
+
 		logger->Log("Time", logTime->Get());
+		/*
 		logger->Log("FLVoltage", motorFL->GetBusVoltage());
 		logger->Log("FRVoltage", motorFR->GetBusVoltage());
 		logger->Log("BLVoltage", motorBL->GetBusVoltage());
@@ -256,7 +259,7 @@ public:
 		logger->Log("BLCurrent", motorBL->GetOutputCurrent());
 		logger->Log("BRCurrent", motorBR->GetOutputCurrent());
 		logger->WriteLine();
-		//cout << logTime->Get() << endl;
+		//cout << logTime->Get() << endl;*/
 	}
 
 	void OutputTroll(ostream & out)
