@@ -8,28 +8,28 @@
 #include "Drive.h"
 #include "WPILib.h"
 
-Drive::Drive(CANTalon * r1, CANTalon * r2, CANTalon * l1, CANTalon * l2)
+Drive::Drive(CANTalon * fr, CANTalon * br, CANTalon * fl, CANTalon * bl)
 {
-	dR1 = r1;
-	dR2 = r2;
-	dL1 = l1;
-	dL2 = l2;
+	FR = fr;
+	BR = br;
+	FL = fl;
+	BL = bl;
 }
 
 void Drive::HaloDrive(float x, float y)
 {
 	float left = y + x;
 	float right = y - x;
-	dR1->Set(right);
-	dR2->Set(right);
-	dL1->Set(left);
-	dL2->Set(left);
+	FR->Set(right);
+	BR->Set(1);
+	FL->Set(left);
+	BL->Set(0);
 }
 
 void Drive::TankDrive(float l, float r)
 {
-	dR1->Set(r);
-	dR2->Set(r);
-	dL1->Set(l);
-	dL2->Set(l);
+	FR->Set(r);
+	BR->Set(1);
+	FL->Set(l);
+	BL->Set(0);
 }

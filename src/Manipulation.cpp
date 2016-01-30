@@ -109,12 +109,12 @@ bool Manipulation::EditTrain(int index, float val[2])
 
 void Manipulation::Update()
 {
-	if(BaseLimit->Get() == true)
+	if(BaseLimit->Get() == false)//object in is false
 	{
 		BaseMotor->Set(BaseMotor->GetEncPosition());
 	}
 
-	if(ArmLimit->Get() == true)
+	if(ArmLimit->Get() == false)
 	{
 		ArmMotor->Set(ArmMotor->GetEncPosition());
 	}

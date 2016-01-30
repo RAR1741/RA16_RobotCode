@@ -16,10 +16,10 @@ public:
 	~Drive();
 	void HaloDrive(float x, float y);
 	void TankDrive(float l, float r);
-	CANTalon * dR1;
-	CANTalon * dR2;
-	CANTalon * dL1;
-	CANTalon * dL2;
+	CANTalon * FL;
+	CANTalon * BL;
+	CANTalon * FR;
+	CANTalon * BR;
 private:
 
 };

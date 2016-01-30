@@ -13,6 +13,7 @@ class Manipulation
 {
 public:
 	Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLimit, DigitalInput *aLimit);
+
 	void Train();
 	void Set(int index);
 	void ResetTrain();

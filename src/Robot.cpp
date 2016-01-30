@@ -103,13 +103,14 @@ public:
 //		arm = new Manipulation(motorBase, motorArm, NULL, NULL);
 
 		motorFL = new CANTalon(0);
-		motorFR = new CANTalon(1);
 		motorBL = new CANTalon(2);
-		motorBR = new CANTalon(3);
-		motorFR->SetInverted(true);
-		motorBL->SetInverted(true);
+		motorBL->SetControlMode(CANTalon::ControlMode::kFollower);
 
-		drive = new Drive(motorBR, motorFR, motorFL, motorBL);
+		motorFR = new CANTalon(1);
+		motorBR = new CANTalon(3);
+		motorBR->SetControlMode(CANTalon::ControlMode::kFollower);
+
+		drive = new Drive(motorFR, motorBR, motorFL, motorBL);
 
 		//xServo = new Servo(0);
 		//yServo = new Servo(1);
