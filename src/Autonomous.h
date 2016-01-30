@@ -16,6 +16,7 @@
 #include <ctime>
 #include <iostream>
 #include <fstream>
+//#include "Robot.cpp"
 //#include "Config.h"
 
 using namespace std;
@@ -23,7 +24,7 @@ using namespace std;
 class Autonomous
 {
 public:
-	Autonomous();
+	//Autonomous(Robot * r);
 	~Autonomous();
 
 
@@ -31,8 +32,8 @@ public:
 
 	void ReloadConfig();
 
-	void SetupLogging(Logger *Log); //starts logging
-	void Log(Logger *Log); //logs
+	//void SetupLogging(Logger *Log); //starts logging
+	//void Log(Logger *Log); //logs
 
 private:
 //	Lift *Lifter;
