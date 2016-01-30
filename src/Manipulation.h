@@ -21,6 +21,7 @@ public:
 	void CreateMotion(int pos[], int size);
 	void StartMotion(int index);
 	void ContinueMotion();
+	void Home();
 	//Manipulation(const Manipulation&);
 private:
 	bool ReadMotion(int in);

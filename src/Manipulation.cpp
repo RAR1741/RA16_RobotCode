@@ -144,3 +144,19 @@ void Manipulation::ContinueMotion()
 		Set(movements.at(currentMov).at(place));
 	}
 }
+void Manipulation::Home()
+{
+	if (!BaseLimit->Get())
+	{
+		BaseMotor -> Set(0);
+		if(BaseLimit->Get())
+			BaseMotor->SetEncPosition(0);
+	}
+	else if (!ArmLimit->Get())
+	{
+		ArmMotor -> Set(0);
+		if(ArmLimit->Get())
+			ArmMotor->SetEncPosition(0);
+	}
+}
+
