@@ -38,8 +38,6 @@ void Drive::TankDrive(float l, float r)
 
 void Drive::Log(Logger* logger)
 {
-
-	//logger->Log("Time", logtimer->Get());
 	logger->Log("FLVoltage", FL->GetBusVoltage());
 	logger->Log("FRVoltage", FR->GetBusVoltage());
 	logger->Log("BLVoltage", BL->GetBusVoltage());
