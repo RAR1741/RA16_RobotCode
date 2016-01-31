@@ -265,7 +265,6 @@ public:
 		logger->Log("Time", logTime->Get());
 #if !TESTBED
 		drive->Log(logger);
-		/*
 		logger->Log("FLVoltage", motorFL->GetBusVoltage());
 		logger->Log("FRVoltage", motorFR->GetBusVoltage());
 		logger->Log("BLVoltage", motorBL->GetBusVoltage());
@@ -273,7 +272,7 @@ public:
 		logger->Log("FLCurrent", motorFL->GetOutputCurrent());
 		logger->Log("FRCurrent", motorFR->GetOutputCurrent());
 		logger->Log("BLCurrent", motorBL->GetOutputCurrent());
-		logger->Log("BRCurrent", motorBR->GetOutputCurrent()); */
+		logger->Log("BRCurrent", motorBR->GetOutputCurrent());
 #endif
 		logger->WriteLine();
 		//cout << logTime->Get() << endl;
