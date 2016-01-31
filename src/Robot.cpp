@@ -13,7 +13,7 @@
 
 using namespace std;
 
-#define TESTBED (1)
+#define TESTBED (0)
 
 class Robot: public IterativeRobot
 {
@@ -43,7 +43,7 @@ private:
     Servo *yServo;
     Manipulation *arm;
     Drive *drive;
-    Targeting *targeting;
+    //Targeting *targeting;
     Relay *light;
 
 
@@ -72,7 +72,7 @@ public:
 		arm = NULL;
 		drive = NULL;
 		gyro = new AnalogGyro(1);// = NULL;
-		targeting = NULL;
+		//targeting = NULL;
 		light = NULL;
 	};
 
@@ -83,7 +83,7 @@ public:
 
 		light = new Relay(0);
 
-		targeting = new Targeting(light);
+		//targeting = new Targeting(light);
 
 		// turn this on once we have a camera connected
 		// targeting = new Targeting(light);
@@ -196,7 +196,8 @@ public:
 			drive->HaloDrive(driver->GetRightX() * 0.6, -driver->GetLeftY() * 0.6);
 		}
 #endif
-		std::vector<Target> targets = targeting->GetTargets();
+		//Targeting code
+		//std::vector<Target> targets = targeting->GetTargets();
 		Log();
 	}
 
@@ -207,12 +208,12 @@ public:
 
 	void TestPeriodic()
 	{
-		std::vector<Target> targets = targeting->GetTargets();
-		if (targets.size() > 0) {
-			cout << "A target! A target!" << endl;
-			cout << targets[0].X() << ", " << targets[0].Y() << " " << targets[0].ApproximateRange() << "'";
-		}
-		Log();
+//		std::vector<Target> targets = targeting->GetTargets();
+//		if (targets.size() > 0) {
+//			cout << "A target! A target!" << endl;
+//			cout << targets[0].X() << ", " << targets[0].Y() << " " << targets[0].ApproximateRange() << "'";
+//		}
+//		Log();
 		//lw->Run();
 	}
 
