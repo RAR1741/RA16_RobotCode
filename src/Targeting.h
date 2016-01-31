@@ -2,11 +2,11 @@
 #define TARGETING_H__
 
 #include "WPILib.h"
+#include "Target.h"
 class Targeting {
 public:
 	Targeting(Relay* light);
-
-	void Process();
+	std::vector<Target> GetTargets();
 private:
 	CameraServer* m_Server;
 	std::shared_ptr<NetworkTable>  m_Grip;

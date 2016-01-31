@@ -34,11 +34,18 @@ Targeting::Targeting(Relay* light) :
 	m_Grip = NetworkTable::GetTable("GRIP");
 }
 
-void Targeting::Process() {
-	auto areas = m_Grip->GetNumberArray("myContoursReport/area", llvm::ArrayRef<double>()),
-			ys = m_Grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
+std::vector<Target> Targeting::GetTargets() {
+	std::vector<double> areas  = m_Grip->GetNumberArray("myContoursReport/area", llvm::ArrayRef<double>());
+	std::vector<double> xs     = m_Grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>());
+	std::vector<double> ys     = m_Grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
+	std::vector<double> widths = m_Grip->GetNumberArray("myContourReport/width", llvm::ArrayRef<double>());
 
-	for (auto area : areas) {
-		std::cout << "Got contour with area=" << area << std::endl;
+	std::vector<Target> targets;
+
+	for (size_t i = 0; i < areas.size(); ++i) {
+		Target target(xs[i], ys[i], areas[i], widths[i]);
+		targets.push_back(target);
 	}
+
+	return targets;
 }

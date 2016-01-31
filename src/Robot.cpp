@@ -196,7 +196,7 @@ public:
 			drive->HaloDrive(driver->GetRightX() * 0.6, -driver->GetLeftY() * 0.6);
 		}
 #endif
-		targeting->Process();
+		std::vector<Target> targets = targeting->GetTargets();
 		Log();
 	}
 
@@ -207,7 +207,11 @@ public:
 
 	void TestPeriodic()
 	{
-		targeting->Process();
+		std::vector<Target> targets = targeting->GetTargets();
+		if (targets.size() > 0) {
+			cout << "A target! A target!" << endl;
+			cout << targets[0].X() << ", " << targets[0].Y() << " " << targets[0].ApproximateRange() << "'";
+		}
 		Log();
 		//lw->Run();
 	}
