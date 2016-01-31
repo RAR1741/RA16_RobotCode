@@ -215,12 +215,13 @@ void Manipulation::Process()
 			BaseMotor->SetControlMode(CANTalon::kPosition);
 			BaseMotor->SetEncPosition(0);
 			BaseMotor->Set(0);
-			state = kReady;
+			state = kHomed;
 		}
 		cout << "StartHomingDown\n";
 		break;
 	case Manipulation::kHomed:	{
 		BaseMotor->SetSetpoint(0);
+		state = kReady;
 		break;
 	}
 	case Manipulation::kReady:
