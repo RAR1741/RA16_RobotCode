@@ -221,6 +221,7 @@ void Manipulation::Process()
 		break;
 	case Manipulation::kHomed:	{
 		BaseMotor->SetSetpoint(0);
+		break;
 	}
 	case Manipulation::kReady:
 		cout << "Ready\n";
