@@ -46,7 +46,7 @@ void Config::SetSetting(std::string name, double value)
 	if (HasKey(name)) {
 		std::map<std::string,double>::const_iterator itr = m_settings.find(name);
 		// We can't get erase to work right now, so we'll use the first
-		// occurance
+		// occurrence
 		//m_settings.erase(itr);
 		m_settings[name] = value;
 	} else
