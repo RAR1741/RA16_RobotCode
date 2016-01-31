@@ -13,7 +13,14 @@ class Manipulation
 {
 public:
 	Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLimit, DigitalInput *aLimit);
-
+	typedef enum
+	{
+		kStart = 0,
+		kHomingUp = 1,
+		kHomingDown = 2,
+		kHomed = 3,
+		kReady = 4
+	}State;
 	void Train();
 	void Set(int index);
 	void ResetTrain();
@@ -23,6 +30,8 @@ public:
 	void StartMotion(int index);
 	void ContinueMotion();
 	void Home();
+	void Process();
+	State GetState();
 	//Manipulation(const Manipulation&);
 private:
 	bool ReadMotion(int in);
@@ -33,6 +42,8 @@ private:
 	DigitalInput *BaseLimit;
 	vector <vector<int>> movements;
 	vector <vector<float>> positions;
+	State state;
+	Timer * homingTimer;
 	int currentMov;
 	int place;
 };

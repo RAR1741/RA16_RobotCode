@@ -36,7 +36,6 @@ Targeting::Targeting(Relay* light) :
 
 void Targeting::Process() {
 	auto areas = m_Grip->GetNumberArray("myContoursReport/area", llvm::ArrayRef<double>()),
-			xs = m_Grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>()),
 			ys = m_Grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
 
 	for (auto area : areas) {

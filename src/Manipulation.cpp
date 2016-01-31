@@ -1,5 +1,4 @@
-/*
- * Manipulation.cpp
+/* Manipulation.cpp
  *
  *  Created on: Jan 20, 2016
  *      Author: Taylor Horne
@@ -17,6 +16,8 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 	ArmMotor = aMotor;
 	BaseLimit = bLimit;
 	ArmLimit = aLimit;
+	state = kReady;
+	homingTimer = new Timer();
 	ReadPostions();
 }
 
@@ -146,17 +147,92 @@ void Manipulation::ContinueMotion()
 }
 void Manipulation::Home()
 {
-	if (!BaseLimit->Get())
+//	if (!BaseLimit->Get())
+//	{
+//		BaseMotor -> Set(0);
+//		if(BaseLimit->Get())
+//			BaseMotor->SetEncPosition(0);
+//	}
+//	else if (!ArmLimit->Get())
+//	{
+//		ArmMotor -> Set(0);
+//		if(ArmLimit->Get())
+//			ArmMotor->SetEncPosition(0);
+//	}
+	if(state == kReady)
 	{
-		BaseMotor -> Set(0);
-		if(BaseLimit->Get())
-			BaseMotor->SetEncPosition(0);
+		cout << "Start\n";
+		state = Manipulation::kStart;
 	}
-	else if (!ArmLimit->Get())
+
+}
+
+void Manipulation::Process()
+{
+	switch(state)
 	{
-		ArmMotor -> Set(0);
-		if(ArmLimit->Get())
-			ArmMotor->SetEncPosition(0);
+	case Manipulation::kStart:
+		cout << "Starting\n";
+		BaseMotor->SetControlMode(CANTalon::kPercentVbus);
+		cout << "Starting2\n";
+		homingTimer->Reset();
+		homingTimer->Start();
+		cout << "Starting3\n";
+		if(!BaseLimit->Get())//is triggered
+		{
+			cout << "Starting4\n";
+			state = kHomingUp;
+		}
+		else if(BaseLimit->Get())//isnt triggered
+		{
+			cout << "Starting5\n";
+			state = kHomingDown;
+		}
+		cout << "EndStart\n";
+		break;
+	case Manipulation::kHomingUp:
+		cout << "StartHomingUP\n";
+		if(!BaseLimit->Get())
+		{
+			BaseMotor->Set(.2);
+		}
+		else
+		{
+			BaseMotor->Set(0);
+			state = kHomingDown;
+		}
+		cout << "EndHomingUP\n";
+		break;
+	case Manipulation::kHomingDown:
+		cout << "StartHomingDown\n";
+		if(BaseLimit->Get())
+		{
+			BaseMotor->Set(-0.1);
+		}
+		else
+		{
+			BaseMotor->Set(0);
+			BaseMotor->SetControlMode(CANTalon::kPosition);
+			BaseMotor->SetEncPosition(0);
+			BaseMotor->Set(0);
+			state = kReady;
+		}
+		cout << "StartHomingDown\n";
+		break;
+	case Manipulation::kHomed:	{
+		BaseMotor->SetSetpoint(0);
+	}
+	case Manipulation::kReady:
+		cout << "Ready\n";
+		break;
+
 	}
 }
+
+Manipulation::State Manipulation::GetState()
+{
+	return state;
+}
+
+
 

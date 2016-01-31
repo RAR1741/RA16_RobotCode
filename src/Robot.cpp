@@ -83,6 +83,8 @@ public:
 
 		light = new Relay(0);
 
+		targeting = new Targeting(light);
+
 		// turn this on once we have a camera connected
 		// targeting = new Targeting(light);
 
@@ -194,6 +196,7 @@ public:
 			drive->HaloDrive(driver->GetRightX() * 0.6, -driver->GetLeftY() * 0.6);
 		}
 #endif
+		targeting->Process();
 		Log();
 	}
 
@@ -204,6 +207,7 @@ public:
 
 	void TestPeriodic()
 	{
+		targeting->Process();
 		Log();
 		//lw->Run();
 	}
@@ -238,6 +242,7 @@ public:
 	void SetupLogging()
 	{
 		logger->AddAttribute("Time");
+#if !TESTBED
 		logger->AddAttribute("FLVoltage");
 		logger->AddAttribute("FRVoltage");
 		logger->AddAttribute("BLVoltage");
@@ -246,15 +251,16 @@ public:
 		logger->AddAttribute("FRCurrent");
 		logger->AddAttribute("BLCurrent");
 		logger->AddAttribute("BRCurrent");
+#endif
 		logger->WriteAttributes();
 	}
 
 	void Log()
 	{
-		drive->Log(logger);
-
 		logger->Log("Time", logTime->Get());
 #if !TESTBED
+		drive->Log(logger);
+		/*
 		logger->Log("FLVoltage", motorFL->GetBusVoltage());
 		logger->Log("FRVoltage", motorFR->GetBusVoltage());
 		logger->Log("BLVoltage", motorBL->GetBusVoltage());
@@ -262,7 +268,7 @@ public:
 		logger->Log("FLCurrent", motorFL->GetOutputCurrent());
 		logger->Log("FRCurrent", motorFR->GetOutputCurrent());
 		logger->Log("BLCurrent", motorBL->GetOutputCurrent());
-		logger->Log("BRCurrent", motorBR->GetOutputCurrent());
+		logger->Log("BRCurrent", motorBR->GetOutputCurrent()); */
 #endif
 		logger->WriteLine();
 		//cout << logTime->Get() << endl;
