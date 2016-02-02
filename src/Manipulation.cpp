@@ -173,7 +173,7 @@ void Manipulation::Process()
 	{
 	case Manipulation::kStart:
 		cout << "Starting\n";
-		BaseMotor->SetControlMode(CANTalon::kPercentVbus);
+		BaseMotor->SetControlMode(CANTalon::kSpeed);
 		cout << "Starting2\n";
 		homingTimer->Reset();
 		homingTimer->Start();
@@ -194,7 +194,7 @@ void Manipulation::Process()
 		cout << "StartHomingUP\n";
 		if(!BaseLimit->Get())
 		{
-			BaseMotor->Set(.2);
+			BaseMotor->Set(60);
 		}
 		else
 		{
@@ -207,7 +207,7 @@ void Manipulation::Process()
 		cout << "StartHomingDown\n";
 		if(BaseLimit->Get())
 		{
-			BaseMotor->Set(-0.1);
+			BaseMotor->Set(-40);
 		}
 		else
 		{
@@ -220,7 +220,7 @@ void Manipulation::Process()
 		cout << "StartHomingDown\n";
 		break;
 	case Manipulation::kHomed:	{
-		BaseMotor->SetSetpoint(0);
+		BaseMotor->Set(0);
 		state = kReady;
 		break;
 	}
@@ -235,6 +235,4 @@ Manipulation::State Manipulation::GetState()
 {
 	return state;
 }
-
-
 
