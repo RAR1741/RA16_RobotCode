@@ -13,7 +13,7 @@
 
 using namespace std;
 
-#define TESTBED (0)
+#define TESTBED (1)
 
 class Robot: public IterativeRobot
 {
@@ -43,12 +43,12 @@ private:
     Servo *yServo;
     Manipulation *arm;
     Drive *drive;
-    //Targeting *targeting;
+    Targeting *targeting;
     Relay *light;
 
 
     std::string profile = "everything";
-    char* nope = '\0';
+    char * nope = '\0';
     //string *nope = NULL;
 
     //std::string GRIP_ARGS = "java -jar /home/lvuser/GRIP.jar /home/lvuser/" + profile + ".grip";
@@ -72,7 +72,7 @@ public:
 		arm = NULL;
 		drive = NULL;
 		gyro = new AnalogGyro(1);// = NULL;
-		//targeting = NULL;
+		targeting = NULL;
 		light = NULL;
 	};
 
@@ -82,8 +82,6 @@ public:
 		//chooser = new SendableChooser();
 
 		light = new Relay(0);
-
-		//targeting = new Targeting(light);
 
 		// turn this on once we have a camera connected
 		// targeting = new Targeting(light);
@@ -196,8 +194,6 @@ public:
 			drive->HaloDrive(driver->GetRightX() * 0.6, -driver->GetLeftY() * 0.6);
 		}
 #endif
-		//Targeting code
-		//std::vector<Target> targets = targeting->GetTargets();
 		Log();
 	}
 
@@ -208,12 +204,7 @@ public:
 
 	void TestPeriodic()
 	{
-//		std::vector<Target> targets = targeting->GetTargets();
-//		if (targets.size() > 0) {
-//			cout << "A target! A target!" << endl;
-//			cout << targets[0].X() << ", " << targets[0].Y() << " " << targets[0].ApproximateRange() << "'";
-//		}
-//		Log();
+		Log();
 		//lw->Run();
 	}
 
@@ -247,7 +238,6 @@ public:
 	void SetupLogging()
 	{
 		logger->AddAttribute("Time");
-#if !TESTBED
 		logger->AddAttribute("FLVoltage");
 		logger->AddAttribute("FRVoltage");
 		logger->AddAttribute("BLVoltage");
@@ -256,15 +246,15 @@ public:
 		logger->AddAttribute("FRCurrent");
 		logger->AddAttribute("BLCurrent");
 		logger->AddAttribute("BRCurrent");
-#endif
 		logger->WriteAttributes();
 	}
 
 	void Log()
 	{
+		drive->Log(logger);
+
 		logger->Log("Time", logTime->Get());
 #if !TESTBED
-		drive->Log(logger);
 		logger->Log("FLVoltage", motorFL->GetBusVoltage());
 		logger->Log("FRVoltage", motorFR->GetBusVoltage());
 		logger->Log("BLVoltage", motorBL->GetBusVoltage());

@@ -225,7 +225,7 @@ void Manipulation::Process()
 		break;
 	}
 	case Manipulation::kReady:
-		cout << "Ready\n";
+		//cout << "Ready\n";
 		break;
 
 	}

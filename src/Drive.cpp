@@ -24,7 +24,7 @@ void Drive::HaloDrive(float x, float y)
 	float right = y - x;
 	FR->Set(right);
 	BR->Set(1);
-	FL->Set(left);
+	FL->Set(-left);
 	BL->Set(0);
 }
 
