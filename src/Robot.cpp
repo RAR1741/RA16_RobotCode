@@ -45,10 +45,15 @@ private:
     Drive *drive;
     Targeting *targeting;
     Relay *light;
+    ///////////////////////
+    DigitalOutput * osciliscope1;
+    DigitalOutput * osciliscope2;
 
 
     std::string profile = "everything";
     char * nope = '\0';
+
+    uint32_t jim = false;
     //string *nope = NULL;
 
     //std::string GRIP_ARGS = "java -jar /home/lvuser/GRIP.jar /home/lvuser/" + profile + ".grip";
@@ -56,6 +61,8 @@ private:
 public:
 	Robot()
 	{
+		osciliscope1 = NULL;
+		osciliscope2 = NULL;
         driver = NULL;
 		motorFL = NULL;
 		motorFR = NULL;
@@ -115,6 +122,8 @@ public:
 
 		drive = new Drive(motorFR, motorBR, motorFL, motorBL);
 #endif
+		osciliscope1 = new DigitalOutput(8);
+		osciliscope2 = new DigitalOutput(9);
 
 		//xServo = new Servo(0);
 		//yServo = new Servo(1);
@@ -266,6 +275,16 @@ public:
 #endif
 		logger->WriteLine();
 		//cout << logTime->Get() << endl;
+	}
+
+	void OsciliscopeBeginning()
+	{
+		//osciliscope1->Set(jim);
+	}
+
+	void OsciliscopeEnd()
+	{
+
 	}
 
 	void OutputTroll(ostream & out)
