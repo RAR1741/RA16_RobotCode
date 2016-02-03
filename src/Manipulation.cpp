@@ -192,7 +192,7 @@ void Manipulation::Process()
 		break;
 	case Manipulation::kHomingUp:
 		cout << "StartHomingUP\n";
-		if(!BaseLimit->Get())
+		if(homingTimer->Get()<.75)
 		{
 			BaseMotor->Set(60);
 		}
