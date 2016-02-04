@@ -13,7 +13,7 @@
 
 using namespace std;
 
-#define TESTBED (1)
+#define TESTBED (0)
 
 class Robot: public IterativeRobot
 {
@@ -121,9 +121,11 @@ public:
 		motorBR->SetControlMode(CANTalon::ControlMode::kFollower);
 
 		drive = new Drive(motorFR, motorBR, motorFL, motorBL);
-#endif
+#else
 		osciliscope1 = new DigitalOutput(8);
 		osciliscope2 = new DigitalOutput(9);
+#endif
+
 
 		//xServo = new Servo(0);
 		//yServo = new Servo(1);
