@@ -48,6 +48,8 @@ private:
     ///////////////////////
     DigitalOutput * osciliscope1;
     DigitalOutput * osciliscope2;
+    /////////////////////////////
+    CANTalon * scoring;
 
 
     std::string profile = "everything";
@@ -61,6 +63,7 @@ private:
 public:
 	Robot()
 	{
+		scoring = NULL;
 		osciliscope1 = NULL;
 		osciliscope2 = NULL;
         driver = NULL;
@@ -138,6 +141,9 @@ public:
 		//motor->EnableZeroSensorPositionOnIndex(true, true);
 		//motor->SetAllowableClosedLoopErr(20);//This is the error for the scoring encoder in PID
 		//////////////////////////////////////////////////////////////////////////////////////////
+
+		scoring = new CANTalon(99);
+		scoring->SetControlMode();
 
 		//StartLogging("init");
 		OutputTroll(cout);
