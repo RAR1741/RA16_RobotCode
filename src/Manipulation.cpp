@@ -93,6 +93,7 @@ bool Manipulation::EditTrain(int index, float val[2])
 		for (unsigned int i = 0; i < positions.size(); i++)
 		{
 			string out;
+			cout << "eowo" << endl;
 			out = to_string(positions.at(i).at(0)) + "," + to_string(positions.at(i).at(1)) + ",\n";
 			train << out;
 		}
@@ -192,7 +193,7 @@ void Manipulation::Process()
 		cout << "StartHomingUP\n";
 		if(homingTimer->Get()<.75)
 		{
-			BaseMotor->Set(60);
+			BaseMotor->Set(150);
 		}
 		else
 		{
@@ -205,7 +206,7 @@ void Manipulation::Process()
 		cout << "StartHomingDown\n";
 		if(BaseLimit->Get())
 		{
-			BaseMotor->Set(-40);
+			BaseMotor->Set(-100);
 		}
 		else
 		{
