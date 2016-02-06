@@ -48,6 +48,7 @@ void Manipulation::ReadPostions()
 			cout << temp.size() << endl;
 			row++;
 		}
+		file.close();
 	}
 }
 
@@ -89,7 +90,7 @@ bool Manipulation::EditTrain(int index, float val[2])
 		positions.at(index) = tmp;
 		fstream train;
 		train.open("/home/lvuser/train.csv", std::ios_base::out);
-		for (unsigned int i; i < positions.size(); i++)
+		for (unsigned int i = 0; i < positions.size(); i++)
 		{
 			string out;
 			out = to_string(positions.at(i).at(0)) + "," + to_string(positions.at(i).at(1)) + ",\n";
