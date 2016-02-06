@@ -143,7 +143,7 @@ public:
 		//////////////////////////////////////////////////////////////////////////////////////////
 
 		scoring = new CANTalon(99);
-		scoring->SetControlMode();
+		//scoring->SetControlMode();
 
 		//StartLogging("init");
 		OutputTroll(cout);
