@@ -10,6 +10,7 @@
 #include "Manipulation.h"
 #include "Drive.h"
 #include "Targeting.h"
+#include "Config.h"
 
 using namespace std;
 
@@ -144,7 +145,7 @@ public:
 
 		scoring = new CANTalon(99);
 		//scoring->SetControlMode();
-
+		ReloadConfig();
 		//StartLogging("init");
 		OutputTroll(cout);
 	}
@@ -293,6 +294,12 @@ public:
 	void OsciliscopeEnd()
 	{
 
+	}
+
+	void ReloadConfig()
+	{
+		Config::LoadFromFile("/home/lvuser/config.txt");
+		cout << Config::GetSetting("wow", 0) << endl;
 	}
 
 	void OutputTroll(ostream & out)
