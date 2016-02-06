@@ -83,19 +83,16 @@ bool Manipulation::EditTrain(int index, float val[2])
 {
 	if((unsigned)index < positions.size() && (unsigned)index >= 0)
 	{
+		vector<float> tmp;
+		tmp.push_back(val[0]);
+		tmp.push_back(val[1]);
+		positions.at(index) = tmp;
 		fstream train;
 		train.open("/home/lvuser/train.csv", std::ios_base::out);
 		for (unsigned int i; i < positions.size(); i++)
 		{
 			string out;
-			if(i != (unsigned)index)
-			{
-				out = to_string(positions.at(i).at(0)) + "," + to_string(positions.at(i).at(1)) + ",\n";
-			}
-			else
-			{
-				out = to_string(val[0]) + "," + to_string(val[1]) + ",\n";
-			}
+			out = to_string(positions.at(i).at(0)) + "," + to_string(positions.at(i).at(1)) + ",\n";
 			train << out;
 		}
 		train.close();
