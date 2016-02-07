@@ -37,6 +37,7 @@ private:
 	Victor *LFlyMotor;
 	Victor *RFlyMotor;
 	DigitalInput *HomeSensor;
+	Timer * fireTimer;
 };
 
 #endif /* SRC_SCORING_H_ */

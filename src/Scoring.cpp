@@ -18,6 +18,7 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	TensionMotor->SetControlMode(CANTalon::kPosition);
 	HomeSensor = homeSensor;
 	state = State::kWaiting;
+	fireTimer = new Timer();
 }
 
 void Scoring::Update()
@@ -28,14 +29,15 @@ void Scoring::Update()
 
 			break;
 		case Scoring::State::kLoading:
-			TensionMotor->Set(180);//Near the Index
-			if(TensionMotor->GetEncPosition()== 0)//change to a range
+			//TensionMotor->SetControlMode(CANTalon::kSpeed);Speed Mode?
+			TensionMotor->Set(180);//just past the Index
+			if(HomeSensor->Get() && fabs( TensionMotor->GetEncPosition() ) <= 20)//change to a range
 			{
 				state = kIndexing;
 			}
 			break;
 		case Scoring::State::kIndexing:
-			TensionMotor->Set(10);//Get to Exact Position
+			TensionMotor->Set(100);//Get to Exact Position
 			if(fabs(TensionMotor->GetClosedLoopError())< 20)
 			{
 				state = kArmed;
@@ -53,10 +55,17 @@ void Scoring::Update()
 			state = kFiring;
 			break;
 		case Scoring::State::kFiring:
+			fireTimer->Reset();
+			fireTimer->Start();
+			if(fireTimer->Get() >= 1.5)//wait 1.5 seconds to go to next state
+			{
+				state = kReset;
+			}
 			//Timer for waiting for fire to happen
 			break;
 		case Scoring::State::kReset:
-			if(false)//Some condition that confirms home
+			SetFlySpeed(0);
+			if(false)//Some condition that confirms resting pos
 			{
 				state = kWaiting;
 			}
@@ -83,7 +92,7 @@ void Scoring::Fire()
 void Scoring::SetFlySpeed(float speed)
 {
 	LFlyMotor->Set(-speed);
-	LFlyMotor->Set(speed);
+	RFlyMotor->Set(speed);
 }
 
 void Scoring::SetAngle(float angle)
