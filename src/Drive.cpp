@@ -23,17 +23,17 @@ void Drive::HaloDrive(float x, float y)
 	float left = y + x;
 	float right = y - x;
 	FR->Set(-right);
-	BR->Set(1);
+	BR->Set(8);
 	FL->Set(left);
-	BL->Set(0);
+	BL->Set(7);
 }
 
 void Drive::TankDrive(float l, float r)
 {
 	FR->Set(r);
-	BR->Set(1);
+	BR->Set(8);
 	FL->Set(l);
-	BL->Set(0);
+	BL->Set(7);
 }
 
 void Drive::Log(Logger* logger)

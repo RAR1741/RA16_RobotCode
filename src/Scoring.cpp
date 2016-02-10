@@ -91,7 +91,7 @@ void Scoring::Fire()
 
 void Scoring::SetFlySpeed(float speed)
 {
-	LFlyMotor->Set(-speed);
+	LFlyMotor->Set(speed);
 	RFlyMotor->Set(speed);
 }
 

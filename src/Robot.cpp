@@ -11,6 +11,7 @@
 #include "Drive.h"
 #include "Targeting.h"
 #include "Config.h"
+#include "Scoring.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ class Robot: public IterativeRobot
 {
 private:
 	Gamepad *driver;
+	Gamepad *op;
 	///////////////////
 	CANTalon * motorFL;
 	CANTalon * motorFR;
@@ -50,13 +52,21 @@ private:
     DigitalOutput * osciliscope1;
     DigitalOutput * osciliscope2;
     /////////////////////////////
-    CANTalon * scoring;
+    CANTalon * puncher;
+    CANTalon * aimer;
+    Victor * lin;
+    Victor * rin;
+    //////////////////////////
+    Scoring * score;
 
 
     std::string profile = "everything";
     char * nope = '\0';
 
     uint32_t jim = false;
+
+
+    bool getPos = false;
     //string *nope = NULL;
 
     //std::string GRIP_ARGS = "java -jar /home/lvuser/GRIP.jar /home/lvuser/" + profile + ".grip";
@@ -64,7 +74,12 @@ private:
 public:
 	Robot()
 	{
-		scoring = NULL;
+		op = NULL;
+		score = NULL;
+		lin = NULL;
+		rin = NULL;
+		aimer = NULL;
+		puncher = NULL;
 		osciliscope1 = NULL;
 		osciliscope2 = NULL;
         driver = NULL;
@@ -98,6 +113,7 @@ public:
 		// targeting = new Targeting(light);
 
 		driver = new Gamepad(0);
+		op = new Gamepad(1);
 		//gyro = new AnalogGyro(1);
 
 		//chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
@@ -116,12 +132,12 @@ public:
 //		arm = new Manipulation(motorBase, motorArm, NULL, NULL);
 
 #if !TESTBED
-		motorFL = new CANTalon(0);
-		motorBL = new CANTalon(2);
+		motorFL = new CANTalon(7);
+		motorBL = new CANTalon(9);
 		motorBL->SetControlMode(CANTalon::ControlMode::kFollower);
 
-		motorFR = new CANTalon(1);
-		motorBR = new CANTalon(3);
+		motorFR = new CANTalon(8);
+		motorBR = new CANTalon(10);
 		motorBR->SetControlMode(CANTalon::ControlMode::kFollower);
 
 		drive = new Drive(motorFR, motorBR, motorFL, motorBL);
@@ -143,7 +159,19 @@ public:
 		//motor->SetAllowableClosedLoopErr(20);//This is the error for the scoring encoder in PID
 		//////////////////////////////////////////////////////////////////////////////////////////
 
-		scoring = new CANTalon(99);
+		puncher = new CANTalon(4);
+		puncher->SetControlMode(CANTalon::kPercentVbus);
+		puncher->Enable();
+		aimer = new CANTalon(3);
+		aimer->SetControlMode(CANTalon::kPercentVbus);
+		rin = new Victor(0);
+		lin = new Victor(1);
+
+		score = new Scoring(aimer,puncher,lin,rin,NULL);
+
+		puncher->SetControlMode(CANTalon::kPercentVbus);
+		aimer->SetControlMode(CANTalon::kPercentVbus);
+
 		//scoring->SetControlMode();
 		ReloadConfig();
 		//StartLogging("init");
@@ -211,6 +239,46 @@ public:
 		{
 			drive->HaloDrive(driver->GetRightX() * 0.6, -driver->GetLeftY() * 0.6);
 		}
+
+		if(op->GetA())
+		{
+			getPos = true;
+		}
+		else
+		{
+			getPos = false;
+		}
+
+		if(fabs(op->GetRTriggerAxis()) >= .1)
+		{
+			score->SetFlySpeed(op->GetRTriggerAxis());
+		}
+		else if(fabs(op->GetLTriggerAxis()) >= .1)
+		{
+			score->SetFlySpeed(-(op->GetLTriggerAxis()));
+		}
+		else
+		{
+			score->SetFlySpeed(0);
+		}
+
+		if(fabs(op->GetRightX()) >= 0.1)//fabs(op->GetRightX()) >= 0.1)
+		{
+			puncher->Set(op->GetRightX() *.5);//op->GetRightX() *
+		}
+		else
+		{
+			puncher->Set(0);
+		}
+
+		if(fabs(op->GetLeftX()) >= 0.1)
+		{
+			aimer->Set(op->GetLeftX() * .5);
+		}
+		else
+		{
+			aimer->Set(0);
+		}
 #endif
 		Log();
 	}
@@ -256,14 +324,19 @@ public:
 	void SetupLogging()
 	{
 		logger->AddAttribute("Time");
-		logger->AddAttribute("FLVoltage");
-		logger->AddAttribute("FRVoltage");
-		logger->AddAttribute("BLVoltage");
-		logger->AddAttribute("BRVoltage");
+		logger->AddAttribute("FLpos");
+		logger->AddAttribute("FRpos");
+		logger->AddAttribute("BLpos");
+		logger->AddAttribute("BRpos");
 		logger->AddAttribute("FLCurrent");
 		logger->AddAttribute("FRCurrent");
 		logger->AddAttribute("BLCurrent");
 		logger->AddAttribute("BRCurrent");
+		logger->AddAttribute("AimPos");
+		logger->AddAttribute("PunchPos");
+		logger->AddAttribute("AimCurrent");
+		logger->AddAttribute("PunchCurrent");
+		logger->AddAttribute("getPos");
 		logger->WriteAttributes();
 	}
 
@@ -273,14 +346,19 @@ public:
 
 		logger->Log("Time", logTime->Get());
 #if !TESTBED
-		logger->Log("FLVoltage", motorFL->GetBusVoltage());
-		logger->Log("FRVoltage", motorFR->GetBusVoltage());
-		logger->Log("BLVoltage", motorBL->GetBusVoltage());
-		logger->Log("BRVoltage", motorBR->GetBusVoltage());
+		logger->Log("FLpos", motorFL->GetEncPosition());
+		logger->Log("FRpos", motorFR->GetEncPosition());
+		logger->Log("BLpos", motorBL->GetEncPosition());
+		logger->Log("BRpos", motorBR->GetEncPosition());
 		logger->Log("FLCurrent", motorFL->GetOutputCurrent());
 		logger->Log("FRCurrent", motorFR->GetOutputCurrent());
 		logger->Log("BLCurrent", motorBL->GetOutputCurrent());
 		logger->Log("BRCurrent", motorBR->GetOutputCurrent());
+		logger->Log("AimPos", aimer->GetEncPosition());
+		logger->Log("PunchPos", puncher->GetEncPosition());
+		logger->Log("AimCurrent", aimer->GetOutputCurrent());
+		logger->Log("PunchCurrent", puncher->GetOutputCurrent());
+		logger->Log("getPos", getPos);
 #endif
 		logger->WriteLine();
 		//cout << logTime->Get() << endl;
