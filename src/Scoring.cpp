@@ -7,6 +7,7 @@
 
 #include "WPILib.h"
 #include "Scoring.h"
+#include "Config.h"
 
 Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *homeSensor)
 {
@@ -19,6 +20,14 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	HomeSensor = homeSensor;
 	state = State::kWaiting;
 	fireTimer = new Timer();
+	Config::LoadFromFile("/home/lvuser/config.txt");
+	ChooChooLoaded = Config::GetSetting("ChooChooLoaded", 400);
+	SP = Config::GetSetting("S_S_P", 1);
+	SI = Config::GetSetting("S_S_I", 1);
+	SD = Config::GetSetting("S_S_D", 1);
+	PP = Config::GetSetting("S_P_P", 1);
+	PI = Config::GetSetting("S_P_I", 1);
+	PD = Config::GetSetting("S_P_D", 1);
 }
 
 void Scoring::Update()

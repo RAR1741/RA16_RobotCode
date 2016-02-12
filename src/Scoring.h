@@ -38,6 +38,13 @@ private:
 	Victor *RFlyMotor;
 	DigitalInput *HomeSensor;
 	Timer * fireTimer;
+	float ChooChooLoaded;
+	float SP;
+	float SI;
+	float SD;
+	float PP;
+	float PI;
+	float PD;
 };
 
 #endif /* SRC_SCORING_H_ */
