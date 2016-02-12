@@ -124,10 +124,10 @@ public:
 		//SmartDashboard::PutData("Auto Modes", chooser);
 		//lw->AddSensor((const std::string)"Main", 0, gyro);
 		cout << "Arm initializing\n";
-		motorBase = new CANTalon(1);
+		motorBase = new CANTalon(2);
 		motorBase->SetControlMode(CANSpeedController::kPosition);
 		motorBase->SetPID(5,.0001,0);
-		motorArm = new CANTalon(3);
+		motorArm = new CANTalon(1);
 		motorArm->SetControlMode(CANSpeedController::kPosition);
 		motorArm->SetPID(1,0,0);
 		cout << "Arm set to pos: " << motorArm->GetEncPosition();
