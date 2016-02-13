@@ -8,8 +8,11 @@
 #include "WPILib.h"
 #include "Scoring.h"
 #include "Config.h"
+#include <iostream>
 
-Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *homeSensor)
+using namespace std;
+
+Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *indexSensor,DigitalInput *homeSensor,DigitalInput *forwardEnd)
 {
 	AngleMotor = aMotor;
 	TensionMotor = tMotor;
@@ -17,8 +20,12 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	RFlyMotor = rMotor;
 	AngleMotor->SetControlMode(CANTalon::kPosition);
 	TensionMotor->SetControlMode(CANTalon::kPosition);
-	HomeSensor = homeSensor;
+	IndexSensor = indexSensor;
+	HomeAngle = homeSensor;
+	homingTimer = new Timer();
+	ForwardEnd = forwardEnd;
 	state = State::kWaiting;
+	homeState = HomeState::kReady;
 	fireTimer = new Timer();
 	Config::LoadFromFile("/home/lvuser/config.txt");
 	ChooChooLoaded = Config::GetSetting("ChooChooLoaded", 400);
@@ -32,6 +39,7 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	encPos2 = Config::GetSetting("AnglePos2", 1);
 	encPos3 = Config::GetSetting("AnglePos3", 1);
 	encPos4 = Config::GetSetting("AnglePos4", 1);
+	encHomePos = Config::GetSetting("AngleHomedPos", 1);
 }
 
 void Scoring::Update()
@@ -44,14 +52,14 @@ void Scoring::Update()
 		case Scoring::State::kLoading:
 			//TensionMotor->SetControlMode(CANTalon::kSpeed);Speed Mode?
 			TensionMotor->Set(180);//just past the Index
-			if(HomeSensor->Get() && fabs( TensionMotor->GetEncPosition() ) <= 20)//change to a range
+			if(IndexSensor->Get() && fabs( TensionMotor->GetEncPosition() ) <= 10000)//change to a range
 			{
 				state = kIndexing;
 			}
 			break;
 		case Scoring::State::kIndexing:
-			TensionMotor->Set(100);//Get to Exact Position
-			if(fabs(TensionMotor->GetClosedLoopError())< 20)
+			TensionMotor->Set(125000);//Get to Exact Position
+			if(fabs(TensionMotor->GetClosedLoopError())< 10000)
 			{
 				state = kArmed;
 			}
@@ -63,8 +71,8 @@ void Scoring::Update()
 
 			break;
 		case Scoring::State::kTrigger:
-			SetFlySpeed(-1);
-			TensionMotor->Set(20);//Just past Trigger point
+			//SetFlySpeed(-1);
+			TensionMotor->Set(200000);//Just past Trigger point
 			state = kFiring;
 			break;
 		case Scoring::State::kFiring:
@@ -77,7 +85,7 @@ void Scoring::Update()
 			//Timer for waiting for fire to happen
 			break;
 		case Scoring::State::kReset:
-			SetFlySpeed(0);
+			//SetFlySpeed(0);
 			if(false)//Some condition that confirms resting pos
 			{
 				state = kWaiting;
@@ -110,8 +118,70 @@ void Scoring::SetFlySpeed(float speed)
 
 void Scoring::SetAngle(float angle)
 {
+	//AngleMotor->Set(angle);
+}
 
-	AngleMotor->Set(angle);
+void Scoring::AngleHome()
+{
+	switch(homeState)
+	{
+	case Scoring::HomeState::kStart:
+
+		AngleMotor->SetControlMode(CANTalon::kSpeed);
+
+		homingTimer->Reset();
+		homingTimer->Start();
+
+		if(!HomeAngle->Get())//is triggered
+		{
+			cout << "Starting4\n";
+			homeState = kHomingUp;
+		}
+		else if(HomeAngle->Get())//isnt triggered
+		{
+			homeState = kHomingDown;
+		}
+		break;
+	case Scoring::HomeState::kHomingUp:
+		cout << "StartHomingUP\n";
+		if(homingTimer->Get()< 2)
+		{
+			AngleMotor->Set(1300);
+		}
+		else
+		{
+			AngleMotor->Set(0);
+			homeState = kHomingDown;
+		}
+		cout << "EndHomingUP\n";
+		break;
+	case Scoring::HomeState::kHomingDown:
+		cout << "StartHomingDown\n";
+		if(HomeAngle->Get())//isnt triggered
+		{
+			AngleMotor->Set(-1300);
+		}
+		else
+		{
+			AngleMotor->Set(0);
+			AngleMotor->SetControlMode(CANTalon::kPosition);
+			AngleMotor->SetEncPosition(encHomePos);
+			AngleMotor->Set(encHomePos);
+			homeState = kHomed;
+		}
+		cout << "StartHomingDown\n";
+		break;
+	case Scoring::HomeState::kHomed:
+	{
+		AngleMotor->Set(encHomePos);
+		homeState = kReady;
+		break;
+	}
+	case Scoring::HomeState::kReady:
+
+		break;
+
+	}
 }
 
 void Scoring::SetPredefinedAngle(int posNum)

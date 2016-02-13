@@ -22,9 +22,19 @@ public:
 		kFiring,
 		kReset
     } State;
-	Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *homeSensor);
+
+	typedef enum
+	{
+		kStart = 0,
+		kHomingUp = 1,
+		kHomingDown = 2,
+		kHomed = 3,
+		kReady = 4
+	}HomeState;
+	Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *indexSensor,DigitalInput *homeSensor,DigitalInput *forwardEnd);
 	void Update();
 	void SetAngle(float angle);
+	void AngleHome();
 	void SetPredefinedAngle(int posNum);
 	float GetAngle();
 	State GetState();
@@ -33,11 +43,15 @@ public:
 	void Fire();
 private:
 	State state;
+	HomeState homeState;
 	CANTalon *AngleMotor;
 	CANTalon *TensionMotor;
 	Victor *LFlyMotor;
 	Victor *RFlyMotor;
-	DigitalInput *HomeSensor;
+	DigitalInput * ForwardEnd;
+	DigitalInput * HomeAngle;
+	Timer * homingTimer;
+	DigitalInput *IndexSensor;
 	Timer * fireTimer;
 	float ChooChooLoaded;
 	float SP;
@@ -50,6 +64,7 @@ private:
 	int encPos2;
 	int encPos3;
 	int encPos4;
+	int encHomePos;
 };
 
 #endif /* SRC_SCORING_H_ */
