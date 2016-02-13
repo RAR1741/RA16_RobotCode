@@ -1,0 +1,2 @@
+#this is a config file
+flyWheelRatio = 4
