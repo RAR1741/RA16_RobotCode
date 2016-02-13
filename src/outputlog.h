@@ -16,6 +16,7 @@ class OutputLog
 public:
 	void Troll(ostream & out);
 	void Aperture(ostream & out);
+	void Mesa(ostream & out);
 };
 
 #endif /* SRC_OUTPUTLOG_H_ */
