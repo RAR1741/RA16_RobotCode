@@ -109,7 +109,7 @@ public:
 		lw = LiveWindow::GetInstance();
 		//chooser = new SendableChooser();
 
-		light = new Relay(0);
+		//light = new Relay(0);
 
 		// turn this on once we have a camera connected
 		// targeting = new Targeting(light);
@@ -135,6 +135,7 @@ public:
 
 #if !TESTBED
 		motorFL = new CANTalon(7);
+		motorFL->SetStatusFrameRateMs(CANTalon::StatusFrameRate::StatusFrameRateQuadEncoder,6);
 		motorBL = new CANTalon(9);
 		motorBL->SetControlMode(CANTalon::ControlMode::kFollower);
 
@@ -156,20 +157,16 @@ public:
 		logTime->Start();
 		logger = new Logger();
 
-		//Scoring THINGS//////////////////////////////////////////////////////////////////////////
-		//motor->EnableZeroSensorPositionOnIndex(true, true);
-		//motor->SetAllowableClosedLoopErr(20);//This is the error for the scoring encoder in PID
-		//////////////////////////////////////////////////////////////////////////////////////////
-
 		puncher = new CANTalon(4);
 		puncher->SetControlMode(CANTalon::kPercentVbus);
-		puncher->Enable();
+		puncher->SetAllowableClosedLoopErr((uint32_t)10000);
+		puncher->EnableZeroSensorPositionOnIndex(true, true);
 		aimer = new CANTalon(3);
 		aimer->SetControlMode(CANTalon::kPercentVbus);
 		rin = new Victor(0);
 		lin = new Victor(1);
 
-		score = new Scoring(aimer,puncher,lin,rin,NULL);
+		//score = new Scoring(aimer,puncher,lin,rin,NULL);
 
 		puncher->SetControlMode(CANTalon::kPercentVbus);
 		aimer->SetControlMode(CANTalon::kPercentVbus);
@@ -233,54 +230,55 @@ public:
 #if !TESTBED
 //		xServo->Set((driver->GetRightX() + 1) / 2);
 //		yServo->Set((driver->GetRightY() + 1) / 2);
-		if(driver->GetRightBumper())
-		{
-			drive->HaloDrive(driver->GetRightX()* 0.6, -driver->GetLeftY());
-		}
-		else
-		{
-			drive->HaloDrive(driver->GetRightX() * 0.6, -driver->GetLeftY() * 0.6);
-		}
-
-		if(op->GetA())
-		{
-			getPos = true;
-		}
-		else
-		{
-			getPos = false;
-		}
-
-		if(fabs(op->GetRTriggerAxis()) >= .1)
-		{
-			score->SetFlySpeed(op->GetRTriggerAxis());
-		}
-		else if(fabs(op->GetLTriggerAxis()) >= .1)
-		{
-			score->SetFlySpeed(-(op->GetLTriggerAxis()));
-		}
-		else
-		{
-			score->SetFlySpeed(0);
-		}
-
-		if(fabs(op->GetRightX()) >= 0.1)//fabs(op->GetRightX()) >= 0.1)
-		{
-			puncher->Set(op->GetRightX() *.5);//op->GetRightX() *
-		}
-		else
-		{
-			puncher->Set(0);
-		}
-
-		if(fabs(op->GetLeftX()) >= 0.1)
-		{
-			aimer->Set(op->GetLeftX() * .5);
-		}
-		else
-		{
-			aimer->Set(0);
-		}
+//		if(driver->GetRightBumper())
+//		{
+//			drive->HaloDrive(driver->GetRightX()* 0.6, -driver->GetLeftY());
+//		}
+//		else
+//		{
+//			drive->HaloDrive(driver->GetRightX() * 0.6, -driver->GetLeftY() * 0.6);
+//		}
+//
+//		if(op->GetA())
+//		{
+//			getPos = true;
+//		}
+//		else
+//		{
+//			getPos = false;
+//		}
+//
+//		if(fabs(op->GetRTriggerAxis()) >= .1)
+//		{
+//			score->SetFlySpeed(op->GetRTriggerAxis());
+//		}
+//		else if(fabs(op->GetLTriggerAxis()) >= .1)
+//		{
+//			score->SetFlySpeed(-(op->GetLTriggerAxis()));
+//		}
+//		else
+//		{
+//			score->SetFlySpeed(0);
+//		}
+//
+//		if(fabs(op->GetRightX()) >= 0.1)//fabs(op->GetRightX()) >= 0.1)
+//		{
+//			puncher->Set(op->GetRightX() *.5);//op->GetRightX() *
+//		}
+//		else
+//		{
+//			puncher->Set(0);
+//		}
+//
+//		if(fabs(op->GetLeftX()) >= 0.1)
+//		{
+//			aimer->Set(op->GetLeftX() * .5);
+//		}
+//		else
+//		{
+//			aimer->Set(0);
+//		}
+		cout << aimer->GetPinStateQuadIdx();
 #endif
 		Log();
 	}
