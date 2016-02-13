@@ -7,6 +7,7 @@
 
 #ifndef SRC_OUTPUTLOG_H_
 #define SRC_OUTPUTLOG_H_
+#include <iostream>
 
 using namespace std;
 

@@ -25,6 +25,7 @@ public:
 	Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *homeSensor);
 	void Update();
 	void SetAngle(float angle);
+	void SetPredefinedAngle(int posNum);
 	float GetAngle();
 	State GetState();
 	void SetFlySpeed(float speed);
@@ -45,6 +46,10 @@ private:
 	float PP;
 	float PI;
 	float PD;
+	int encPos1;
+	int encPos2;
+	int encPos3;
+	int encPos4;
 };
 
 #endif /* SRC_SCORING_H_ */

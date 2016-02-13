@@ -28,6 +28,10 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	PP = Config::GetSetting("S_P_P", 1);
 	PI = Config::GetSetting("S_P_I", 1);
 	PD = Config::GetSetting("S_P_D", 1);
+	encPos1 = Config::GetSetting("AnglePos1", 1);
+	encPos2 = Config::GetSetting("AnglePos2", 1);
+	encPos3 = Config::GetSetting("AnglePos3", 1);
+	encPos4 = Config::GetSetting("AnglePos4", 1);
 }
 
 void Scoring::Update()
@@ -106,7 +110,29 @@ void Scoring::SetFlySpeed(float speed)
 
 void Scoring::SetAngle(float angle)
 {
+
 	AngleMotor->Set(angle);
+}
+
+void Scoring::SetPredefinedAngle(int posNum)
+{
+	switch(posNum)
+	{
+	case 1:
+		AngleMotor->Set(encPos1);
+		break;
+	case 2:
+		AngleMotor->Set(encPos2);
+		break;
+	case 3:
+		AngleMotor->Set(encPos3);
+		break;
+	case 4:
+		AngleMotor->Set(encPos4);
+		break;
+	default:
+		break;
+	}
 }
 
 float Scoring::GetAngle()
