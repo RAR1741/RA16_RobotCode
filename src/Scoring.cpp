@@ -52,29 +52,31 @@ void Scoring::Update()
 		case Scoring::State::kLoading:
 			TensionMotor->SetControlMode(CANTalon::kPercentVbus);
 			TensionMotor->Set(.4);//just past the Index
-			if(IndexSensor->Get())// && fabs( TensionMotor->GetEncPosition() ) <= 10000change to a range
+			if(IndexSensor->Get())// && fabs( TensionMotor->GetEncPosition() ) <= 1000 0change to a range
 			{
 				TensionMotor->SetControlMode(CANTalon::kPosition);
 				state = kIndexing;
 			}
 			break;
 		case Scoring::State::kIndexing:
-			TensionMotor->Set(125000);//Get to Exact Position
-			if(fabs(TensionMotor->GetClosedLoopError())< 10000)
+			TensionMotor->Set(-125000);//Get to Exact Position
+			if(fabs(TensionMotor->GetClosedLoopError())< 5000)
 			{
 				state = kArmed;
 			}
 			break;
 
 		case Scoring::State::kArmed:
-			TensionMotor->Set(TensionMotor->GetEncPosition());
+			TensionMotor->SetControlMode(CANTalon::kPercentVbus);
+			TensionMotor->Set(0);
 			//JUST DO IT
 
 
 			break;
 		case Scoring::State::kTrigger:
+			TensionMotor->SetControlMode(CANTalon::kPosition);
 			//SetFlySpeed(-1);
-			TensionMotor->Set(200000);//Just past Trigger point
+			TensionMotor->Set(-200000);//Just past Trigger point
 			fireTimer->Reset();
 			fireTimer->Start();
 			state = kFiring;

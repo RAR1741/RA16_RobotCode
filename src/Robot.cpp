@@ -163,7 +163,7 @@ public:
 		Index = new DigitalInput(0);
 		puncher = new CANTalon(4);
 		puncher->SetControlMode(CANTalon::kPosition);
-		//puncher->SetAllowableClosedLoopErr((uint32_t)10000);
+		//puncher->SetAllowableClosedLoopErr(5000);
 		puncher->EnableZeroSensorPositionOnIndex(true, false);
 		puncher->SetPID(.75,0,0);
 		puncher->Enable();
