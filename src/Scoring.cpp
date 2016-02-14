@@ -51,7 +51,7 @@ void Scoring::Update()
 			break;
 		case Scoring::State::kLoading:
 			TensionMotor->SetControlMode(CANTalon::kPercentVbus);
-			TensionMotor->Set(-.4);//just past the Index
+			TensionMotor->Set(-.65);//just past the Index
 			if(IndexSensor->Get())// && fabs( TensionMotor->GetEncPosition() ) <= 1000 0change to a range
 			{
 				TensionMotor->SetEncPosition(0);
@@ -66,25 +66,25 @@ void Scoring::Update()
 			if(TensionMotor->GetEncPosition() > -50000)
 			{
 				cout << TensionMotor->GetEncPosition() << endl;
-				TensionMotor->Set(-.4);
+				TensionMotor->Set(-.55);
 			}
 			else if(TensionMotor->GetEncPosition() > -75000)
 			{
 				cout << "2: " << TensionMotor->GetEncPosition() << endl;
-				TensionMotor->Set(-.35);
+				TensionMotor->Set(-.45);
 			}
 			else if(TensionMotor->GetEncPosition() > -100000)
 			{
 				cout << "3: " << TensionMotor->GetEncPosition() << endl;
-				TensionMotor->Set(-.3);
+				TensionMotor->Set(-.4);
 			}
-			else if(TensionMotor->GetEncPosition() < -125000)
+			else if(TensionMotor->GetEncPosition() < -135000)
 			{
 				cout << "4: " << TensionMotor->GetEncPosition() << endl;
-				TensionMotor->Set(-.25);
+				TensionMotor->Set(-.3);
 			}
 			//TensionMotor->Set(.35);//Get to Exact Position
-			if(TensionMotor->GetEncPosition() < -125000)
+			if(TensionMotor->GetEncPosition() < -135000)
 			{
 				cout << "switched" << endl;
 				TensionMotor->Set(0);
@@ -101,7 +101,7 @@ void Scoring::Update()
 		case Scoring::State::kTrigger:
 			//TensionMotor->SetControlMode(CANTalon::kPosition);
 			//SetFlySpeed(-1);
-			if(TensionMotor->GetEncPosition() < -200000)
+			if(TensionMotor->GetEncPosition() < -175000)
 			{
 				TensionMotor->Set(0);
 				fireTimer->Reset();

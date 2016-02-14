@@ -232,14 +232,14 @@ public:
 	{
 //		xServo->Set((driver->GetRightX() + 1) / 2);
 //		yServo->Set((driver->GetRightY() + 1) / 2);
-//		if(driver->GetRightBumper())
-//		{
-//			drive->HaloDrive(driver->GetRightX()* 0.6, -driver->GetLeftY());
-//		}
-//		else
-//		{
-//			drive->HaloDrive(driver->GetRightX() * 0.6, -driver->GetLeftY() * 0.6);
-//		}
+		if(driver->GetRightBumper())
+		{
+			drive->HaloDrive(driver->GetRightX()* 0.6, -driver->GetLeftY());
+		}
+		else
+		{
+			drive->HaloDrive(driver->GetRightX() * 0.6, -driver->GetLeftY() * 0.6);
+		}
 //
 //		if(op->GetA())
 //		{
@@ -250,18 +250,18 @@ public:
 //			getPos = false;
 //		}
 //
-//		if(fabs(op->GetRTriggerAxis()) >= .1)
-//		{
-//			score->SetFlySpeed(op->GetRTriggerAxis());
-//		}
-//		else if(fabs(op->GetLTriggerAxis()) >= .1)
-//		{
-//			score->SetFlySpeed(-(op->GetLTriggerAxis()));
-//		}
-//		else
-//		{
-//			score->SetFlySpeed(0);
-//		}
+		if(fabs(op->GetRTriggerAxis()) >= .1)
+		{
+			score->SetFlySpeed(op->GetRTriggerAxis()*4/5);
+		}
+		else if(fabs(op->GetLTriggerAxis()) >= .1)
+		{
+			score->SetFlySpeed(-(op->GetLTriggerAxis())*4/5);
+		}
+		else
+		{
+			score->SetFlySpeed(0);
+		}
 //
 //		if(fabs(op->GetRightX()) >= 0.1)//fabs(op->GetRightX()) >= 0.1)
 //		{
@@ -272,14 +272,15 @@ public:
 //			puncher->Set(0);
 //		}
 //
-//		if(fabs(op->GetLeftX()) >= 0.1)
-//		{
-//			aimer->Set(op->GetLeftX() * .5);
-//		}
-//		else
-//		{
-//			aimer->Set(0);
-//		}
+		if(fabs(op->GetLeftX()) >= 0.1)
+		{
+			aimer->Set(op->GetLeftX() * .5);
+		}
+		else
+		{
+			aimer->Set(0);
+		}
+
 		if(driver->GetA())
 		{
 			score->Load();
