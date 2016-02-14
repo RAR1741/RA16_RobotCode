@@ -54,6 +54,7 @@ private:
     DigitalOutput * osciliscope2;
     /////////////////////////////
     CANTalon * puncher;
+    DigitalInput * Index;
     CANTalon * aimer;
     Victor * lin;
     Victor * rin;
@@ -76,6 +77,7 @@ private:
 public:
 	Robot()
 	{
+		Index = NULL;
 		op = NULL;
 		score = NULL;
 		lin = NULL;
@@ -115,7 +117,7 @@ public:
 		// targeting = new Targeting(light);
 
 		driver = new Gamepad(0);
-		op = new Gamepad(1);
+		//op = new Gamepad(1);
 		//gyro = new AnalogGyro(1);
 
 		//chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
@@ -123,15 +125,15 @@ public:
 
 		//SmartDashboard::PutData("Auto Modes", chooser);
 		//lw->AddSensor((const std::string)"Main", 0, gyro);
-		cout << "Arm initializing\n";
-		motorBase = new CANTalon(2);
-		motorBase->SetControlMode(CANSpeedController::kPosition);
-		motorBase->SetPID(5,.0001,0);
-		motorArm = new CANTalon(1);
-		motorArm->SetControlMode(CANSpeedController::kPosition);
-		motorArm->SetPID(1,0,0);
-		cout << "Arm set to pos: " << motorArm->GetEncPosition();
-		arm = new Manipulation(motorBase, motorArm, NULL, NULL);
+//		cout << "Arm initializing\n";
+//		motorBase = new CANTalon(2);
+//		motorBase->SetControlMode(CANSpeedController::kPosition);
+//		motorBase->SetPID(5,.0001,0);
+//		motorArm = new CANTalon(1);
+//		motorArm->SetControlMode(CANSpeedController::kPosition);
+//		motorArm->SetPID(1,0,0);
+//		cout << "Arm set to pos: " << motorArm->GetEncPosition();
+//		arm = new Manipulation(motorBase, motorArm, NULL, NULL);
 
 #if !TESTBED
 		motorFL = new CANTalon(7);
@@ -157,21 +159,21 @@ public:
 		logTime->Start();
 		logger = new Logger();
 
+
+		Index = new DigitalInput(0);
 		puncher = new CANTalon(4);
-		puncher->SetControlMode(CANTalon::kPercentVbus);
-		puncher->SetAllowableClosedLoopErr((uint32_t)10000);
-		puncher->EnableZeroSensorPositionOnIndex(true, true);
+		puncher->SetControlMode(CANTalon::kPosition);
+		//puncher->SetAllowableClosedLoopErr((uint32_t)10000);
+		puncher->EnableZeroSensorPositionOnIndex(true, false);
+		puncher->SetPID(.75,0,0);
+		puncher->Enable();
 		aimer = new CANTalon(3);
 		aimer->SetControlMode(CANTalon::kPercentVbus);
 		rin = new Victor(0);
 		lin = new Victor(1);
 
-		//score = new Scoring(aimer,puncher,lin,rin,NULL);
+		score = new Scoring(aimer,puncher,lin,rin,Index,NULL,NULL);
 
-		puncher->SetControlMode(CANTalon::kPercentVbus);
-		aimer->SetControlMode(CANTalon::kPercentVbus);
-
-		//scoring->SetControlMode();
 		ReloadConfig();
 		//StartLogging("init");
 		logthing->Troll(cout);
@@ -227,7 +229,6 @@ public:
 
 	void TeleopPeriodic()
 	{
-#if !TESTBED
 //		xServo->Set((driver->GetRightX() + 1) / 2);
 //		yServo->Set((driver->GetRightY() + 1) / 2);
 //		if(driver->GetRightBumper())
@@ -278,9 +279,22 @@ public:
 //		{
 //			aimer->Set(0);
 //		}
-		cout << aimer->GetPinStateQuadIdx();
-#endif
-		Log();
+		if(driver->GetA())
+		{
+			score->Load();
+		}
+
+		if(driver->GetB())
+		{
+			score->Fire();
+		}
+		//puncher->Set(3000);
+		cout << puncher->GetPinStateQuadIdx() << endl;
+		cout << puncher->GetEncPosition() << endl;
+		cout << score->GetState() << endl;
+		score->Update();
+		//cout << aimer->GetPinStateQuadIdx();
+		//Log();
 	}
 
 	void TestInit()
