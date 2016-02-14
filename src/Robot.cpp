@@ -117,7 +117,7 @@ public:
 		// targeting = new Targeting(light);
 
 		driver = new Gamepad(0);
-		//op = new Gamepad(1);
+		op = new Gamepad(1);
 		//gyro = new AnalogGyro(1);
 
 		//chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);

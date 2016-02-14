@@ -18,7 +18,7 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	TensionMotor = tMotor;
 	LFlyMotor = lMotor;
 	RFlyMotor = rMotor;
-	AngleMotor->SetControlMode(CANTalon::kPosition);
+	AngleMotor->SetControlMode(CANTalon::kPercentVbus);
 	TensionMotor->SetControlMode(CANTalon::kPosition);
 	IndexSensor = indexSensor;
 	HomeAngle = homeSensor;
@@ -78,13 +78,13 @@ void Scoring::Update()
 				cout << "3: " << TensionMotor->GetEncPosition() << endl;
 				TensionMotor->Set(-.4);
 			}
-			else if(TensionMotor->GetEncPosition() < -135000)
+			else if(TensionMotor->GetEncPosition() < -145000)
 			{
 				cout << "4: " << TensionMotor->GetEncPosition() << endl;
 				TensionMotor->Set(-.3);
 			}
 			//TensionMotor->Set(.35);//Get to Exact Position
-			if(TensionMotor->GetEncPosition() < -135000)
+			if(TensionMotor->GetEncPosition() < -145000)
 			{
 				cout << "switched" << endl;
 				TensionMotor->Set(0);
@@ -101,7 +101,7 @@ void Scoring::Update()
 		case Scoring::State::kTrigger:
 			//TensionMotor->SetControlMode(CANTalon::kPosition);
 			//SetFlySpeed(-1);
-			if(TensionMotor->GetEncPosition() < -175000)
+			if(TensionMotor->GetEncPosition() < -190000)
 			{
 				TensionMotor->Set(0);
 				fireTimer->Reset();
