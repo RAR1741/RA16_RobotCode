@@ -51,38 +51,73 @@ void Scoring::Update()
 			break;
 		case Scoring::State::kLoading:
 			TensionMotor->SetControlMode(CANTalon::kPercentVbus);
-			TensionMotor->Set(.4);//just past the Index
+			TensionMotor->Set(-.4);//just past the Index
 			if(IndexSensor->Get())// && fabs( TensionMotor->GetEncPosition() ) <= 1000 0change to a range
 			{
-				TensionMotor->SetControlMode(CANTalon::kPosition);
+				TensionMotor->SetEncPosition(0);
+				cout << TensionMotor->GetEncPosition() << endl;
+				//TensionMotor->EnableZeroSensorPositionOnIndex(false, false);
+				//TensionMotor->SetControlMode(CANTalon::kPosition);
 				state = kIndexing;
 			}
 			break;
 		case Scoring::State::kIndexing:
-			TensionMotor->Set(-125000);//Get to Exact Position
-			if(fabs(TensionMotor->GetClosedLoopError())< 5000)
+
+			if(TensionMotor->GetEncPosition() > -50000)
 			{
+				cout << TensionMotor->GetEncPosition() << endl;
+				TensionMotor->Set(-.4);
+			}
+			else if(TensionMotor->GetEncPosition() > -75000)
+			{
+				cout << "2: " << TensionMotor->GetEncPosition() << endl;
+				TensionMotor->Set(-.35);
+			}
+			else if(TensionMotor->GetEncPosition() > -100000)
+			{
+				cout << "3: " << TensionMotor->GetEncPosition() << endl;
+				TensionMotor->Set(-.3);
+			}
+			else if(TensionMotor->GetEncPosition() < -125000)
+			{
+				cout << "4: " << TensionMotor->GetEncPosition() << endl;
+				TensionMotor->Set(-.25);
+			}
+			//TensionMotor->Set(.35);//Get to Exact Position
+			if(TensionMotor->GetEncPosition() < -125000)
+			{
+				cout << "switched" << endl;
+				TensionMotor->Set(0);
 				state = kArmed;
 			}
 			break;
 
 		case Scoring::State::kArmed:
-			TensionMotor->SetControlMode(CANTalon::kPercentVbus);
 			TensionMotor->Set(0);
 			//JUST DO IT
 
 
 			break;
 		case Scoring::State::kTrigger:
-			TensionMotor->SetControlMode(CANTalon::kPosition);
+			//TensionMotor->SetControlMode(CANTalon::kPosition);
 			//SetFlySpeed(-1);
-			TensionMotor->Set(-200000);//Just past Trigger point
-			fireTimer->Reset();
-			fireTimer->Start();
-			state = kFiring;
+			if(TensionMotor->GetEncPosition() < -200000)
+			{
+				TensionMotor->Set(0);
+				fireTimer->Reset();
+				fireTimer->Start();
+				state = kFiring;
+			}
+			else
+			{
+				TensionMotor->Set(-.3);
+			}
+			//TensionMotor->Set(200000);//Just past Trigger point
+
+			//state = kFiring;
 			break;
 		case Scoring::State::kFiring:
-
+			TensionMotor->Set(0);
 			if(fireTimer->Get() >= 1.5)//wait 1.5 seconds to go to next state
 			{
 				state = kReset;
@@ -90,7 +125,9 @@ void Scoring::Update()
 			//Timer for waiting for fire to happen
 			break;
 		case Scoring::State::kReset:
+			TensionMotor->Set(0);
 			//SetFlySpeed(0);
+			//TensionMotor->EnableZeroSensorPositionOnIndex(true, false);
 			if(true)//Some condition that confirms resting pos
 			{
 				state = kWaiting;

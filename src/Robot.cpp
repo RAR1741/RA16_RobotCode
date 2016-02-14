@@ -162,10 +162,11 @@ public:
 
 		Index = new DigitalInput(0);
 		puncher = new CANTalon(4);
-		puncher->SetControlMode(CANTalon::kPosition);
+		puncher->SetControlMode(CANTalon::kPercentVbus);
 		//puncher->SetAllowableClosedLoopErr(5000);
 		puncher->EnableZeroSensorPositionOnIndex(true, false);
-		puncher->SetPID(.75,0,0);
+		//puncher->SetPID(.1,0,0);
+		puncher->SetStatusFrameRateMs(CANTalon::StatusFrameRate::StatusFrameRateQuadEncoder, 6);
 		puncher->Enable();
 		aimer = new CANTalon(3);
 		aimer->SetControlMode(CANTalon::kPercentVbus);
@@ -289,9 +290,9 @@ public:
 			score->Fire();
 		}
 		//puncher->Set(3000);
-		cout << puncher->GetPinStateQuadIdx() << endl;
-		cout << puncher->GetEncPosition() << endl;
-		cout << score->GetState() << endl;
+//		cout << puncher->GetPinStateQuadIdx() << endl;
+//		cout << puncher->GetEncPosition() << endl;
+//		cout << score->GetState() << endl;
 		score->Update();
 		//cout << aimer->GetPinStateQuadIdx();
 		//Log();
