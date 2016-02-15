@@ -173,18 +173,18 @@ public:
 		puncher->SetStatusFrameRateMs(CANTalon::StatusFrameRate::StatusFrameRateQuadEncoder, 6);
 		puncher->Enable();
 		aimer = new CANTalon(3);
-		aimer->SetInverted(true);
+		aimer->SetInverted(false);
 		aimer->SetControlMode(CANTalon::kPercentVbus);
 		rin = new Victor(0);
 		lin = new Victor(1);
 
 		absenc = new AnalogInput(0);
 
-		aimLoop = new PIDController(.75, 0, 0, absenc, aimer ,0.05);
+		aimLoop = new PIDController(19, 2, 0, absenc, aimer ,0.05);
 		aimLoop->SetContinuous(false);
 		aimLoop->SetPIDSourceType(PIDSourceType::kDisplacement);
 		aimLoop->SetInputRange(0,4.8);
-		aimLoop->SetOutputRange(-.3,.3);
+		aimLoop->SetOutputRange(-.6,.6);
 		aimLoop->Enable();
 
 		score = new Scoring(aimer,puncher,lin,rin,Index,aimLoop,NULL,NULL);
@@ -326,8 +326,14 @@ public:
 //		cout << puncher->GetEncPosition() << endl;
 //		cout << score->GetState() << endl;
 		score->Update();
+
+		cout << aimLoop->Get() << endl;
+		cout << "EncValue: " << aimer->GetEncPosition() << endl;
+		cout << "Setpoint: " << aimLoop->GetSetpoint() << endl;
+		cout << "AbsEncValue: " << absenc->GetValue() << "\n";
+		cout << "AbsEncVolt: " << absenc->GetVoltage() << "\n";
 		//cout << aimer->GetPinStateQuadIdx();
-		//Log();
+		Log();
 	}
 
 	void TestInit()
