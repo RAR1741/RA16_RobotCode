@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <iostream>
 
-Targeting::Targeting(Relay* light) :
+/*Targeting::Targeting(Relay* light) :
 	m_Server(NULL), m_Grip(NULL)
 {
 	char * GRIP_ARGS[5] = {"java" , "-jar" , "/home/lvuser/grip.jar" ,
@@ -31,21 +31,25 @@ Targeting::Targeting(Relay* light) :
 	m_Server->SetQuality(2);
 	m_Server->StartAutomaticCapture();
 
-	m_Grip = NetworkTable::GetTable("GRIP");
-}
+	m_Grip = NetworkTable::GetTable("Targeting");
+}*/
 
-std::vector<Target> Targeting::GetTargets() {
-	std::vector<double> areas  = m_Grip->GetNumberArray("myContoursReport/area", llvm::ArrayRef<double>());
-	std::vector<double> xs     = m_Grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>());
-	std::vector<double> ys     = m_Grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
-	std::vector<double> widths = m_Grip->GetNumberArray("myContourReport/width", llvm::ArrayRef<double>());
+std::vector<Target> Targeting::GetTargets()
+{
+	std::string t  = m_Grip->GetString("targets");
+	//std::vector<double> xs     = m_Grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>());
+	//std::vector<double> ys     = m_Grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
+	//std::vector<double> widths = m_Grip->GetNumberArray("myContourReport/width", llvm::ArrayRef<double>());
 
 	std::vector<Target> targets;
 
-	for (size_t i = 0; i < areas.size(); ++i) {
-		Target target(xs[i], ys[i], areas[i], widths[i]);
-		targets.push_back(target);
-	}
+	std::stringstream test(t);
+	std::string segment;
 
+	while(std::getline(test, segment, '|'))
+	{
+	   Target target(segment);
+	   targets.push_back(target);
+	}
 	return targets;
 }

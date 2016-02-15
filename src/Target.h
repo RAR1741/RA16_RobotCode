@@ -1,23 +1,23 @@
 #ifndef TARGET_H__
 #define TARGET_H__
+#include <string>
+
+using namespace std;
 
 class Target {
 public:
-	Target(float x, float y, float width, float area);
+	Target(float distance, float pan, float tilt);
+	Target(std::string in);
 
-	float Area() const;
-	float X() const;
-	float Y() const;
-	float Width() const;
-
-	float ApproximateRange() const;
+	float Distance();
+	float Pan();
+	float Tilt();
 private:
-	float m_area;
-	float m_x;
-	float m_y;
-	float m_width;
+	float m_distance;
+	float m_pan;
+	float m_tilt;
 
-	const float kCameraHorizontalFOV = 41.7; // 54 degrees for axis 206,
+	//const float kCameraHorizontalFOV = 41.7; // 54 degrees for axis 206,
 											 // 41.7 supposedly works better
 };
 #endif
