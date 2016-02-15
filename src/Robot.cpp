@@ -253,11 +253,22 @@ public:
 //		yServo->Set((driver->GetRightY() + 1) / 2);
 		if(driver->GetRightBumper())
 		{
-			drive->HaloDrive(driver->GetRightX()* 0.6, -driver->GetLeftY());
+			drive->HaloDrive(Deadband(driver->GetRightX())* 0.6, -Deadband(driver->GetLeftY()));
 		}
 		else
 		{
-			drive->HaloDrive(driver->GetRightX() * 0.6, -driver->GetLeftY() * 0.6);
+			drive->HaloDrive(Deadband(driver->GetRightX()) * 0.6, -(driver->GetLeftY() * 0.6));
+		}
+
+		if(DeadbandCheck(driver->GetRightX()) || DeadbandCheck(driver->GetLeftY()))
+		{
+			//aimer->SetControlMode(CANTalon::ControlMode::kPercentVbus);
+			aimLoop->Disable();
+			aimer->Set(0);
+		}
+		else
+		{
+			aimLoop->Enable();
 		}
 //
 //		if(op->GetA())
@@ -459,6 +470,30 @@ public:
 	{
 		Config::LoadFromFile("/home/lvuser/config.txt");
 		cout << Config::GetSetting("wow", 0) << endl;
+	}
+
+	bool DeadbandCheck(float in, float dead = 0.1)
+	{
+		if(fabs(in) >= dead)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	float Deadband(float in, float dead = 0.1)
+	{
+		if(fabs(in) >= dead)
+		{
+			return in;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 };
 
