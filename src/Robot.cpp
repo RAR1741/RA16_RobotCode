@@ -132,11 +132,11 @@ public:
 		//SmartDashboard::PutData("Auto Modes", chooser);
 		//lw->AddSensor((const std::string)"Main", 0, gyro);
 //		cout << "Arm initializing\n";
-//		motorBase = new CANTalon(2);
-//		motorBase->SetControlMode(CANSpeedController::kPosition);
+		motorBase = new CANTalon(2);
+		motorBase->SetControlMode(CANSpeedController::kPercentVbus);
 //		motorBase->SetPID(5,.0001,0);
-//		motorArm = new CANTalon(1);
-//		motorArm->SetControlMode(CANSpeedController::kPosition);
+		motorArm = new CANTalon(1);
+		motorArm->SetControlMode(CANSpeedController::kPercentVbus);
 //		motorArm->SetPID(1,0,0);
 //		cout << "Arm set to pos: " << motorArm->GetEncPosition();
 //		arm = new Manipulation(motorBase, motorArm, NULL, NULL);
@@ -326,6 +326,28 @@ public:
 		{
 			score->SetPredefinedAngle(4);
 		}
+
+
+		if(fabs(op->GetRightY())>.1)
+		{
+			motorBase->Set(op->GetRightY()*.5);
+		}
+		else
+		{
+			motorBase->Set(0);
+		}
+
+		if(fabs(op->GetLeftY())>.1)
+		{
+			motorArm->Set(op->GetLeftY()*.5);
+		}
+		else
+		{
+			motorArm->Set(0);
+		}
+
+
+
 		//puncher->Set(3000);
 //		cout << puncher->GetPinStateQuadIdx() << endl;
 //		cout << puncher->GetEncPosition() << endl;
