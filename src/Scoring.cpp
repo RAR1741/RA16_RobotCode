@@ -12,14 +12,15 @@
 
 using namespace std;
 
-Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *indexSensor,DigitalInput *homeSensor,DigitalInput *forwardEnd)
+Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *indexSensor,PIDController * aimLoop,DigitalInput *homeSensor,DigitalInput *forwardEnd)
 {
+	AimLoop = aimLoop;
 	AngleMotor = aMotor;
 	TensionMotor = tMotor;
 	LFlyMotor = lMotor;
 	RFlyMotor = rMotor;
 	AngleMotor->SetControlMode(CANTalon::kPercentVbus);
-	TensionMotor->SetControlMode(CANTalon::kPosition);
+	TensionMotor->SetControlMode(CANTalon::kPercentVbus);
 	IndexSensor = indexSensor;
 	HomeAngle = homeSensor;
 	homingTimer = new Timer();
@@ -35,10 +36,10 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	PP = Config::GetSetting("S_P_P", 1);
 	PI = Config::GetSetting("S_P_I", 1);
 	PD = Config::GetSetting("S_P_D", 1);
-	encPos1 = Config::GetSetting("AnglePos1", 1);
-	encPos2 = Config::GetSetting("AnglePos2", 1);
-	encPos3 = Config::GetSetting("AnglePos3", 1);
-	encPos4 = Config::GetSetting("AnglePos4", 1);
+	encPos1 = Config::GetSetting("AnglePos1", 2250);
+	encPos2 = Config::GetSetting("AnglePos2", 2500);
+	encPos3 = Config::GetSetting("AnglePos3", 3000);
+	encPos4 = Config::GetSetting("AnglePos4", 3250);
 	encHomePos = Config::GetSetting("AngleHomedPos", 1);
 	holdStart = Config::GetSetting("holdStart", -97000);
 	holdInc = Config::GetSetting("holdInc", -25000);
@@ -235,20 +236,25 @@ void Scoring::SetPredefinedAngle(int posNum)
 	switch(posNum)
 	{
 	case 1:
-		AngleMotor->Set(encPos1);
+		AimLoop->SetSetpoint(ValueToVoltage(encPos1));
 		break;
 	case 2:
-		AngleMotor->Set(encPos2);
+		AimLoop->SetSetpoint(ValueToVoltage(encPos2));
 		break;
 	case 3:
-		AngleMotor->Set(encPos3);
+		AimLoop->SetSetpoint(ValueToVoltage(encPos3));
 		break;
 	case 4:
-		AngleMotor->Set(encPos4);
+		AimLoop->SetSetpoint(ValueToVoltage(encPos4));
 		break;
 	default:
 		break;
 	}
+}
+
+float Scoring::ValueToVoltage(float value)
+{
+	return value/800.0F;
 }
 
 float Scoring::GetAngle()

@@ -31,13 +31,15 @@ public:
 		kHomed = 3,
 		kReady = 4
 	}HomeState;
-	Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *indexSensor,DigitalInput *homeSensor,DigitalInput *forwardEnd);
+	Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *indexSensor,PIDController * aimLoop,DigitalInput *homeSensor,DigitalInput *forwardEnd);
 	void Update();
 	void SetAngle(float angle);
 	void AngleHome();
 	void SetPredefinedAngle(int posNum);
 	float GetAngle();
 	State GetState();
+
+	float ValueToVoltage(float value);
 	void SetFlySpeed(float speed);
 	void Load();
 	void Fire();
@@ -52,6 +54,7 @@ private:
 	DigitalInput * HomeAngle;
 	Timer * homingTimer;
 	DigitalInput *IndexSensor;
+	PIDController * AimLoop;
 	Timer * fireTimer;
 	float ChooChooLoaded;
 	float SP;

@@ -56,6 +56,8 @@ private:
     CANTalon * puncher;
     DigitalInput * Index;
     CANTalon * aimer;
+    AnalogInput * absenc;
+    PIDController * aimLoop;
     Victor * lin;
     Victor * rin;
     //////////////////////////
@@ -77,6 +79,8 @@ private:
 public:
 	Robot()
 	{
+		absenc = NULL;
+		aimLoop = NULL;
 		Index = NULL;
 		op = NULL;
 		score = NULL;
@@ -169,11 +173,21 @@ public:
 		puncher->SetStatusFrameRateMs(CANTalon::StatusFrameRate::StatusFrameRateQuadEncoder, 6);
 		puncher->Enable();
 		aimer = new CANTalon(3);
+		aimer->SetInverted(true);
 		aimer->SetControlMode(CANTalon::kPercentVbus);
 		rin = new Victor(0);
 		lin = new Victor(1);
 
-		score = new Scoring(aimer,puncher,lin,rin,Index,NULL,NULL);
+		absenc = new AnalogInput(0);
+
+		aimLoop = new PIDController(.75, 0, 0, absenc, aimer ,0.05);
+		aimLoop->SetContinuous(false);
+		aimLoop->SetPIDSourceType(PIDSourceType::kDisplacement);
+		aimLoop->SetInputRange(0,4.8);
+		aimLoop->SetOutputRange(-.3,.3);
+		aimLoop->Enable();
+
+		score = new Scoring(aimer,puncher,lin,rin,Index,aimLoop,NULL,NULL);
 
 		ReloadConfig();
 		//StartLogging("init");
@@ -272,14 +286,14 @@ public:
 //			puncher->Set(0);
 //		}
 //
-		if(fabs(op->GetLeftX()) >= 0.1)
-		{
-			aimer->Set(op->GetLeftX() * .5);
-		}
-		else
-		{
-			aimer->Set(0);
-		}
+//		if(fabs(op->GetLeftX()) >= 0.1)
+//		{
+//			aimer->Set(op->GetLeftX() * .5);
+//		}
+//		else
+//		{
+//			aimer->Set(0);
+//		}
 
 		if(driver->GetA())
 		{
@@ -289,6 +303,23 @@ public:
 		if(driver->GetB())
 		{
 			score->Fire();
+		}
+
+		if(op->GetA())
+		{
+			score->SetPredefinedAngle(1);
+		}
+		else if(op->GetB())
+		{
+			score->SetPredefinedAngle(2);
+		}
+		else if(op->GetX())
+		{
+			score->SetPredefinedAngle(3);
+		}
+		else if(op->GetY())
+		{
+			score->SetPredefinedAngle(4);
 		}
 		//puncher->Set(3000);
 //		cout << puncher->GetPinStateQuadIdx() << endl;
