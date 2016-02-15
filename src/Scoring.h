@@ -65,6 +65,8 @@ private:
 	int encPos3;
 	int encPos4;
 	int encHomePos;
+	int holdStart;
+	int holdInc;
 };
 
 #endif /* SRC_SCORING_H_ */

@@ -40,6 +40,8 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	encPos3 = Config::GetSetting("AnglePos3", 1);
 	encPos4 = Config::GetSetting("AnglePos4", 1);
 	encHomePos = Config::GetSetting("AngleHomedPos", 1);
+	holdStart = Config::GetSetting("holdStart", -97000);
+	holdInc = Config::GetSetting("holdInc", -25000);
 }
 
 void Scoring::Update()
@@ -62,36 +64,38 @@ void Scoring::Update()
 			}
 			break;
 		case Scoring::State::kIndexing:
-
-			if(TensionMotor->GetEncPosition() > -50000)
+		{
+			int start = holdStart; //-97000;
+			int inc = holdInc; //-25000;
+			if(TensionMotor->GetEncPosition() > start)
 			{
 				cout << TensionMotor->GetEncPosition() << endl;
 				TensionMotor->Set(-.55);
 			}
-			else if(TensionMotor->GetEncPosition() > -75000)
+			else if(TensionMotor->GetEncPosition() > start + inc)
 			{
 				cout << "2: " << TensionMotor->GetEncPosition() << endl;
 				TensionMotor->Set(-.45);
 			}
-			else if(TensionMotor->GetEncPosition() > -100000)
+			else if(TensionMotor->GetEncPosition() > start + (2 * inc))
 			{
 				cout << "3: " << TensionMotor->GetEncPosition() << endl;
 				TensionMotor->Set(-.4);
 			}
-			else if(TensionMotor->GetEncPosition() < -145000)
+			else if(TensionMotor->GetEncPosition() < start + (3 * inc))
 			{
 				cout << "4: " << TensionMotor->GetEncPosition() << endl;
 				TensionMotor->Set(-.3);
 			}
 			//TensionMotor->Set(.35);//Get to Exact Position
-			if(TensionMotor->GetEncPosition() < -145000)
+			if(TensionMotor->GetEncPosition() < start + (3 * inc))
 			{
 				cout << "switched" << endl;
 				TensionMotor->Set(0);
 				state = kArmed;
 			}
 			break;
-
+		}
 		case Scoring::State::kArmed:
 			TensionMotor->Set(0);
 			//JUST DO IT
@@ -101,7 +105,7 @@ void Scoring::Update()
 		case Scoring::State::kTrigger:
 			//TensionMotor->SetControlMode(CANTalon::kPosition);
 			//SetFlySpeed(-1);
-			if(TensionMotor->GetEncPosition() < -190000)
+			if(TensionMotor->GetEncPosition() < holdStart + (holdInc * 3) - 15000)
 			{
 				TensionMotor->Set(0);
 				fireTimer->Reset();
