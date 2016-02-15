@@ -1,2 +1,4 @@
 #this is a config file
 flyWheelRatio = 4
+holdStart = -96000
+holdInc = -25000
