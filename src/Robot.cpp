@@ -55,6 +55,7 @@ private:
     /////////////////////////////
     CANTalon * puncher;
     DigitalInput * Index;
+    DigitalInput * FlyLimit;
     CANTalon * aimer;
     AnalogInput * absenc;
     PIDController * aimLoop;
@@ -105,6 +106,7 @@ public:
 		yServo = NULL;
 		arm = NULL;
 		drive = NULL;
+		FlyLimit = NULL;
 		gyro = new AnalogGyro(1);// = NULL;
 		targeting = NULL;
 		light = NULL;
@@ -165,6 +167,8 @@ public:
 
 
 		Index = new DigitalInput(0);
+		FlyLimit = new DigitalInput(1);
+
 		puncher = new CANTalon(4);
 		puncher->SetControlMode(CANTalon::kPercentVbus);
 		//puncher->SetAllowableClosedLoopErr(5000);
@@ -235,6 +239,7 @@ public:
 	{
 		StartLogging("teleop");
 		cout << "thing" << endl;
+		score->SetPredefinedAngle(4);
 	}
 
 	void DisabledInit()
@@ -264,7 +269,7 @@ public:
 //			getPos = false;
 //		}
 //
-		if(fabs(op->GetRTriggerAxis()) >= .1)
+		if(fabs(op->GetRTriggerAxis()) >= .1 && !FlyLimit->Get())
 		{
 			score->SetFlySpeed(op->GetRTriggerAxis()*4/5);
 		}
@@ -386,6 +391,7 @@ public:
 		logger->AddAttribute("BLCurrent");
 		logger->AddAttribute("BRCurrent");
 		logger->AddAttribute("AimPos");
+		logger->AddAttribute("AimTarget");
 		logger->AddAttribute("PunchPos");
 		logger->AddAttribute("AimCurrent");
 		logger->AddAttribute("PunchCurrent");
