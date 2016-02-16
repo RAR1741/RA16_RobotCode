@@ -6,6 +6,7 @@
 class Targeting {
 public:
 	Targeting(Relay* light);
+	Targeting();
 	std::vector<Target> GetTargets();
 private:
 	CameraServer* m_Server;

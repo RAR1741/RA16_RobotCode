@@ -13,6 +13,7 @@
 #include "Config.h"
 #include "Scoring.h"
 #include "outputlog.h"
+#include "Targeting.h"
 
 using namespace std;
 
@@ -64,6 +65,7 @@ private:
     //////////////////////////
     Scoring * score;
     OutputLog * logthing = new OutputLog();
+    //Targeting * targeting;
 
 
     std::string profile = "everything";
@@ -110,6 +112,7 @@ public:
 		gyro = new AnalogGyro(1);// = NULL;
 		targeting = NULL;
 		light = NULL;
+		//targeting = NULL;
 	};
 
 	void RobotInit()
@@ -152,6 +155,8 @@ public:
 		motorBR->SetControlMode(CANTalon::ControlMode::kFollower);
 
 		drive = new Drive(motorFR, motorBR, motorFL, motorBL);
+
+		targeting = new Targeting();
 #else
 		osciliscope1 = new DigitalOutput(8);
 		osciliscope2 = new DigitalOutput(9);
@@ -255,6 +260,27 @@ public:
 		{
 			drive->HaloDrive(Deadband(driver->GetRightX())* 0.6, -Deadband(driver->GetLeftY()));
 		}
+		else if(driver->GetLeftBumper())
+		{
+			vector<Target> targets;
+			targets = targeting->GetTargets();
+			if(targets.size() != 0)
+			{
+				Target closest = targets.at(0);
+				for (unsigned int i = 0; i < targets.size(); i++)
+				{
+					if(targets.at(i).Distance() < closest.Distance())
+					{
+						closest = targets.at(i);
+					}
+				}
+				drive->HaloDrive(0.1 * closest.Pan(), 0);
+			}
+			else
+			{
+				drive->HaloDrive(0,0);
+			}
+		}
 		else
 		{
 			drive->HaloDrive(Deadband(driver->GetRightX()) * 0.6, -(driver->GetLeftY() * 0.6));
@@ -341,7 +367,7 @@ public:
 
 		if(fabs(op->GetRightY())>.1)
 		{
-			motorBase->Set(op->GetRightY()*.5);
+			motorBase->Set(op->GetRightY()*.75);
 		}
 		else
 		{
@@ -350,7 +376,7 @@ public:
 
 		if(fabs(op->GetLeftY())>.1)
 		{
-			motorArm->Set(op->GetLeftY()*.5);
+			motorArm->Set(op->GetLeftY()*.75);
 		}
 		else
 		{

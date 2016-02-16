@@ -34,9 +34,14 @@
 	m_Grip = NetworkTable::GetTable("Targeting");
 }*/
 
+Targeting::Targeting()
+{
+	m_Server = NULL;
+}
+
 std::vector<Target> Targeting::GetTargets()
 {
-	std::string t  = m_Grip->GetString("targets");
+	std::string t  = m_Grip->GetString("targets", "");
 	//std::vector<double> xs     = m_Grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>());
 	//std::vector<double> ys     = m_Grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
 	//std::vector<double> widths = m_Grip->GetNumberArray("myContourReport/width", llvm::ArrayRef<double>());
@@ -49,6 +54,7 @@ std::vector<Target> Targeting::GetTargets()
 	while(std::getline(test, segment, '|'))
 	{
 	   Target target(segment);
+	   cout << segment << endl;
 	   targets.push_back(target);
 	}
 	return targets;
