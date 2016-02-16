@@ -70,6 +70,7 @@ private:
 	int encHomePos;
 	int holdStart;
 	int holdInc;
+	int holdFire;
 };
 
 #endif /* SRC_SCORING_H_ */

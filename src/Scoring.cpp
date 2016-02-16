@@ -44,6 +44,7 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	encHomePos = Config::GetSetting("AngleHomedPos", 1);
 	holdStart = Config::GetSetting("holdStart", -97000);
 	holdInc = Config::GetSetting("holdInc", -25000);
+	holdFire = Config::GetSetting("holdFire", -20000);
 }
 
 void Scoring::Update()
@@ -107,7 +108,7 @@ void Scoring::Update()
 		case Scoring::State::kTrigger:
 			//TensionMotor->SetControlMode(CANTalon::kPosition);
 			//SetFlySpeed(-1);
-			if(TensionMotor->GetEncPosition() < holdStart + (holdInc * 3) - 15000)
+			if(TensionMotor->GetEncPosition() < holdStart + (holdInc * 3) + holdFire)
 			{
 				TensionMotor->Set(0);
 				fireTimer->Reset();
