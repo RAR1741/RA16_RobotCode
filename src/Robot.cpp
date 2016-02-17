@@ -289,12 +289,12 @@ public:
 		if(DeadbandCheck(driver->GetRightX()) || DeadbandCheck(driver->GetLeftY()))
 		{
 			//aimer->SetControlMode(CANTalon::ControlMode::kPercentVbus);
-			aimLoop->Disable();
-			aimer->Set(0);
+//			aimLoop->Disable();
+//			aimer->Set(0);
 		}
 		else
 		{
-			aimLoop->Enable();
+//			aimLoop->Enable();
 		}
 //
 //		if(op->GetA())
@@ -362,6 +362,16 @@ public:
 		else if(op->GetY())
 		{
 			score->SetPredefinedAngle(4);
+		}
+
+		if(op->GetRightBumper())
+		{
+			aimLoop->Enable();
+		}
+		else
+		{
+			aimLoop->Disable();
+			aimer->Set(0);
 		}
 
 
@@ -473,6 +483,7 @@ public:
 		logger->Log("BLCurrent", motorBL->GetOutputCurrent());
 		logger->Log("BRCurrent", motorBR->GetOutputCurrent());
 		logger->Log("AimPos", aimer->GetEncPosition());
+		logger->Log("AimTarget", aimer->GetSetpoint());
 		logger->Log("PunchPos", puncher->GetEncPosition());
 		logger->Log("AimCurrent", aimer->GetOutputCurrent());
 		logger->Log("PunchCurrent", puncher->GetOutputCurrent());
