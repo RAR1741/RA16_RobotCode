@@ -193,7 +193,7 @@ public:
 		aimLoop->SetContinuous(false);
 		aimLoop->SetPIDSourceType(PIDSourceType::kDisplacement);
 		aimLoop->SetInputRange(0,4.8);
-		aimLoop->SetOutputRange(-.75,.75);
+		aimLoop->SetOutputRange(-.90,.90);
 		aimLoop->Enable();
 
 		score = new Scoring(aimer,puncher,lin,rin,Index,aimLoop,NULL,NULL);
@@ -274,7 +274,7 @@ public:
 						closest = targets.at(i);
 					}
 				}
-				drive->HaloDrive(0.1 * closest.Pan(), 0);
+				drive->HaloDrive(-0.1 * closest.Pan(), 0);
 			}
 			else
 			{

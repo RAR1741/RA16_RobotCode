@@ -2,10 +2,10 @@
 flyWheelRatio = 4
 holdStart = -95000
 holdInc = -25000
-AnglePos4 = 3490
+AnglePos4 = 3485
 AnglePos3 = 3250
 AnglePos2 = 2915
 AnglePos1 = 2750
-S_P_P = 22
-S_P_I = 0.001
-S_P_D = 0.01
+S_P_P = 15
+S_P_I = 1
+S_P_D = 0
