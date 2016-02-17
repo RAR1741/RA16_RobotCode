@@ -193,7 +193,7 @@ public:
 		aimLoop->SetContinuous(false);
 		aimLoop->SetPIDSourceType(PIDSourceType::kDisplacement);
 		aimLoop->SetInputRange(0,4.8);
-		aimLoop->SetOutputRange(-.6,.6);
+		aimLoop->SetOutputRange(-.75,.75);
 		aimLoop->Enable();
 
 		score = new Scoring(aimer,puncher,lin,rin,Index,aimLoop,NULL,NULL);
@@ -460,6 +460,7 @@ public:
 		logger->AddAttribute("BLCurrent");
 		logger->AddAttribute("BRCurrent");
 		logger->AddAttribute("AimPos");
+		logger->AddAttribute("AbsEnc");
 		logger->AddAttribute("AimTarget");
 		logger->AddAttribute("PunchPos");
 		logger->AddAttribute("AimCurrent");
@@ -483,7 +484,8 @@ public:
 		logger->Log("BLCurrent", motorBL->GetOutputCurrent());
 		logger->Log("BRCurrent", motorBR->GetOutputCurrent());
 		logger->Log("AimPos", aimer->GetEncPosition());
-		logger->Log("AimTarget", aimer->GetSetpoint());
+		logger->Log("AbsEnc", absenc->GetVoltage());
+		logger->Log("AimTarget", aimLoop->GetSetpoint());
 		logger->Log("PunchPos", puncher->GetEncPosition());
 		logger->Log("AimCurrent", aimer->GetOutputCurrent());
 		logger->Log("PunchCurrent", puncher->GetOutputCurrent());
