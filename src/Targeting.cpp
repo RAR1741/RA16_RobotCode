@@ -37,6 +37,7 @@
 Targeting::Targeting()
 {
 	m_Server = NULL;
+	m_Grip =  NetworkTable::GetTable("Targeting");
 }
 
 std::vector<Target> Targeting::GetTargets()
