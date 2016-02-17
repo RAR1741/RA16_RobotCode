@@ -75,6 +75,8 @@ private:
 
 
     bool getPos = false;
+
+    float autoAimP;
     //string *nope = NULL;
 
     //std::string GRIP_ARGS = "java -jar /home/lvuser/GRIP.jar /home/lvuser/" + profile + ".grip";
@@ -112,6 +114,7 @@ public:
 		gyro = new AnalogGyro(1);// = NULL;
 		targeting = NULL;
 		light = NULL;
+		autoAimP = NULL;
 		//targeting = NULL;
 	};
 
@@ -274,7 +277,7 @@ public:
 						closest = targets.at(i);
 					}
 				}
-				drive->HaloDrive(-0.1 * closest.Pan(), 0);
+				drive->HaloDrive(-autoAimP * closest.Pan(), 0);
 			}
 			else
 			{
@@ -509,6 +512,7 @@ public:
 	{
 		Config::LoadFromFile("/home/lvuser/config.txt");
 		cout << Config::GetSetting("wow", 0) << endl;
+		autoAimP = Config::GetSetting("autoAimP", 0.08);
 	}
 
 	bool DeadbandCheck(float in, float dead = 0.1)
