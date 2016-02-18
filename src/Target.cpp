@@ -38,6 +38,11 @@ float Target::Pan()
 	return m_pan;
 }
 
+float Target::Tilt()
+{
+	return m_tilt;
+}
+
 /*float Target::ApproximateRange() const {
 	// see https://wpilib.screenstepslive.com/s/4485/m/24194/l/288985-identifying-and-processing-the-targets
 	// for derivation

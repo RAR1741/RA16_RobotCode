@@ -76,7 +76,10 @@ private:
 
     bool getPos = false;
 
-    float autoAimP;
+    float autoPanP;
+    float encoderTicksPerDegree;
+    int bottomHardLimit;
+    int DegreesToZero;
     //string *nope = NULL;
 
     //std::string GRIP_ARGS = "java -jar /home/lvuser/GRIP.jar /home/lvuser/" + profile + ".grip";
@@ -114,7 +117,10 @@ public:
 		gyro = new AnalogGyro(1);// = NULL;
 		targeting = NULL;
 		light = NULL;
-		autoAimP = NULL;
+		autoPanP = 0;
+		encoderTicksPerDegree = 0;
+		bottomHardLimit = 0;
+		DegreesToZero = 0;
 		//targeting = NULL;
 	};
 
@@ -277,7 +283,8 @@ public:
 						closest = targets.at(i);
 					}
 				}
-				drive->HaloDrive(-autoAimP * closest.Pan(), 0);
+				drive->HaloDrive(-autoPanP * closest.Pan(), 0);
+				aimLoop->SetSetpoint(targetDegreeToTicks(closest.Tilt()) / 800);
 			}
 			else
 			{
@@ -389,11 +396,13 @@ public:
 
 		if(fabs(op->GetLeftY())>.1)
 		{
-			motorArm->Set(op->GetLeftY()*.75);
+			aimer->Set(-op->GetLeftY()* 0.5);
+			cout << absenc->GetVoltage() * 800 << endl;
+			//motorArm->Set(op->GetLeftY()*.75);
 		}
 		else
 		{
-			motorArm->Set(0);
+			//motorArm->Set(0);
 		}
 
 
@@ -512,7 +521,10 @@ public:
 	{
 		Config::LoadFromFile("/home/lvuser/config.txt");
 		cout << Config::GetSetting("wow", 0) << endl;
-		autoAimP = Config::GetSetting("autoAimP", 0.08);
+		autoPanP = Config::GetSetting("autoAimP", 0.08);
+		encoderTicksPerDegree = Config::GetSetting("encodeTicksPerDegree", 10.78);
+		bottomHardLimit = Config::GetSetting("bottomHardLimit", 3635);
+		DegreesToZero = Config::GetSetting("degreesToZero", 10);
 	}
 
 	bool DeadbandCheck(float in, float dead = 0.1)
@@ -537,6 +549,11 @@ public:
 		{
 			return 0;
 		}
+	}
+
+	int targetDegreeToTicks(float in)
+	{
+		return (bottomHardLimit - ((in + DegreesToZero) * encoderTicksPerDegree));
 	}
 };
 
