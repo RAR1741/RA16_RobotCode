@@ -450,6 +450,7 @@ public:
 		cout << "Setpoint: " << aimLoop->GetSetpoint() << endl;
 		cout << "AbsEncValue: " << absenc->GetVoltage()* 800.0F << "\n";
 		cout << "AbsEncVolt: " << absenc->GetVoltage() << "\n";
+		cout << "BaseEnc: " << motorBase->GetEncPosition() << endl;
 		//cout << aimer->GetPinStateQuadIdx();
 		Log();
 	}
