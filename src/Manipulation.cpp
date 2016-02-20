@@ -20,6 +20,7 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 	homingTimer = new Timer();
 	ReadPostions();
 
+#if 0
 	BaseMotor->Set(0);
 	BaseMotor->SetControlMode(CANTalon::kPosition);
 	BaseMotor->SetEncPosition(0);
@@ -29,6 +30,7 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 	ArmMotor->SetControlMode(CANTalon::kPosition);
 	ArmMotor->SetEncPosition(0);
 	ArmMotor->Set(0);
+#endif
 }
 
 void Manipulation::ReadPostions()

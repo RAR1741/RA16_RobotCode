@@ -369,8 +369,9 @@ public:
 			score->Fire();
 		}
 
+
 		// If in SHOOT MODE
-		if (op->GetRightBumper()) {
+		//if (op->GetRightBumper()) {
 			if(op->GetA())
 			{
 				score->SetPredefinedAngle(1);
@@ -387,7 +388,8 @@ public:
 			{
 				score->SetPredefinedAngle(4);
 			}
-		} else { // MANIP MODE XD
+//		} else { // MANIP MODE XD
+#if 0 // NOTHING
 			if (op->GetA()) {
 				arm->Set(0);
 			} else if (op->GetB()) {
@@ -397,7 +399,8 @@ public:
 			} else if (op->GetY()) {
 				arm->Set(3);
 			}
-		}
+#endif
+//		}
 
 
 //		if(fabs(op->GetRightY())>.1)
@@ -407,7 +410,7 @@ public:
 //		}
 //		else
 //		{
-			//arm->ManualDrive(op->GetRightY(), op->GetLeftY());
+			arm->ManualDrive(op->GetRightY(), op->GetLeftY());
 //		}
 
 //		if(fabs(op->GetLeftY())>.1)
