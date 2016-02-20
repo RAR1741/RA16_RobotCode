@@ -49,7 +49,7 @@ private:
 	int place;
 	float absZeroPos;
 	float absToInc;
-	AnalogInput BaseAbs;
+	AnalogInput *BaseAbs;
 };
 
 #endif /* SRC_MANIPULATION_H_ */

@@ -254,6 +254,7 @@ public:
 		StartLogging("teleop");
 		cout << "thing" << endl;
 		score->SetPredefinedAngle(4);
+		score->ReloadConfig();
 	}
 
 	void DisabledInit()
@@ -417,7 +418,7 @@ public:
 		cout << aimLoop->Get() << endl;
 		cout << "EncValue: " << aimer->GetEncPosition() << endl;
 		cout << "Setpoint: " << aimLoop->GetSetpoint() << endl;
-		cout << "AbsEncValue: " << absenc->GetValue() << "\n";
+		cout << "AbsEncValue: " << absenc->GetVoltage()* 800.0F << "\n";
 		cout << "AbsEncVolt: " << absenc->GetVoltage() << "\n";
 		//cout << aimer->GetPinStateQuadIdx();
 		Log();

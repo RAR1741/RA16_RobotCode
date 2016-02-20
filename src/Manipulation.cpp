@@ -149,7 +149,7 @@ void Manipulation::ContinueMotion()
 
 void Manipulation::Home()
 {
-	BaseMotor->Set((BaseAbs.GetVoltage() + absZeroPos) * absToInc);
+	//BaseMotor->Set((BaseAbs.GetVoltage() + absZeroPos) * absToInc);
 	if(state == kReady)
 	{
 		cout << "Start\n";
@@ -228,6 +228,6 @@ Manipulation::State Manipulation::GetState()
 
 void Manipulation::ReloadConfig()
 {
-	absZeroPos = Config::GetSetting("manAbsZeroPos", 2);
-	absToInc = Config::GetSetting("manAbstoInc", 800);
+//	absZeroPos = Config::GetSetting("manAbsZeroPos", 2);
+//	absToInc = Config::GetSetting("manAbstoInc", 800);
 }
