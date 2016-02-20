@@ -353,14 +353,7 @@ public:
 //			puncher->Set(0);
 //		}
 //
-//		if(fabs(op->GetLeftX()) >= 0.1)
-//		{
-//			aimer->Set(op->GetLeftX() * .5);
-//		}
-//		else
-//		{
-//			aimer->Set(0);
-//		}
+
 
 		if(driver->GetA())
 		{
@@ -374,7 +367,25 @@ public:
 
 
 		// If in SHOOT MODE
-		//if (op->GetRightBumper()) {
+		if (op->GetRightBumper())
+		{
+			aimLoop->Enable();
+		}
+		else
+		{
+			aimLoop->Disable();
+			aimer->Set(0);
+		}
+
+		if(fabs(op->GetLeftX()) >= 0.1)
+		{
+			aimer->Set(op->GetLeftX() * .5);
+		}
+		else
+		{
+			aimer->Set(0);
+		}
+
 			if(op->GetA())
 			{
 				score->SetPredefinedAngle(1);
@@ -391,7 +402,8 @@ public:
 			{
 				score->SetPredefinedAngle(4);
 			}
-//		} else { // MANIP MODE XD
+
+			// MANIP MODE XD
 #if 0 // NOTHING
 			if (op->GetA()) {
 				arm->Set(0);
@@ -403,7 +415,6 @@ public:
 				arm->Set(3);
 			}
 #endif
-//		}
 
 
 //		if(fabs(op->GetRightY())>.1)
