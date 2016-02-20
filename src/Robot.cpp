@@ -331,11 +331,11 @@ public:
 //			getPos = false;
 //		}
 //
-		if(fabs(driver->GetRTriggerAxis()) >= .1 && !FlyLimit->Get())
+		if(fabs(op->GetRTriggerAxis()) >= .1 && !FlyLimit->Get())
 		{
 			score->SetFlySpeed(op->GetRTriggerAxis()*4/5);
 		}
-		else if(fabs(driver->GetLTriggerAxis()) >= .1)
+		else if(fabs(op->GetLTriggerAxis()) >= .1)
 		{
 			score->SetFlySpeed(-(op->GetLTriggerAxis())*4/5);
 		}
@@ -377,14 +377,14 @@ public:
 			aimer->Set(0);
 		}
 
-		if(fabs(driver->GetRightY()) >= 0.1)
-		{
-			aimer->Set(driver->GetRightY() * .5);
-		}
-		else
-		{
-			aimer->Set(0);
-		}
+//		if(fabs(driver->GetRightY()) >= 0.1)
+//		{
+//			aimer->Set(driver->GetRightY() * .5);
+//		}
+//		else
+//		{
+//			aimer->Set(0);
+//		}
 
 			if(op->GetA())
 			{
