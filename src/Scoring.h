@@ -43,6 +43,7 @@ public:
 	void SetFlySpeed(float speed);
 	void Load();
 	void Fire();
+	void ReloadConfig();
 private:
 	State state;
 	HomeState homeState;

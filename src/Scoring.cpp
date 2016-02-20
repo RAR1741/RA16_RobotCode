@@ -268,3 +268,23 @@ Scoring::State Scoring::GetState()
 {
 	return state;
 }
+
+void Scoring::ReloadConfig()
+{
+	ChooChooLoaded = Config::GetSetting("ChooChooLoaded", 400);
+	SP = Config::GetSetting("S_S_P", 1);
+	SI = Config::GetSetting("S_S_I", 1);
+	SD = Config::GetSetting("S_S_D", 1);
+	PP = Config::GetSetting("S_P_P", 19);
+	PI = Config::GetSetting("S_P_I", 2);
+	PD = Config::GetSetting("S_P_D", 0);
+	AimLoop->SetPID(PP,PI,PD);
+	encPos1 = Config::GetSetting("AnglePos1", 2750);
+	encPos2 = Config::GetSetting("AnglePos2", 2900);
+	encPos3 = Config::GetSetting("AnglePos3", 3250);
+	encPos4 = Config::GetSetting("AnglePos4", 3480);
+	encHomePos = Config::GetSetting("AngleHomedPos", 1);
+	holdStart = Config::GetSetting("holdStart", -97000);
+	holdInc = Config::GetSetting("holdInc", -25000);
+	holdFire = Config::GetSetting("holdFire", -20000);
+}
