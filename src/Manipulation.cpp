@@ -10,7 +10,7 @@
 #include <string>
 using namespace std;
 
-Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLimit, DigitalInput *aLimit, AnalogInput * bAbs)
+Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLimit, DigitalInput *aLimit)
 {
 	BaseMotor = bMotor;
 	ArmMotor = aMotor;
@@ -19,7 +19,6 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 	state = kReady;
 	homingTimer = new Timer();
 	ReadPostions();
-	BaseAbs = bAbs;
 }
 
 void Manipulation::ReadPostions()
@@ -228,6 +227,5 @@ Manipulation::State Manipulation::GetState()
 
 void Manipulation::ReloadConfig()
 {
-//	absZeroPos = Config::GetSetting("manAbsZeroPos", 2);
-//	absToInc = Config::GetSetting("manAbstoInc", 800);
+
 }

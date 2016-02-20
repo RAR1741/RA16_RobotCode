@@ -12,7 +12,7 @@ using namespace std;
 class Manipulation
 {
 public:
-	Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLimit, DigitalInput *aLimit, AnalogInput * bAbs);
+	Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLimit, DigitalInput *aLimit);
 	typedef enum
 	{
 		kStart = 0,
