@@ -181,19 +181,19 @@ void Scoring::AngleHome()
 		homingTimer->Reset();
 		homingTimer->Start();
 
-		if(!HomeAngle->Get())//is triggered
+		if(HomeAngle->Get())//is triggered
 		{
 			cout << "Starting4\n";
-			homeState = kHomingUp;
+			homeState = kHomed;
 		}
-		else if(HomeAngle->Get())//isnt triggered
+		else if(!HomeAngle->Get())//isnt triggered
 		{
 			homeState = kHomingDown;
 		}
 		break;
 	case Scoring::HomeState::kHomingUp:
 		cout << "StartHomingUP\n";
-		if(homingTimer->Get()< 2)
+		if(homingTimer->Get()< 0.5)
 		{
 			AngleMotor->Set(1300);
 		}
@@ -206,7 +206,7 @@ void Scoring::AngleHome()
 		break;
 	case Scoring::HomeState::kHomingDown:
 		cout << "StartHomingDown\n";
-		if(HomeAngle->Get())//isnt triggered
+		if(!HomeAngle->Get())//isnt triggered
 		{
 			AngleMotor->Set(-1300);
 		}
@@ -214,7 +214,7 @@ void Scoring::AngleHome()
 		{
 			AngleMotor->Set(0);
 			AngleMotor->SetControlMode(CANTalon::kPosition);
-			AngleMotor->SetEncPosition(encHomePos);
+			//AngleMotor->SetPosition(encHomePos);
 			AngleMotor->Set(encHomePos);
 			homeState = kHomed;
 		}
@@ -222,12 +222,12 @@ void Scoring::AngleHome()
 		break;
 	case Scoring::HomeState::kHomed:
 	{
+		AngleMotor->SetControlMode(CANTalon::kPosition);
 		AngleMotor->Set(encHomePos);
 		homeState = kReady;
 		break;
 	}
 	case Scoring::HomeState::kReady:
-
 		break;
 
 	}
@@ -238,16 +238,16 @@ void Scoring::SetPredefinedAngle(int posNum)
 	switch(posNum)
 	{
 	case 1:
-		AimLoop->SetSetpoint(ValueToVoltage(encPos1));
+		AngleMotor->Set(encPos1);
 		break;
 	case 2:
-		AimLoop->SetSetpoint(ValueToVoltage(encPos2));
+		AngleMotor->Set(encPos2);
 		break;
 	case 3:
-		AimLoop->SetSetpoint(ValueToVoltage(encPos3));
+		AngleMotor->Set(encPos3);
 		break;
 	case 4:
-		AimLoop->SetSetpoint(ValueToVoltage(encPos4));
+		AngleMotor->Set(encPos4);
 		break;
 	default:
 		break;

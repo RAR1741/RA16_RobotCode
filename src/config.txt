@@ -7,6 +7,7 @@ AnglePos4 = 3385
 AnglePos3 = 3250
 AnglePos2 = 2865
 AnglePos1 = 2300
+AngleHomedPos = 820000
 S_P_P = 15
 S_P_I = 1.5
 S_P_D = 0
@@ -14,3 +15,4 @@ encoderTicksPerDegree = 10.78
 bottomHardLimit = 3635
 degreesToZero = 10
 AutoAimP = 0.04
+#819200
