@@ -234,6 +234,18 @@ void Manipulation::Process()
 
 	}
 }
+#else
+void Manipulation::Process()
+{
+	if(ArmLimit->Get() && ArmMotor->Get() > 0)
+	{
+		ArmMotor->Set(0);
+	}
+	if(BaseLimit->Get() && BaseMotor->Get() > 0)
+	{
+		BaseMotor->Set(0);
+	}
+}
 #endif
 
 void Manipulation::ManualDrive(float base, float arm) {

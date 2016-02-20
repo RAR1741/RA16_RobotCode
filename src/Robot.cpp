@@ -58,6 +58,7 @@ private:
     DigitalInput * Index;
     DigitalInput * FlyLimit;
     DigitalInput * ArmLimit;
+    DigitalInput * BaseLimit;
     CANTalon * aimer;
     AnalogInput * absenc;
     PIDController * aimLoop;
@@ -122,6 +123,7 @@ public:
 		targeting = NULL;
 		light = NULL;
 		ArmLimit = NULL;
+		BaseLimit = NULL;
 		autoPanP = 0;
 		encoderTicksPerDegree = 0;
 		bottomHardLimit = 0;
@@ -215,7 +217,8 @@ public:
 		score = new Scoring(aimer,puncher,lin,rin,Index,aimLoop,NULL,NULL);
 
 		ArmLimit = new DigitalInput(2);
-		arm = new Manipulation(motorBase, motorArm, ArmLimit);
+		BaseLimit = new DigitalInput(3);
+		arm = new Manipulation(motorBase, motorArm, BaseLimit, ArmLimit);
 
 		ReloadConfig();
 		//StartLogging("init");
@@ -410,7 +413,8 @@ public:
 //		}
 //		else
 //		{
-			arm->ManualDrive(op->GetRightY(), op->GetLeftY());
+		arm->ManualDrive(op->GetRightY(), op->GetLeftY());
+		arm->Process();
 //		}
 
 //		if(fabs(op->GetLeftY())>.1)
