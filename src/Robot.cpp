@@ -68,6 +68,9 @@ private:
     OutputLog * logthing = new OutputLog();
     //Targeting * targeting;
 
+    bool triggerToggle;
+    bool lastTrigger;
+
 
     std::string profile = "everything";
     char * nope = '\0';
@@ -123,6 +126,8 @@ public:
 		encoderTicksPerDegree = 0;
 		bottomHardLimit = 0;
 		DegreesToZero = 0;
+		triggerToggle = false;
+		lastTrigger = false;
 		//targeting = NULL;
 	};
 
@@ -363,31 +368,34 @@ public:
 			score->Fire();
 		}
 
-		if(op->GetA())
-		{
-			score->SetPredefinedAngle(1);
-		}
-		else if(op->GetB())
-		{
-			score->SetPredefinedAngle(2);
-		}
-		else if(op->GetX())
-		{
-			score->SetPredefinedAngle(3);
-		}
-		else if(op->GetY())
-		{
-			score->SetPredefinedAngle(4);
-		}
-
-		if(op->GetRightBumper())
-		{
-			aimLoop->Enable();
-		}
-		else
-		{
-			aimLoop->Disable();
-			aimer->Set(0);
+		// If in SHOOT MODE
+		if (op->GetRightBumper()) {
+			if(op->GetA())
+			{
+				score->SetPredefinedAngle(1);
+			}
+			else if(op->GetB())
+			{
+				score->SetPredefinedAngle(2);
+			}
+			else if(op->GetX())
+			{
+				score->SetPredefinedAngle(3);
+			}
+			else if(op->GetY())
+			{
+				score->SetPredefinedAngle(4);
+			}
+		} else { // MANIP MODE XD
+			if (op->GetA()) {
+				arm->Set(1);
+			} else if (op->GetB()) {
+				arm->Set(2);
+			} else if (op->GetX()) {
+				arm->Set(3);
+			} else if (op->GetY()) {
+				arm->Set(4);
+			}
 		}
 
 
@@ -398,20 +406,16 @@ public:
 //		}
 //		else
 //		{
-			arm->ManualDrive(op->GetRightY(), op->GetRightX());
+			arm->ManualDrive(op->GetRightY(), op->GetLeftY());
 //		}
 
-		if(fabs(op->GetLeftY())>.1)
-		{
-			aimer->Set(-op->GetLeftY()* 0.5);
-			cout << absenc->GetVoltage() * 800 << endl;
-			//motorArm->Set(op->GetLeftY()*.75);
-		}
-		else
-		{
-			//aimer->Set(0);
-			//motorArm->Set(0);
-		}
+//		if(fabs(op->GetLeftY())>.1)
+//		{
+//			aimer->Set(-op->GetLeftY()* 0.5);
+//			cout << absenc->GetVoltage() * 800 << endl;
+//			//motorArm->Set(op->GetLeftY()*.75);
+//		}
+//
 
 
 
