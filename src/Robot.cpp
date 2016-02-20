@@ -57,6 +57,7 @@ private:
     CANTalon * puncher;
     DigitalInput * Index;
     DigitalInput * FlyLimit;
+    DigitalInput * ArmLimit;
     CANTalon * aimer;
     AnalogInput * absenc;
     PIDController * aimLoop;
@@ -117,6 +118,7 @@ public:
 		gyro = new AnalogGyro(1);// = NULL;
 		targeting = NULL;
 		light = NULL;
+		ArmLimit = NULL;
 		autoPanP = 0;
 		encoderTicksPerDegree = 0;
 		bottomHardLimit = 0;
@@ -146,7 +148,7 @@ public:
 //		cout << "Arm initializing\n";
 		motorBase = new CANTalon(2);
 		motorBase->SetControlMode(CANSpeedController::kPercentVbus);
-//		motorBase->SetPID(5,.0001,0);
+		motorBase->SetPID(5,.0001,0);
 		motorArm = new CANTalon(1);
 		motorArm->SetControlMode(CANSpeedController::kPercentVbus);
 //		motorArm->SetPID(1,0,0);
@@ -206,6 +208,9 @@ public:
 		aimLoop->Enable();
 
 		score = new Scoring(aimer,puncher,lin,rin,Index,aimLoop,NULL,NULL);
+
+		ArmLimit = new DigitalInput(2);
+		arm = new Manipulation(motorBase, motorArm, ArmLimit);
 
 		ReloadConfig();
 		//StartLogging("init");
@@ -388,11 +393,12 @@ public:
 
 		if(fabs(op->GetRightY())>.1)
 		{
-			motorBase->Set(op->GetRightY()*.75);
+			arm->SetPositionBase(arm->ReadPositionBase() + (op->GetRightY() * 10));
+			//motorBase->Set(op->GetRightY()*.75);
 		}
 		else
 		{
-			motorBase->Set(0);
+			//motorBase->Set(0);
 		}
 
 		if(fabs(op->GetLeftY())>.1)
@@ -414,6 +420,7 @@ public:
 //		cout << puncher->GetEncPosition() << endl;
 //		cout << score->GetState() << endl;
 		score->Update();
+		arm->Process();
 
 		cout << aimLoop->Get() << endl;
 		cout << "EncValue: " << aimer->GetEncPosition() << endl;
