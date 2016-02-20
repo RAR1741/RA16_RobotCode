@@ -391,15 +391,15 @@ public:
 		}
 
 
-		if(fabs(op->GetRightY())>.1)
-		{
-			arm->SetPositionBase(arm->ReadPositionBase() + (op->GetRightY() * 10));
-			//motorBase->Set(op->GetRightY()*.75);
-		}
-		else
-		{
-			//motorBase->Set(0);
-		}
+//		if(fabs(op->GetRightY())>.1)
+//		{
+//			arm->SetPositionBase(arm->GetPositionBase() + (op->GetRightY() * 10));
+//			//motorBase->Set(op->GetRightY()*.75);
+//		}
+//		else
+//		{
+			arm->ManualDrive(op->GetRightY(), op->GetRightX());
+//		}
 
 		if(fabs(op->GetLeftY())>.1)
 		{
@@ -420,7 +420,7 @@ public:
 //		cout << puncher->GetEncPosition() << endl;
 //		cout << score->GetState() << endl;
 		score->Update();
-		arm->Process();
+//		arm->Process();
 
 		cout << aimLoop->Get() << endl;
 		cout << "EncValue: " << aimer->GetEncPosition() << endl;

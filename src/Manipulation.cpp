@@ -156,8 +156,10 @@ void Manipulation::Home()
 	}
 }
 
+#if 0
 void Manipulation::Process()
 {
+#error "oh dang dang"
 	switch(state)
 	{
 	case Manipulation::kStart:
@@ -219,6 +221,31 @@ void Manipulation::Process()
 
 	}
 }
+#endif
+
+void Manipulation::ManualDrive(float base, float arm) {
+	BaseMotor->Set(base);
+	ArmMotor->Set(arm);
+}
+#if 0
+int Manipulation::GetPositionBase() {
+	return BaseMotor->GetEncPosition();
+}
+
+void Manipulation::SetPositionBase(int pos)
+{
+	BaseMotor->Set(pos);
+}
+
+int Manipulation::GetPositionArm() {
+	return ArmMotor->GetEncPosition();
+}
+
+void Manipulation::SetPositionArm(int pos)
+{
+	ArmMotor->Set(pos);
+}
+#endif
 
 Manipulation::State Manipulation::GetState()
 {

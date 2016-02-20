@@ -12,7 +12,7 @@ using namespace std;
 class Manipulation
 {
 public:
-	Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLimit, DigitalInput *aLimit);
+	Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLimit=NULL, DigitalInput *aLimit=NULL);
 	typedef enum
 	{
 		kStart = 0,
@@ -33,6 +33,12 @@ public:
 	void Process();
 	State GetState();
 	void ReloadConfig();
+
+	void ManualDrive(float base, float arm);
+
+//	void SetPositionBase(int pos);
+//	int GetPositionBase();
+//
 	//Manipulation(const Manipulation&);
 private:
 	bool ReadMotion(int in);
