@@ -237,13 +237,49 @@ void Manipulation::Process()
 #else
 void Manipulation::Process()
 {
-	if(ArmLimit->Get() && ArmMotor->Get() > 0)
+	switch(state)
 	{
-		ArmMotor->Set(0);
-	}
-	if(BaseMotor->GetPinStateQuadB() && BaseMotor->Get() > 0)
-	{
-		BaseMotor->Set(0);
+	case Manipulation::kStart:
+		ArmMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
+		ArmMotor->Set(0.5);
+		BaseMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
+		BaseMotor->Set(0.5);
+		state = Manipulation::kHomingDown;
+		break;
+	case Manipulation::kHomingDown:
+		if(ArmLimit->Get())
+		{
+			ArmMotor->Set(0);
+		}
+		if(BaseMotor->GetPinStateQuadIdx())
+		{
+			BaseMotor->Set(0);
+		}
+
+		if(ArmLimit->Get() && BaseMotor->GetPinStateQuadIdx())
+		{
+			state = kHomed;
+		}
+		break;
+	case Manipulation::kHomed:
+		ArmMotor->SetControlMode(CANTalon::ControlMode::kPosition);
+		BaseMotor->SetControlMode(CANTalon::ControlMode::kPosition);
+		state = Manipulation::kReady;
+		break;
+	case Manipulation::kReady:
+		ArmMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
+		BaseMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
+		if(ArmLimit->Get() && ArmMotor->Get() > 0)
+		{
+			ArmMotor->Set(0);
+		}
+		if(BaseMotor->GetPinStateQuadB() && BaseMotor->Get() > 0)
+		{
+			BaseMotor->Set(0);
+		}
+		ArmMotor->SetControlMode(CANTalon::ControlMode::kPosition);
+		BaseMotor->SetControlMode(CANTalon::ControlMode::kPosition);
+		break;
 	}
 }
 #endif
