@@ -282,7 +282,7 @@ public:
 //		yServo->Set((driver->GetRightY() + 1) / 2);
 		if(driver->GetRightBumper())
 		{
-			drive->HaloDrive(Deadband(driver->GetRightX())* 0.6, -Deadband(driver->GetLeftY()));
+			drive->HaloDrive(Deadband(driver->GetLeftX())* 0.6, -Deadband(driver->GetLeftY()));
 		}
 		else if(driver->GetLeftBumper())
 		{
@@ -308,7 +308,7 @@ public:
 		}
 		else
 		{
-			drive->HaloDrive(Deadband(driver->GetRightX()) * 0.6, -(driver->GetLeftY() * 0.6));
+			drive->HaloDrive(Deadband(driver->GetLeftX()) * 0.7, -(driver->GetLeftY() * 0.6));
 		}
 
 		if(DeadbandCheck(driver->GetRightX()) || DeadbandCheck(driver->GetLeftY()))
@@ -331,11 +331,11 @@ public:
 //			getPos = false;
 //		}
 //
-		if(fabs(op->GetRTriggerAxis()) >= .1 && !FlyLimit->Get())
+		if(fabs(driver->GetRTriggerAxis()) >= .1 && !FlyLimit->Get())
 		{
 			score->SetFlySpeed(op->GetRTriggerAxis()*4/5);
 		}
-		else if(fabs(op->GetLTriggerAxis()) >= .1)
+		else if(fabs(driver->GetLTriggerAxis()) >= .1)
 		{
 			score->SetFlySpeed(-(op->GetLTriggerAxis())*4/5);
 		}
@@ -377,9 +377,9 @@ public:
 			aimer->Set(0);
 		}
 
-		if(fabs(op->GetLeftX()) >= 0.1)
+		if(fabs(driver->GetRightY()) >= 0.1)
 		{
-			aimer->Set(op->GetLeftX() * .5);
+			aimer->Set(driver->GetRightY() * .5);
 		}
 		else
 		{

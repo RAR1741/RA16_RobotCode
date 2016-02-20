@@ -241,7 +241,7 @@ void Manipulation::Process()
 	{
 		ArmMotor->Set(0);
 	}
-	if(BaseLimit->Get() && BaseMotor->Get() > 0)
+	if(BaseMotor->GetPinStateQuadB() && BaseMotor->Get() > 0)
 	{
 		BaseMotor->Set(0);
 	}
