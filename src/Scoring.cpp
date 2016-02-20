@@ -117,7 +117,7 @@ void Scoring::Update()
 			}
 			else
 			{
-				TensionMotor->Set(-.3);
+				TensionMotor->Set(-.5);
 			}
 			//TensionMotor->Set(200000);//Just past Trigger point
 

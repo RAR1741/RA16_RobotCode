@@ -202,7 +202,7 @@ public:
 		aimLoop->SetContinuous(false);
 		aimLoop->SetPIDSourceType(PIDSourceType::kDisplacement);
 		aimLoop->SetInputRange(0,4.8);
-		aimLoop->SetOutputRange(-.90,.90);
+		aimLoop->SetOutputRange(-.6,.6);
 		aimLoop->Enable();
 
 		score = new Scoring(aimer,puncher,lin,rin,Index,aimLoop,NULL,NULL);
@@ -284,7 +284,7 @@ public:
 					}
 				}
 				drive->HaloDrive(-autoPanP * closest.Pan(), 0);
-				aimLoop->SetSetpoint(targetDegreeToTicks(closest.Tilt()) / 800);
+				//aimLoop->SetSetpoint(targetDegreeToTicks(closest.Tilt()) / 800);
 			}
 			else
 			{
@@ -396,13 +396,13 @@ public:
 
 		if(fabs(op->GetLeftY())>.1)
 		{
-			aimer->Set(-op->GetLeftY()* 0.5);
-			cout << absenc->GetVoltage() * 800 << endl;
-			//motorArm->Set(op->GetLeftY()*.75);
+//			aimer->Set(-op->GetLeftY()* 0.5);
+//			cout << absenc->GetVoltage() * 800 << endl;
+			motorArm->Set(op->GetLeftY()*.75);
 		}
 		else
 		{
-			//motorArm->Set(0);
+			motorArm->Set(0);
 		}
 
 
