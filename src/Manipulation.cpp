@@ -10,7 +10,7 @@
 #include <string>
 using namespace std;
 
-Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLimit, DigitalInput *aLimit)
+Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLimit, DigitalInput *aLimit, AnalogInput * bAbs)
 {
 	BaseMotor = bMotor;
 	ArmMotor = aMotor;
@@ -19,6 +19,7 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 	state = kReady;
 	homingTimer = new Timer();
 	ReadPostions();
+	BaseAbs = bAbs;
 }
 
 void Manipulation::ReadPostions()
@@ -136,6 +137,7 @@ void Manipulation::StartMotion(int index)
 	currentMov = index;
 	Set(movements.at(currentMov).at(place));
 }
+
 void Manipulation::ContinueMotion()
 {
 	place++;
@@ -144,26 +146,15 @@ void Manipulation::ContinueMotion()
 		Set(movements.at(currentMov).at(place));
 	}
 }
+
 void Manipulation::Home()
 {
-//	if (!BaseLimit->Get())
-//	{
-//		BaseMotor -> Set(0);
-//		if(BaseLimit->Get())
-//			BaseMotor->SetEncPosition(0);
-//	}
-//	else if (!ArmLimit->Get())
-//	{
-//		ArmMotor -> Set(0);
-//		if(ArmLimit->Get())
-//			ArmMotor->SetEncPosition(0);
-//	}
+	BaseMotor->Set((BaseAbs.GetVoltage() + absZeroPos) * absToInc);
 	if(state == kReady)
 	{
 		cout << "Start\n";
 		state = Manipulation::kStart;
 	}
-
 }
 
 void Manipulation::Process()
@@ -235,3 +226,8 @@ Manipulation::State Manipulation::GetState()
 	return state;
 }
 
+void Manipulation::ReloadConfig()
+{
+	absZeroPos = Config::GetSetting("manAbsZeroPos", 2);
+	absToInc = Config::GetSetting("manAbstoInc", 800);
+}
