@@ -76,7 +76,7 @@ private:
     std::string profile = "everything";
     char * nope = '\0';
 
-    uint32_t jim = false;
+    uint32_t jim = false;//This is stupid
 
 
     bool getPos = false;
