@@ -265,6 +265,7 @@ public:
 		cout << "thing" << endl;
 		score->SetPredefinedAngle(4);
 		score->ReloadConfig();
+		arm->ReloadConfig();
 	}
 
 	void DisabledInit()
@@ -388,13 +389,13 @@ public:
 			}
 		} else { // MANIP MODE XD
 			if (op->GetA()) {
-				arm->Set(1);
+				arm->Set(0);
 			} else if (op->GetB()) {
-				arm->Set(2);
+				arm->Set(1);
 			} else if (op->GetX()) {
-				arm->Set(3);
+				arm->Set(2);
 			} else if (op->GetY()) {
-				arm->Set(4);
+				arm->Set(3);
 			}
 		}
 
@@ -406,7 +407,7 @@ public:
 //		}
 //		else
 //		{
-			arm->ManualDrive(op->GetRightY(), op->GetLeftY());
+			//arm->ManualDrive(op->GetRightY(), op->GetLeftY());
 //		}
 
 //		if(fabs(op->GetLeftY())>.1)

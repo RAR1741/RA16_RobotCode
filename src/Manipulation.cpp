@@ -19,6 +19,16 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 	state = kReady;
 	homingTimer = new Timer();
 	ReadPostions();
+
+	BaseMotor->Set(0);
+	BaseMotor->SetControlMode(CANTalon::kPosition);
+	BaseMotor->SetEncPosition(0);
+	BaseMotor->Set(0);
+
+	ArmMotor->Set(0);
+	ArmMotor->SetControlMode(CANTalon::kPosition);
+	ArmMotor->SetEncPosition(0);
+	ArmMotor->Set(0);
 }
 
 void Manipulation::ReadPostions()
@@ -68,6 +78,7 @@ void Manipulation::Set(int in)
 	if((unsigned)in < positions.size() && in >= 0)
 	{
 		pos = positions.at(in);
+		cout << "pos: " << pos.at(0) << pos.at(1) << endl;
 		BaseMotor->Set(pos.at(0));
 		ArmMotor->Set(pos.at(1));
 	}
@@ -254,5 +265,5 @@ Manipulation::State Manipulation::GetState()
 
 void Manipulation::ReloadConfig()
 {
-
+	ReadPostions(); // XD
 }
