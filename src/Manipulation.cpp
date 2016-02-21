@@ -272,10 +272,12 @@ void Manipulation::Process()
 		BaseMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
 		if(ArmLimit->Get() && ArmMotor->Get() < 0)
 		{
+			cout << ArmLimit->Get() << " " << ArmMotor->Get() << endl;
 			ArmMotor->Set(0);
 		}
 		if(BaseMotor->GetPinStateQuadB() && BaseMotor->Get() < 0)
 		{
+			cout << BaseMotor->GetPinStateQuadB() <<  " " << BaseMotor->Get() << endl;
 			BaseMotor->Set(0);
 		}
 		ArmMotor->SetControlMode(CANTalon::ControlMode::kPosition);
