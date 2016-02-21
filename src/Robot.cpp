@@ -424,22 +424,22 @@ public:
 				score->SetPredefinedAngle(4);
 			}
 
-			if(op->GetA())
-			{
-				score->SetPreIncrementalPos(1);
-			}
-			else if(op->GetB())
-			{
-				score->SetPreIncrementalPos(2);
-			}
-			else if(op->GetX())
-			{
-				score->SetPreIncrementalPos(3);
-			}
-			else if(op->GetY())
-			{
-				score->SetPreIncrementalPos(4);
-			}
+//			if(op->GetA())
+//			{
+//				score->SetPreIncrementalPos(1);
+//			}
+//			else if(op->GetB())
+//			{
+//				score->SetPreIncrementalPos(2);
+//			}
+//			else if(op->GetX())
+//			{
+//				score->SetPreIncrementalPos(3);
+//			}
+//			else if(op->GetY())
+//			{
+//				score->SetPreIncrementalPos(4);
+//			}
 
 			// MANIP MODE XD
 #if 0 // NOTHING
