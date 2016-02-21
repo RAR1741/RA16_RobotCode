@@ -39,12 +39,34 @@ void Manipulation::SetupLogging(Logger * logger)
 {
 	logger->AddAttribute("ManipBaseAngle");
 	logger->AddAttribute("ManipArmAngle");
+	logger->AddAttribute("ManipState");
 }
 
 void Manipulation::Log(Logger * logger)
 {
 	logger->Log("ManipBaseAngle", BaseAngle());
 	logger->Log("ManipArmAngle",  ArmAngle());
+
+	std::string stateName = "unknown";
+
+	switch(GetState()) {
+	case Manipulation::State::kStart:
+		stateName = "kStart";
+		break;
+	case Manipulation::State::kReady:
+		stateName = "kReady";
+		break;
+	case Manipulation::State::kHomed:
+		stateName = "kHomed";
+		break;
+	case Manipulation::State::kHomingDown:
+		stateName = "kHomingDown";
+		break;
+	default:
+		stateName = "unknown (" + std::to_string(GetState()) + ")";
+	}
+
+	logger->Log("ManipState", stateName);
 }
 
 void Manipulation::GoToXY(float x, float y) {
