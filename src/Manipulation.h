@@ -44,6 +44,9 @@ public:
 	float ArmAngle()  { return ArmDegreesByEncoder(ArmMotor->GetPosition());   }
 	float BaseAngle() { return BaseDegreesByEncoder(BaseMotor->GetPosition()); }
 
+	bool IsArmHome();
+	bool IsBaseHome();
+
 	void SetupLogging(Logger * logger);
 	void Log(Logger * logger);
 

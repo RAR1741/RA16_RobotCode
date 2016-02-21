@@ -40,12 +40,16 @@ void Manipulation::SetupLogging(Logger * logger)
 	logger->AddAttribute("ManipBaseAngle");
 	logger->AddAttribute("ManipArmAngle");
 	logger->AddAttribute("ManipState");
+	logger->AddAttribute("ManipBaseHome");
+	logger->AddAttribute("ManipArmHome");
 }
 
 void Manipulation::Log(Logger * logger)
 {
 	logger->Log("ManipBaseAngle", BaseAngle());
 	logger->Log("ManipArmAngle",  ArmAngle());
+	logger->Log("ManipBaseHome", IsBaseHome());
+	logger->Log("ManipArmHome", IsArmHome());
 
 	std::string stateName = "unknown";
 
@@ -218,6 +222,14 @@ void Manipulation::Home()
 	}
 }
 
+bool Manipulation::IsArmHome() {
+	return !(ArmLimit->Get());
+}
+
+bool Manipulation::IsBaseHome() {
+	return BaseMotor->GetPinStateQuadIdx();
+}
+
 void Manipulation::Process()
 {
 	//state = kReady;
@@ -231,18 +243,18 @@ void Manipulation::Process()
 		state = Manipulation::kHomingDown;
 		break;
 	case Manipulation::kHomingDown:
-		if(ArmLimit->Get())
+		if(IsArmHome())
 		{
 			ArmMotor->Set(0);
 			ArmMotor->SetPosition(0);
 		}
-		if(BaseMotor->GetPinStateQuadIdx())
+		if(IsBaseHome())
 		{
 			BaseMotor->Set(0);
 			BaseMotor->Set(0);
 		}
 
-		if(ArmLimit->Get() && BaseMotor->GetPinStateQuadIdx())
+		if(IsArmHome() && IsBaseHome())
 		{
 			state = kHomed;
 		}
