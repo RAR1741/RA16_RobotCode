@@ -41,6 +41,10 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	encPos2 = Config::GetSetting("AnglePos2", 2900);
 	encPos3 = Config::GetSetting("AnglePos3", 3250);
 	encPos4 = Config::GetSetting("AnglePos4", 3480);
+	degPos1 = Config::GetSetting("AngleDeg1", 2750);
+	degPos2 = Config::GetSetting("AngleDeg2", 2900);
+	degPos3 = Config::GetSetting("AngleDeg3", 3250);
+	degPos4 = Config::GetSetting("AngleDeg4", 3480);
 	encHomePos = Config::GetSetting("AngleHomedPos", 1);
 	holdStart = Config::GetSetting("holdStart", -97000);
 	holdInc = Config::GetSetting("holdInc", -25000);
@@ -170,13 +174,21 @@ void Scoring::SetAngle(float angle)
 	//AngleMotor->Set(angle);
 }
 
-void Scoring::AngleHome()
+void Scoring::Home()
+{
+	if(homeState == kReady)
+	{
+		homeState = kStart;
+	}
+}
+
+void Scoring::AngleHomeLoop()
 {
 	switch(homeState)
 	{
 	case Scoring::HomeState::kStart:
 
-		AngleMotor->SetControlMode(CANTalon::kSpeed);
+		AngleMotor->SetControlMode(CANTalon::kPercentVbus);
 
 		homingTimer->Reset();
 		homingTimer->Start();
@@ -195,7 +207,7 @@ void Scoring::AngleHome()
 		cout << "StartHomingUP\n";
 		if(homingTimer->Get()< 0.5)
 		{
-			AngleMotor->Set(1300);
+			AngleMotor->Set(.6);
 		}
 		else
 		{
@@ -208,7 +220,7 @@ void Scoring::AngleHome()
 		cout << "StartHomingDown\n";
 		if(!HomeAngle->Get())//isnt triggered
 		{
-			AngleMotor->Set(-1300);
+			AngleMotor->Set(-.6);
 		}
 		else
 		{
@@ -238,16 +250,16 @@ void Scoring::SetPredefinedAngle(int posNum)
 	switch(posNum)
 	{
 	case 1:
-		AngleMotor->Set(encPos1);
+		AimLoop->SetSetpoint(ValueToVoltage(encPos1));
 		break;
 	case 2:
-		AngleMotor->Set(encPos2);
+		AimLoop->SetSetpoint(ValueToVoltage(encPos2));
 		break;
 	case 3:
-		AngleMotor->Set(encPos3);
+		AimLoop->SetSetpoint(ValueToVoltage(encPos3));
 		break;
 	case 4:
-		AngleMotor->Set(encPos4);
+		AimLoop->SetSetpoint(ValueToVoltage(encPos4));
 		break;
 	default:
 		break;
@@ -257,6 +269,11 @@ void Scoring::SetPredefinedAngle(int posNum)
 float Scoring::ValueToVoltage(float value)
 {
 	return value/800.0F;
+}
+
+float Scoring::DegreeToEnc(float value)
+{
+	return value * 16118.518518F;
 }
 
 float Scoring::GetAngle()
@@ -279,10 +296,14 @@ void Scoring::ReloadConfig()
 	PI = Config::GetSetting("S_P_I", 2);
 	PD = Config::GetSetting("S_P_D", 0);
 	AimLoop->SetPID(PP,PI,PD);
-	encPos1 = Config::GetSetting("AnglePos1", 2750);
-	encPos2 = Config::GetSetting("AnglePos2", 2900);
-	encPos3 = Config::GetSetting("AnglePos3", 3250);
-	encPos4 = Config::GetSetting("AnglePos4", 3480);
+	encPos1 = Config::GetSetting("AnglePos1", 1800);
+	encPos2 = Config::GetSetting("AnglePos2", 2000);
+	encPos3 = Config::GetSetting("AnglePos3", 2400);
+	encPos4 = Config::GetSetting("AnglePos4", 2680);
+	degPos1 = Config::GetSetting("AngleDeg1", 2750);
+	degPos2 = Config::GetSetting("AngleDeg2", 2900);
+	degPos3 = Config::GetSetting("AngleDeg3", 3250);
+	degPos4 = Config::GetSetting("AngleDeg4", 3480);
 	encHomePos = Config::GetSetting("AngleHomedPos", 1);
 	holdStart = Config::GetSetting("holdStart", -97000);
 	holdInc = Config::GetSetting("holdInc", -25000);

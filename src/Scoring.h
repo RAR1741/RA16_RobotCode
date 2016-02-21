@@ -34,12 +34,14 @@ public:
 	Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *indexSensor,PIDController * aimLoop,DigitalInput *homeSensor,DigitalInput *forwardEnd);
 	void Update();
 	void SetAngle(float angle);
-	void AngleHome();
+	void AngleHomeLoop();
+	void Home();
 	void SetPredefinedAngle(int posNum);
 	float GetAngle();
 	State GetState();
 
 	float ValueToVoltage(float value);
+	float DegreeToEnc(float value);
 	void SetFlySpeed(float speed);
 	void Load();
 	void Fire();
@@ -68,6 +70,10 @@ private:
 	int encPos2;
 	int encPos3;
 	int encPos4;
+	int degPos1;
+	int degPos2;
+	int degPos3;
+	int degPos4;
 	int encHomePos;
 	int holdStart;
 	int holdInc;

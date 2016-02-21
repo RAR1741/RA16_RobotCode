@@ -376,7 +376,7 @@ public:
 			aimLoop->Disable();
 			aimer->Set(0);
 		}
-
+//
 //		if(fabs(driver->GetRightY()) >= 0.1)
 //		{
 //			aimer->Set(driver->GetRightY() * .5);
@@ -417,6 +417,11 @@ public:
 #endif
 
 
+//		if(op->GetDPad() == Gamepad::kLeft)
+//		{
+//			score->Home();
+//		}
+
 //		if(fabs(op->GetRightY())>.1)
 //		{
 //			arm->SetPositionBase(arm->GetPositionBase() + (op->GetRightY() * 10));
@@ -436,13 +441,12 @@ public:
 //		}
 //
 
-
-
 		//puncher->Set(3000);
 //		cout << puncher->GetPinStateQuadIdx() << endl;
 //		cout << puncher->GetEncPosition() << endl;
 //		cout << score->GetState() << endl;
 		score->Update();
+		//score->AngleHomeLoop();
 //		arm->Process();
 
 		cout << aimLoop->Get() << endl;
