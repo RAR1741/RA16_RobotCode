@@ -147,10 +147,7 @@ public:
 		// turn this on once we have a camera connected
 		// targeting = new Targeting(light);
 
-		m_server = CameraServer::GetInstance();
-		m_server->StartAutomaticCapture("cam0");
-		m_server->SetQuality(2);
-		m_server->StartAutomaticCapture();
+
 
 		driver = new Gamepad(0);
 		op = new Gamepad(1);
@@ -273,6 +270,10 @@ public:
 
 	void TeleopInit()
 	{
+		m_server = CameraServer::GetInstance();
+		m_server->StartAutomaticCapture("cam0");
+		m_server->SetQuality(2);
+		m_server->StartAutomaticCapture();
 		StartLogging("teleop");
 		cout << "thing" << endl;
 		score->SetPredefinedAngle(4);
@@ -317,7 +318,7 @@ public:
 		}
 		else
 		{
-			drive->HaloDrive(Deadband(driver->GetLeftX()) * 0.7, -(driver->GetLeftY() * 0.6));
+			drive->HaloDrive(Deadband(driver->GetLeftX()) * 0.7, forward(Deadband(driver->GetLeftY() * 0.6)));
 		}
 
 		if(DeadbandCheck(driver->GetRightX()) || forward(DeadbandCheck(driver->GetLeftY())))
@@ -448,7 +449,7 @@ public:
 //		else
 //		{
 		arm->ManualDrive(op->GetRightY(), op->GetLeftY());
-		arm->Process();
+		//arm->Process();
 //		}
 
 //		if(fabs(op->GetLeftY())>.1)

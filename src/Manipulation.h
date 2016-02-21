@@ -16,7 +16,7 @@ public:
 	typedef enum
 	{
 		kStart = 0,
-		kHomingUp = 1,
+		//kHomingUp = 1,
 		kHomingDown = 2,
 		kHomed = 3,
 		kReady = 4
