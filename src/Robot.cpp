@@ -142,7 +142,7 @@ public:
 		lw = LiveWindow::GetInstance();
 		//chooser = new SendableChooser();
 
-		//light = new Relay(0);
+		light = new Relay(0);
 
 		// turn this on once we have a camera connected
 		// targeting = new Targeting(light);
@@ -270,6 +270,7 @@ public:
 
 	void TeleopInit()
 	{
+		light->Set(Relay::Value::kOn);
 		m_server = CameraServer::GetInstance();
 		m_server->StartAutomaticCapture("cam0");
 		m_server->SetQuality(2);
@@ -283,6 +284,7 @@ public:
 
 	void DisabledInit()
 	{
+		light->Set(Relay::Value::kOff);
 		logger->Close();
 	}
 
