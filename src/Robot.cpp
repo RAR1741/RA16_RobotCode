@@ -278,6 +278,7 @@ public:
 		StartLogging("teleop");
 		cout << "thing" << endl;
 		score->SetPredefinedAngle(4);
+		aimLoop->Disable();
 		score->ReloadConfig();
 		arm->ReloadConfig();
 	}

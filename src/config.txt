@@ -3,7 +3,7 @@ flyWheelRatio = 4
 holdStart = -92000
 holdInc = -25000
 holdFire = -23000
-AnglePos4 = 2671
+AnglePos4 = 2687
 AnglePos3 = 2200
 AnglePos2 = 2000
 AnglePos1 = 1250
@@ -20,3 +20,4 @@ bottomHardLimit = 3635
 degreesToZero = 10
 AutoAimP = 0.04
 #819200
+#2671
