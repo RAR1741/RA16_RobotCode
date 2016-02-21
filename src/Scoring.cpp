@@ -19,7 +19,7 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	TensionMotor = tMotor;
 	LFlyMotor = lMotor;
 	RFlyMotor = rMotor;
-	AngleMotor->SetControlMode(CANTalon::kPosition);
+	AngleMotor->SetControlMode(CANTalon::kPercentVbus);
 	AngleMotor->SetPID(0,0,0);
 	TensionMotor->SetControlMode(CANTalon::kPercentVbus);
 	IndexSensor = indexSensor;
