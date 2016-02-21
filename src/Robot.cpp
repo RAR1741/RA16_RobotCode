@@ -203,7 +203,7 @@ public:
 		cout << "Arm initializing";
 		motorBase = new CANTalon(2);
 		motorArm = new CANTalon(1);
-		ArmLimit = new DigitalInput(2);
+		ArmLimit = new DigitalInput(6);
 		BaseLimit = new DigitalInput(3);
 		arm = new Manipulation(motorBase, motorArm, BaseLimit, ArmLimit);
 		cout << "done" << endl;
@@ -454,7 +454,7 @@ public:
 //		cout << score->GetState() << endl;
 		score->Update();
 		//score->AngleHomeLoop();
-//		arm->Process();
+		arm->Process();
 
 		cout << aimLoop->Get() << endl;
 		cout << "EncValue: " << aimer->GetEncPosition() << endl;
