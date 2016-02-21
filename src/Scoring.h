@@ -36,6 +36,7 @@ public:
 	void SetAngle(float angle);
 	void AngleHomeLoop();
 	void Home();
+	void SetPreIncrementalPos(int posNum);
 	void SetPredefinedAngle(int posNum);
 	float GetAngle();
 	State GetState();

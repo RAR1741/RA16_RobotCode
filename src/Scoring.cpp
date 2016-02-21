@@ -19,7 +19,8 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	TensionMotor = tMotor;
 	LFlyMotor = lMotor;
 	RFlyMotor = rMotor;
-	AngleMotor->SetControlMode(CANTalon::kPercentVbus);
+	AngleMotor->SetControlMode(CANTalon::kPosition);
+	AngleMotor->SetPID(0,0,0);
 	TensionMotor->SetControlMode(CANTalon::kPercentVbus);
 	IndexSensor = indexSensor;
 	HomeAngle = homeSensor;
@@ -242,6 +243,27 @@ void Scoring::AngleHomeLoop()
 	case Scoring::HomeState::kReady:
 		break;
 
+	}
+}
+
+void Scoring::SetPreIncrementalPos(int posNum)
+{
+	switch(posNum)
+	{
+	case 1:
+		AimLoop->SetSetpoint(DegreeToEnc(degPos1));
+		break;
+	case 2:
+		AimLoop->SetSetpoint(DegreeToEnc(degPos2));
+		break;
+	case 3:
+		AimLoop->SetSetpoint(DegreeToEnc(degPos3));
+		break;
+	case 4:
+		AimLoop->SetSetpoint(DegreeToEnc(degPos4));
+		break;
+	default:
+		break;
 	}
 }
 
