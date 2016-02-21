@@ -218,7 +218,7 @@ public:
 		aimLoop->SetPIDSourceType(PIDSourceType::kDisplacement);
 		aimLoop->SetInputRange(0,4.8);
 		aimLoop->SetOutputRange(-.9,.9);
-		aimLoop->Enable();
+		aimLoop->Disable();
 
 		score = new Scoring(aimer,puncher,lin,rin,Index,aimLoop,NULL,NULL);
 
@@ -270,6 +270,8 @@ public:
 
 	void TeleopInit()
 	{
+		score->SetPredefinedAngle(4);
+		aimLoop->Disable();
 		light->Set(Relay::Value::kOn);
 		m_server = CameraServer::GetInstance();
 		m_server->StartAutomaticCapture("cam0");
@@ -277,8 +279,7 @@ public:
 		m_server->StartAutomaticCapture();
 		StartLogging("teleop");
 		cout << "thing" << endl;
-		score->SetPredefinedAngle(4);
-		aimLoop->Disable();
+
 		score->ReloadConfig();
 		arm->ReloadConfig();
 	}
