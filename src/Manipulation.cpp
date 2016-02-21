@@ -227,7 +227,7 @@ bool Manipulation::IsArmHome() {
 }
 
 bool Manipulation::IsBaseHome() {
-	return BaseMotor->GetPinStateQuadIdx();
+	return !(BaseMotor->GetPinStateQuadIdx());
 }
 
 void Manipulation::Process()
