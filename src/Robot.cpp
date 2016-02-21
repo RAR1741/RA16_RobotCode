@@ -140,35 +140,13 @@ public:
 	void RobotInit()
 	{
 		lw = LiveWindow::GetInstance();
-		//chooser = new SendableChooser();
-
 		light = new Relay(0);
-
-		// turn this on once we have a camera connected
-		// targeting = new Targeting(light);
-
-
 
 		driver = new Gamepad(0);
 		op = new Gamepad(1);
-		//gyro = new AnalogGyro(1);
-
-		//chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
-		//chooser->AddObject(autoNameCustom, (void*)&autoNameCustom);
-
-		//SmartDashboard::PutData("Auto Modes", chooser);
-		//lw->AddSensor((const std::string)"Main", 0, gyro);
-//		cout << "Arm initializing\n";
-		motorBase = new CANTalon(2);
-		motorBase->SetControlMode(CANSpeedController::kPercentVbus);
-		motorBase->SetPID(5,.0001,0);
-		motorArm = new CANTalon(1);
-		motorArm->SetControlMode(CANSpeedController::kPercentVbus);
-//		motorArm->SetPID(1,0,0);
-//		cout << "Arm set to pos: " << motorArm->GetEncPosition();
-//		arm = new Manipulation(motorBase, motorArm, NULL, NULL);
 
 #if !TESTBED
+
 		motorFL = new CANTalon(7);
 		motorFL->SetStatusFrameRateMs(CANTalon::StatusFrameRate::StatusFrameRateQuadEncoder,6);
 		motorBL = new CANTalon(9);
@@ -222,10 +200,13 @@ public:
 
 		score = new Scoring(aimer,puncher,lin,rin,Index,aimLoop,NULL,NULL);
 
+		cout << "Arm initializing";
+		motorBase = new CANTalon(2);
+		motorArm = new CANTalon(1);
 		ArmLimit = new DigitalInput(2);
 		BaseLimit = new DigitalInput(3);
 		arm = new Manipulation(motorBase, motorArm, BaseLimit, ArmLimit);
-
+		cout << "done" << endl;
 		ReloadConfig();
 		//StartLogging("init");
 		logthing->Troll(cout);
@@ -244,27 +225,10 @@ public:
 	void AutonomousInit()
 	{
 		StartLogging("auto");
-		//autoSelected = *((std::string*)chooser->GetSelected());
-		//std::string autoSelected = SmartDashboard::GetString("Auto Selector", autoNameDefault);
-		//std::cout << "Auto selected: " << autoSelected << std::endl;
-
-		//if(autoSelected == autoNameCustom){
-			//Custom Auto goes here
-		//} else {
-			//Default Auto goes here
-		//}
 	}
 
 	void AutonomousPeriodic()
 	{
-//		if(autoSelected == autoNameCustom)
-//		{
-//			//Custom Auto goes here
-//		}
-//		else
-//		{
-//			//Default Auto goes here
-//		}
 		Log();
 	}
 
@@ -471,7 +435,8 @@ public:
 //		}
 //		else
 //		{
-		arm->ManualDrive(op->GetRightY(), op->GetLeftY());
+		//arm->GoToAngles(10, 0);
+		//arm->ManualDrive(op->GetRightY(), op->GetLeftY());
 		//arm->Process();
 //		}
 
@@ -557,6 +522,7 @@ public:
 		logger->AddAttribute("AimCurrent");
 		logger->AddAttribute("PunchCurrent");
 		logger->AddAttribute("getPos");
+		arm->SetupLogging(logger);
 		logger->WriteAttributes();
 	}
 
@@ -581,6 +547,7 @@ public:
 		logger->Log("AimCurrent", aimer->GetOutputCurrent());
 		logger->Log("PunchCurrent", puncher->GetOutputCurrent());
 		logger->Log("getPos", getPos);
+		arm->Log(logger);
 #endif
 		logger->WriteLine();
 		//cout << logTime->Get() << endl;

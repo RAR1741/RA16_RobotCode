@@ -7,7 +7,10 @@
 
 #ifndef SRC_MANIPULATION_H_
 #define SRC_MANIPULATION_H_
+
 #include "WPILib.h"
+#include "Logger.h"
+
 using namespace std;
 class Manipulation
 {
@@ -35,12 +38,32 @@ public:
 	void ReloadConfig();
 
 	void ManualDrive(float base, float arm);
+	void GoToAngles(float baseDegrees, float armDegrees);
+	void GoToXY(float x, float y);
 
-//	void SetPositionBase(int pos);
-//	int GetPositionBase();
-//
-	//Manipulation(const Manipulation&);
+	float ArmAngle()  { return ArmDegreesByEncoder(ArmMotor->GetPosition());   }
+	float BaseAngle() { return BaseDegreesByEncoder(BaseMotor->GetPosition()); }
+
+	void SetupLogging(Logger * logger);
+	void Log(Logger * logger);
+
+
 private:
+	// Utility methods to convert between revolutions and degrees
+	int BaseEncoderByDegrees(float degrees) {
+		return (int) degrees * kDegreesPerEncoderTick;
+	}
+	float BaseDegreesByEncoder(int encoderTicks) {
+		return encoderTicks / kDegreesPerEncoderTick;
+	}
+
+	float ArmEncoderByDegrees(float degrees) {
+		return (int) degrees * kDegreesPerEncoderTick;
+	}
+	int ArmDegreesByEncoder(int encoderTicks) {
+		return encoderTicks / kDegreesPerEncoderTick;
+	}
+
 	bool ReadMotion(int in);
 	void ReadPostions();
 	CANTalon *BaseMotor;
@@ -56,6 +79,9 @@ private:
 	float absZeroPos;
 	float absToInc;
 	AnalogInput *BaseAbs;
+	const float kDegreesPerEncoderTick = 19.91111111;
+	const float kRevolutionsPerDegree = 0.71111111;
+
 };
 
 #endif /* SRC_MANIPULATION_H_ */

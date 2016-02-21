@@ -4,6 +4,8 @@
  *      Author: Taylor Horne
  */
 #include "Manipulation.h"
+#include "Config.h"
+#include "Logger.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -13,14 +15,15 @@ using namespace std;
 Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLimit, DigitalInput *aLimit)
 {
 	BaseMotor = bMotor;
+	//BaseMotor->ConfigEncoderCodesPerRev(28);
 	ArmMotor = aMotor;
+	//ArmMotor->ConfigEncoderCodesPerRev(28);
 	BaseLimit = bLimit;
 	ArmLimit = aLimit;
 	state = kReady;
 	homingTimer = new Timer();
 	ReadPostions();
 
-#if 0
 	BaseMotor->Set(0);
 	BaseMotor->SetControlMode(CANTalon::kPosition);
 	BaseMotor->SetEncPosition(0);
@@ -30,7 +33,31 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 	ArmMotor->SetControlMode(CANTalon::kPosition);
 	ArmMotor->SetEncPosition(0);
 	ArmMotor->Set(0);
-#endif
+}
+
+void Manipulation::SetupLogging(Logger * logger)
+{
+	logger->AddAttribute("ManipBaseAngle");
+	logger->AddAttribute("ManipArmAngle");
+}
+
+void Manipulation::Log(Logger * logger)
+{
+	logger->Log("ManipBaseAngle", BaseAngle());
+	logger->Log("ManipArmAngle",  ArmAngle());
+}
+
+void Manipulation::GoToXY(float x, float y) {
+	// todo: calculate
+	float baseDegrees = 0;
+	float armDegrees = 0;
+
+	GoToAngles(baseDegrees, armDegrees);
+}
+
+void Manipulation::GoToAngles(float baseDegrees, float armDegrees) {
+	BaseMotor->Set(BaseEncoderByDegrees(baseDegrees));
+	ArmMotor->Set(ArmEncoderByDegrees(armDegrees));
 }
 
 void Manipulation::ReadPostions()
@@ -169,91 +196,27 @@ void Manipulation::Home()
 	}
 }
 
-#if 0
 void Manipulation::Process()
 {
-#error "oh dang dang"
-	switch(state)
-	{
-	case Manipulation::kStart:
-		cout << "Starting\n";
-		BaseMotor->SetControlMode(CANTalon::kSpeed);
-		cout << "Starting2\n";
-		homingTimer->Reset();
-		homingTimer->Start();
-		cout << "Starting3\n";
-		if(!BaseLimit->Get())//is triggered
-		{
-			cout << "Starting4\n";
-			state = kHomingUp;
-		}
-		else if(BaseLimit->Get())//isnt triggered
-		{
-			cout << "Starting5\n";
-			state = kHomingDown;
-		}
-		cout << "EndStart\n";
-		break;
-	case Manipulation::kHomingUp:
-		cout << "StartHomingUP\n";
-		if(homingTimer->Get()<.75)
-		{
-			BaseMotor->Set(150);
-		}
-		else
-		{
-			BaseMotor->Set(0);
-			state = kHomingDown;
-		}
-		cout << "EndHomingUP\n";
-		break;
-	case Manipulation::kHomingDown:
-		cout << "StartHomingDown\n";
-		if(BaseLimit->Get())
-		{
-			BaseMotor->Set(-100);
-		}
-		else
-		{
-			BaseMotor->Set(0);
-			BaseMotor->SetControlMode(CANTalon::kPosition);
-			BaseMotor->SetEncPosition(0);
-			BaseMotor->Set(0);
-			state = kHomed;
-		}
-		cout << "StartHomingDown\n";
-		break;
-	case Manipulation::kHomed:	{
-		BaseMotor->Set(0);
-		state = kReady;
-		break;
-	}
-	case Manipulation::kReady:
-		//cout << "Ready\n";
-		break;
-
-	}
-}
-#else
-void Manipulation::Process()
-{
-	state = kReady;
+	//state = kReady;
 	switch(state)
 	{
 	case Manipulation::kStart:
 		ArmMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
-		ArmMotor->Set(0.5);
+		ArmMotor->Set(Config::GetSetting("manip_arm_home_speed", -0.5));
 		BaseMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
-		BaseMotor->Set(0.5);
+		BaseMotor->Set(Config::GetSetting("manip_base_home_speed", -0.5));
 		state = Manipulation::kHomingDown;
 		break;
 	case Manipulation::kHomingDown:
 		if(ArmLimit->Get())
 		{
 			ArmMotor->Set(0);
+			ArmMotor->SetPosition(0);
 		}
 		if(BaseMotor->GetPinStateQuadIdx())
 		{
+			BaseMotor->Set(0);
 			BaseMotor->Set(0);
 		}
 
@@ -268,48 +231,15 @@ void Manipulation::Process()
 		state = Manipulation::kReady;
 		break;
 	case Manipulation::kReady:
-		ArmMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
-		BaseMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
-		if(ArmLimit->Get() && ArmMotor->Get() < 0)
-		{
-			cout << ArmLimit->Get() << " " << ArmMotor->Get() << endl;
-			ArmMotor->Set(0);
-		}
-		if(BaseMotor->GetPinStateQuadB() && BaseMotor->Get() < 0)
-		{
-			cout << BaseMotor->GetPinStateQuadB() <<  " " << BaseMotor->Get() << endl;
-			BaseMotor->Set(0);
-		}
-		ArmMotor->SetControlMode(CANTalon::ControlMode::kPosition);
-		BaseMotor->SetControlMode(CANTalon::ControlMode::kPosition);
 		break;
 	}
 }
-#endif
 
 void Manipulation::ManualDrive(float base, float arm) {
 	BaseMotor->Set(base);
 	ArmMotor->Set(arm);
 }
-#if 0
-int Manipulation::GetPositionBase() {
-	return BaseMotor->GetEncPosition();
-}
 
-void Manipulation::SetPositionBase(int pos)
-{
-	BaseMotor->Set(pos);
-}
-
-int Manipulation::GetPositionArm() {
-	return ArmMotor->GetEncPosition();
-}
-
-void Manipulation::SetPositionArm(int pos)
-{
-	ArmMotor->Set(pos);
-}
-#endif
 
 Manipulation::State Manipulation::GetState()
 {
@@ -319,4 +249,13 @@ Manipulation::State Manipulation::GetState()
 void Manipulation::ReloadConfig()
 {
 	ReadPostions(); // XD
+	BaseMotor->SetPID(
+		Config::GetSetting("manip_base_p", 5.0),
+		Config::GetSetting("manip_base_i", 0.001),
+		Config::GetSetting("manip_base_d", 0));
+
+	ArmMotor->SetPID(
+		Config::GetSetting("manip_arm_p", 1),
+		Config::GetSetting("manip_arm_i", 0),
+		Config::GetSetting("manip_arm_d", 0));
 }

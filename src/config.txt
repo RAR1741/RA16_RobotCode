@@ -20,4 +20,17 @@ bottomHardLimit = 3635
 degreesToZero = 10
 AutoAimP = 0.04
 #819200
+
+# Arm Base
+manip_base_p = 5
+manip_base_i = 0.001
+manip_base_d = 0
+
+manip_arm_p  = 1
+manip_arm_i  = 0
+manip_arm_d  = 0
+
+manip_base_home_speed = -0.5
+manip_arm_home_speed  = -0.5
+#819200
 #2671
