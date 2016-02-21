@@ -337,12 +337,12 @@ public:
 		if(driver->GetDPad() == Gamepad::DPadDirection::kUp)
 		{
 			isForward = true;
-			m_server->StartAutomaticCapture("cam0");
+			//m_server->StartAutomaticCapture("cam0");
 		}
 		else if(driver->GetDPad() == Gamepad::DPadDirection::kDown)
 		{
 			isForward = false;
-			m_server->StartAutomaticCapture("cam1");
+			//m_server->StartAutomaticCapture("cam1");
 		}
 //
 //		if(op->GetA())
