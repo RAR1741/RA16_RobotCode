@@ -236,10 +236,37 @@ void Manipulation::Process()
 	switch(state)
 	{
 	case Manipulation::kStart:
-		ArmMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
-		ArmMotor->Set(Config::GetSetting("manip_arm_home_speed", -0.5));
-		BaseMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
-		BaseMotor->Set(Config::GetSetting("manip_base_home_speed", -0.5));
+		if(!IsArmHome())
+		{
+			ArmMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
+			ArmMotor->Set(Config::GetSetting("manip_arm_home_speed", -0.5));
+			if(!IsBaseHome())
+			{
+				BaseMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
+				BaseMotor->Set(Config::GetSetting("manip_base_home_speed", -0.5));
+				state = kHomingDown;
+			}
+			state = kHomingDown;
+		}
+		else if(!IsBaseHome())
+		{
+			BaseMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
+			BaseMotor->Set(Config::GetSetting("manip_base_home_speed", -0.5));
+			if(!IsArmHome())
+			{
+				ArmMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
+				ArmMotor->Set(Config::GetSetting("manip_arm_home_speed", -0.5));
+				state = kHomingDown;
+			}
+			state = kHomingDown;
+		}
+		else
+		{
+			state = kHomed;
+		}
+
+
+
 		state = Manipulation::kHomingDown;
 		break;
 	case Manipulation::kHomingDown:
@@ -251,7 +278,7 @@ void Manipulation::Process()
 		if(IsBaseHome())
 		{
 			BaseMotor->Set(0);
-			BaseMotor->Set(0);
+			BaseMotor->SetPosition(0);
 		}
 
 		if(IsArmHome() && IsBaseHome())
