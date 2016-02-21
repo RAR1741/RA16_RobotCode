@@ -237,6 +237,7 @@ void Manipulation::Process()
 #else
 void Manipulation::Process()
 {
+	state = kReady;
 	switch(state)
 	{
 	case Manipulation::kStart:
@@ -269,11 +270,11 @@ void Manipulation::Process()
 	case Manipulation::kReady:
 		ArmMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
 		BaseMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
-		if(ArmLimit->Get() && ArmMotor->Get() > 0)
+		if(ArmLimit->Get() && ArmMotor->Get() < 0)
 		{
 			ArmMotor->Set(0);
 		}
-		if(BaseMotor->GetPinStateQuadB() && BaseMotor->Get() > 0)
+		if(BaseMotor->GetPinStateQuadB() && BaseMotor->Get() < 0)
 		{
 			BaseMotor->Set(0);
 		}

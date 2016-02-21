@@ -64,6 +64,7 @@ private:
     PIDController * aimLoop;
     Victor * lin;
     Victor * rin;
+    CameraServer * m_server;
     //////////////////////////
     Scoring * score;
     OutputLog * logthing = new OutputLog();
@@ -71,6 +72,7 @@ private:
 
     bool triggerToggle;
     bool lastTrigger;
+    bool isForward;
 
 
     std::string profile = "everything";
@@ -124,12 +126,14 @@ public:
 		light = NULL;
 		ArmLimit = NULL;
 		BaseLimit = NULL;
+		m_server = NULL;
 		autoPanP = 0;
 		encoderTicksPerDegree = 0;
 		bottomHardLimit = 0;
 		DegreesToZero = 0;
 		triggerToggle = false;
 		lastTrigger = false;
+		isForward = true;
 		//targeting = NULL;
 	};
 
@@ -142,6 +146,11 @@ public:
 
 		// turn this on once we have a camera connected
 		// targeting = new Targeting(light);
+
+		m_server = CameraServer::GetInstance();
+		m_server->StartAutomaticCapture("cam0");
+		m_server->SetQuality(2);
+		m_server->StartAutomaticCapture();
 
 		driver = new Gamepad(0);
 		op = new Gamepad(1);
@@ -282,7 +291,7 @@ public:
 //		yServo->Set((driver->GetRightY() + 1) / 2);
 		if(driver->GetRightBumper())
 		{
-			drive->HaloDrive(Deadband(driver->GetLeftX())* 0.6, -Deadband(driver->GetLeftY()));
+			drive->HaloDrive(Deadband(driver->GetLeftX())* 0.7, forward(Deadband(driver->GetLeftY())));
 		}
 		else if(driver->GetLeftBumper())
 		{
@@ -311,7 +320,7 @@ public:
 			drive->HaloDrive(Deadband(driver->GetLeftX()) * 0.7, -(driver->GetLeftY() * 0.6));
 		}
 
-		if(DeadbandCheck(driver->GetRightX()) || DeadbandCheck(driver->GetLeftY()))
+		if(DeadbandCheck(driver->GetRightX()) || forward(DeadbandCheck(driver->GetLeftY())))
 		{
 			//aimer->SetControlMode(CANTalon::ControlMode::kPercentVbus);
 //			aimLoop->Disable();
@@ -320,6 +329,15 @@ public:
 		else
 		{
 //			aimLoop->Enable();
+		}
+
+		if(driver->GetDPad() == Gamepad::DPadDirection::kUp)
+		{
+			isForward = true;
+		}
+		else if(driver->GetDPad() == Gamepad::DPadDirection::kDown)
+		{
+			isForward = false;
 		}
 //
 //		if(op->GetA())
@@ -591,6 +609,18 @@ public:
 	int targetDegreeToTicks(float in)
 	{
 		return (bottomHardLimit - ((in + DegreesToZero) * encoderTicksPerDegree));
+	}
+
+	float forward(float in)
+	{
+		if(isForward)
+		{
+			return in;
+		}
+		else
+		{
+			return -in;
+		}
 	}
 };
 
