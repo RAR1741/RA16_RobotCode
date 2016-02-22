@@ -23,12 +23,13 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 	state = kReady;
 	homingTimer = new Timer();
 	ReadPostions();
-
+	BaseMotor->SetPID(5,.0001,0);
 	BaseMotor->Set(0);
 	BaseMotor->SetControlMode(CANTalon::kPosition);
 	BaseMotor->SetEncPosition(0);
 	BaseMotor->Set(0);
 
+	ArmMotor->SetPID(5,.0001,0);
 	ArmMotor->Set(0);
 	ArmMotor->SetControlMode(CANTalon::kPosition);
 	ArmMotor->SetEncPosition(0);
@@ -239,11 +240,11 @@ void Manipulation::Process()
 		if(!IsArmHome())
 		{
 			ArmMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
-			ArmMotor->Set(Config::GetSetting("manip_arm_home_speed", -0.5));
+			ArmMotor->Set(Config::GetSetting("manip_arm_home_speed", -0.2));
 			if(!IsBaseHome())
 			{
 				BaseMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
-				BaseMotor->Set(Config::GetSetting("manip_base_home_speed", -0.5));
+				BaseMotor->Set(Config::GetSetting("manip_base_home_speed", 0.2));
 				state = kHomingDown;
 			}
 			state = kHomingDown;
@@ -251,11 +252,11 @@ void Manipulation::Process()
 		else if(!IsBaseHome())
 		{
 			BaseMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
-			BaseMotor->Set(Config::GetSetting("manip_base_home_speed", -0.5));
+			BaseMotor->Set(Config::GetSetting("manip_base_home_speed", 0.2));
 			if(!IsArmHome())
 			{
 				ArmMotor->SetControlMode(CANTalon::ControlMode::kPercentVbus);
-				ArmMotor->Set(Config::GetSetting("manip_arm_home_speed", -0.5));
+				ArmMotor->Set(Config::GetSetting("manip_arm_home_speed", -0.2));
 				state = kHomingDown;
 			}
 			state = kHomingDown;
@@ -267,7 +268,7 @@ void Manipulation::Process()
 
 
 
-		state = Manipulation::kHomingDown;
+		//state = Manipulation::kHomingDown;
 		break;
 	case Manipulation::kHomingDown:
 		if(IsArmHome())

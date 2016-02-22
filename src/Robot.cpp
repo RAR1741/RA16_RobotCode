@@ -236,7 +236,7 @@ public:
 	{
 		score->SetPredefinedAngle(4);
 		aimLoop->Disable();
-		light->Set(Relay::Value::kOn);
+		//light->Set(Relay::Value::kOn);
 		m_server = CameraServer::GetInstance();
 		m_server->StartAutomaticCapture("cam0");
 		m_server->SetQuality(2);
@@ -455,6 +455,22 @@ public:
 		score->Update();
 		//score->AngleHomeLoop();
 		arm->Process();
+		if(op->GetDPad() == Gamepad::kDown)
+		{
+			arm->Home();
+		}
+		if(op->GetDPad() == Gamepad::kLeft)
+		{
+			arm->GoToAngles(-90,90);
+		}
+		if(op->GetDPad() == Gamepad::kRight)
+		{
+			arm->GoToAngles(-60,90);
+		}
+		if(op->GetDPad() == Gamepad::kUp)
+		{
+			arm->GoToAngles(-90,60);
+		}
 
 		cout << aimLoop->Get() << endl;
 		cout << "EncValue: " << aimer->GetEncPosition() << endl;
