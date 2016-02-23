@@ -142,10 +142,10 @@ public:
 		lw = LiveWindow::GetInstance();
 		light = new Relay(0);
 
-		m_server = CameraServer::GetInstance();
-		m_server->StartAutomaticCapture("cam1");
-		m_server->SetQuality(2);
-		m_server->StartAutomaticCapture();
+//		m_server = CameraServer::GetInstance();
+//		m_server->StartAutomaticCapture("cam1");
+//		m_server->SetQuality(2);
+//		m_server->StartAutomaticCapture();
 
 		driver = new Gamepad(0);
 		op = new Gamepad(1);
@@ -466,7 +466,7 @@ public:
 		}
 		if(op->GetDPad() == Gamepad::kRight)
 		{
-			arm->GoToAngles(-60,90);
+			arm->GoToAngles(-175,175);
 		}
 		if(op->GetDPad() == Gamepad::kUp)
 		{
