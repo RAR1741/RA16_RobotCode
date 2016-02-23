@@ -56,7 +56,7 @@ float Gamepad::GetRightY()
  * @param axis The axis to read [1-6].
  * @return The value of the axis.
  */
-float Gamepad::GetRawAxis(AxisNumber axis)
+float Gamepad::GetRawAxis(int axis)
 {
     return ap_ds->GetStickAxis(a_port, (int) axis);
 }

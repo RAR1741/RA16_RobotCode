@@ -47,6 +47,7 @@ public:
     float GetLTriggerAxis() { return GetRawAxis(Gamepad::kLeftTriggerAxis); }
     float GetRTriggerAxis() { return GetRawAxis(Gamepad::kRightTriggerAxis); }
     int GetPOV();
+    float GetRawAxis(int axis);
 
     DPadDirection GetDPad();
 
@@ -67,7 +68,7 @@ protected:
 		kRightAnalogStickButton = 12,
 	} StickButton;
 
-	float GetRawAxis(AxisNumber axis);
+
     DriverStation *ap_ds;
     int a_port;
 };
