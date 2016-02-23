@@ -7,10 +7,9 @@
 
 #include "WPILib.h"
 
-Inputs::Inputs(Gamepad * d, Gamepad * o)
+Inputs::Inputs()
 {
-	driver = d;
-	op = o;
+
 }
 
 void Inputs::AddButtonMap(Gamepad * controller, int button, void(*f)(void))
