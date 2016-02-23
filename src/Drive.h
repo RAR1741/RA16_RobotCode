@@ -18,6 +18,7 @@ public:
 	void HaloDrive(float x, float y);
 	void TankDrive(float l, float r);
 	void Log(Logger * logger);
+	void SetupLogging(Logger * logger);
 
 private:
 	CANTalon * FL;

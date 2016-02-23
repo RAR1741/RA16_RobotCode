@@ -36,12 +36,25 @@ void Drive::TankDrive(float l, float r)
 	BL->Set(7);
 }
 
+void Drive::SetupLogging(Logger * logger)
+{
+	logger->AddAttribute("Time");
+	logger->AddAttribute("FLpos");
+	logger->AddAttribute("FRpos");
+	logger->AddAttribute("BLpos");
+	logger->AddAttribute("BRpos");
+	logger->AddAttribute("FLCurrent");
+	logger->AddAttribute("FRCurrent");
+	logger->AddAttribute("BLCurrent");
+	logger->AddAttribute("BRCurrent");
+}
+
 void Drive::Log(Logger* logger)
 {
-	logger->Log("FLVoltage", FL->GetBusVoltage());
-	logger->Log("FRVoltage", FR->GetBusVoltage());
-	logger->Log("BLVoltage", BL->GetBusVoltage());
-	logger->Log("BRVoltage", BR->GetBusVoltage());
+	logger->Log("FLpos", FL->GetEncPosition());
+	logger->Log("FRpos", FR->GetEncPosition());
+	logger->Log("BLpos", BL->GetEncPosition());
+	logger->Log("BRpos", BR->GetEncPosition());
 	logger->Log("FLCurrent", FL->GetOutputCurrent());
 	logger->Log("FRCurrent", FR->GetOutputCurrent());
 	logger->Log("BLCurrent", BL->GetOutputCurrent());
