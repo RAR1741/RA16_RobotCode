@@ -228,13 +228,12 @@ public:
 
 	void TeleopPeriodic()
 	{
-//		xServo->Set((driver->GetRightX() + 1) / 2);
-//		yServo->Set((driver->GetRightY() + 1) / 2);
-		if(driver->GetRightBumper())
+		//DRIVE
+		if(driver->GetRightBumper())//Full speed mode
 		{
 			drive->HaloDrive(Deadband(driver->GetRightX())* 0.7, forward(Deadband(driver->GetLeftY())));
 		}
-		else if(driver->GetLeftBumper())
+		else if(driver->GetLeftBumper())//Targeting mode
 		{
 			vector<Target> targets;
 			targets = targeting->GetTargets();
@@ -256,42 +255,22 @@ public:
 				drive->HaloDrive(0,0);
 			}
 		}
-		else
+		else //normal drive mode
 		{
 			drive->HaloDrive(Deadband(driver->GetRightX()) * 0.7, forward(Deadband(driver->GetLeftY() * 0.6)));
 		}
 
-		if(DeadbandCheck(driver->GetRightX()) || forward(DeadbandCheck(driver->GetLeftY())))
-		{
-			//aimer->SetControlMode(CANTalon::ControlMode::kPercentVbus);
-//			aimLoop->Disable();
-//			aimer->Set(0);
-		}
-		else
-		{
-//			aimLoop->Enable();
-		}
-
+		//switch drive direction
 		if(driver->GetDPad() == Gamepad::DPadDirection::kUp)
 		{
 			isForward = true;
-			//m_server->StartAutomaticCapture("cam0");
 		}
 		else if(driver->GetDPad() == Gamepad::DPadDirection::kDown)
 		{
 			isForward = false;
-			//m_server->StartAutomaticCapture("cam1");
 		}
-//
-//		if(op->GetA())
-//		{
-//			getPos = true;
-//		}
-//		else
-//		{
-//			getPos = false;
-//		}
-//
+
+		//run the scoring flywheels
 		if(fabs(op->GetRTriggerAxis()) >= .1 && !FlyLimit->Get())
 		{
 			score->SetFlySpeed(op->GetRTriggerAxis()*4/5);
@@ -304,40 +283,31 @@ public:
 		{
 			score->SetFlySpeed(0);
 		}
-//
-//		if(fabs(op->GetRightX()) >= 0.1)//fabs(op->GetRightX()) >= 0.1)
-//		{
-//			puncher->Set(op->GetRightX() *.5);//op->GetRightX() *
-//		}
-//		else
-//		{
-//			puncher->Set(0);
-//		}
-//
 
-
+		//load scoring
 		if(driver->GetA())
 		{
 			score->Load();
 		}
-
+		//fire scoring
 		if(driver->GetB())
 		{
 			score->Fire();
 		}
 
-
 		// If in SHOOT MODE
+		//allow scoring aim PID
 		if (op->GetRightBumper())
 		{
-			aimLoop->Enable();
+			score->EnablePID(true);
 		}
 		else
 		{
-			aimLoop->Disable();
+			score->EnablePID(false);
 			aimer->Set(0);
 		}
-//
+
+//		//scoring aim manual
 //		if(fabs(driver->GetRightY()) >= 0.1)
 //		{
 //			aimer->Set(driver->GetRightY() * .5);
@@ -347,91 +317,25 @@ public:
 //			aimer->Set(0);
 //		}
 
-			if(op->GetA())
-			{
-				score->SetPredefinedAngle(1);
-			}
-			else if(op->GetB())
-			{
-				score->SetPredefinedAngle(2);
-			}
-			else if(op->GetX())
-			{
-				score->SetPredefinedAngle(3);
-			}
-			else if(op->GetY())
-			{
-				score->SetPredefinedAngle(4);
-			}
+		//set scoring to predefined positions 0-3
+		if(op->GetA())
+		{
+			score->SetPredefinedAngle(0);
+		}
+		else if(op->GetB())
+		{
+			score->SetPredefinedAngle(1);
+		}
+		else if(op->GetX())
+		{
+			score->SetPredefinedAngle(2);
+		}
+		else if(op->GetY())
+		{
+			score->SetPredefinedAngle(3);
+		}
 
-//			if(op->GetA())
-//			{
-//				score->SetPreIncrementalPos(1);
-//			}
-//			else if(op->GetB())
-//			{
-//				score->SetPreIncrementalPos(2);
-//			}
-//			else if(op->GetX())
-//			{
-//				score->SetPreIncrementalPos(3);
-//			}
-//			else if(op->GetY())
-//			{
-//				score->SetPreIncrementalPos(4);
-//			}
-
-			// MANIP MODE XD
-#if 0 // NOTHING
-			if (op->GetA()) {
-				arm->Set(0);
-			} else if (op->GetB()) {
-				arm->Set(1);
-			} else if (op->GetX()) {
-				arm->Set(2);
-			} else if (op->GetY()) {
-				arm->Set(3);
-			}
-#endif
-
-
-//		if(op->GetDPad() == Gamepad::kLeft)
-//		{
-//			score->Home();
-//		}
-
-//		if(fabs(op->GetRightY())>.1)
-//		{
-//			arm->SetPositionBase(arm->GetPositionBase() + (op->GetRightY() * 10));
-//			//motorBase->Set(op->GetRightY()*.75);
-//		}
-//		else
-//		{
-		//arm->GoToAngles(10, 0);
-		//arm->ManualDrive(op->GetRightY(), op->GetLeftY());
-		//arm->Process();
-//		}
-
-//		if(fabs(op->GetLeftY())>.1)
-//		{
-//			aimer->Set(-op->GetLeftY()* 0.5);
-//			cout << absenc->GetVoltage() * 800 << endl;
-//			//motorArm->Set(op->GetLeftY()*.75);
-//		}
-//
-
-		//puncher->Set(3000);
-//		cout << puncher->GetPinStateQuadIdx() << endl;
-//		cout << puncher->GetEncPosition() << endl;
-//		cout << score->GetState() << endl;
-		score->Update();
-		//score->AngleHomeLoop();
-		arm->Process();
-
-		cout << "Arm angles:\n";
-		cout << "base: " << arm->BaseAngle() << endl;
-		cout << "arm:  " << arm->ArmAngle() << endl;
-
+		//manual drive manipulation
 		if(fabs(op->GetRightY())>.1 && !(fabs(op->GetLeftY())>.1))
 		{
 			cout << "Derp0\n";
@@ -443,15 +347,20 @@ public:
 			arm->GoToAngles(arm->BaseAngle(),arm->ArmAngle() + (op->GetLeftY() * 15));
 		}
 
+		//reset training
 		if(op->GetBack())
 		{
 			arm->ResetTrain();
 		}
+
+		//create a trained point
 		if(op->GetStart())
 		{
 			arm->Train();
 		}
-		if(op->GetDPad() == Gamepad::kDown)
+
+		//manipulation setpoints
+		if(op->GetDPad() == Gamepad::kDown) //home
 		{
 			arm->Home();
 		}
@@ -468,13 +377,21 @@ public:
 			arm->Set(2);
 		}
 
+		//update scoring and manipulation
+		score->Update();
+		arm->Process();
+
+		//testing
+		cout << "Arm angles:\n";
+		cout << "base: " << arm->BaseAngle() << endl;
+		cout << "arm:  " << arm->ArmAngle() << endl;
 		cout << aimLoop->Get() << endl;
 		cout << "EncValue: " << aimer->GetEncPosition() << endl;
 		cout << "Setpoint: " << aimLoop->GetSetpoint() << endl;
 		cout << "AbsEncValue: " << absenc->GetVoltage()* 800.0F << "\n";
 		cout << "AbsEncVolt: " << absenc->GetVoltage() << "\n";
 		cout << "BaseEnc: " << motorBase->GetEncPosition() << endl;
-		//cout << aimer->GetPinStateQuadIdx();
+
 		Log();
 	}
 
@@ -486,7 +403,6 @@ public:
 	void TestPeriodic()
 	{
 		Log();
-		//lw->Run();
 	}
 
 	void StartLogging(string mode)
