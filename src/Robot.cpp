@@ -14,111 +14,95 @@ using namespace std;
 class Robot: public IterativeRobot
 {
 private:
+	//controllers
 	Gamepad *driver;
 	Gamepad *op;
-	///////////////////
+	//drivetrain
 	CANTalon * motorFL;
 	CANTalon * motorFR;
 	CANTalon * motorBL;
 	CANTalon * motorBR;
-	/////////////////////
-	CANTalon * motorBase;
-	CANTalon * motorArm;
-	////////////////////
-	LiveWindow * lw;
-	////////////////////////////
-	//SendableChooser *chooser;
-	//const std::string autoNameDefault = "Default";
-	//const std::string autoNameCustom = "My Auto";
-	//std::string autoSelected;
-	//////////////////////////////
-    AnalogGyro * gyro;
-    ////////////////////////////
-    Logger *logger;
-    Timer *logTime;
-    Servo *xServo;
-    Servo *yServo;
-    Manipulation *arm;
     Drive *drive;
-    Targeting *targeting;
-    Relay *light;
-    ///////////////////////
-    DigitalOutput * osciliscope1;
-    DigitalOutput * osciliscope2;
-    /////////////////////////////
-    CANTalon * puncher;
+	//scoring
+	CANTalon * puncher;
+	CANTalon * aimer;
     DigitalInput * Index;
     DigitalInput * FlyLimit;
-    DigitalInput * ArmLimit;
-    DigitalInput * BaseLimit;
-    CANTalon * aimer;
     AnalogInput * absenc;
     PIDController * aimLoop;
     Victor * lin;
     Victor * rin;
-    CameraServer * m_server;
-    //////////////////////////
     Scoring * score;
+	//manipulation
+	CANTalon * motorBase;
+	CANTalon * motorArm;
+    DigitalInput * ArmLimit;
+    DigitalInput * BaseLimit;
+    Manipulation *arm;
+    //logging
+    Logger *logger;
+    Timer *logTime;
+    //misc
     OutputLog * logthing = new OutputLog();
-    //Targeting * targeting;
-
+    CameraServer * m_server;
+	LiveWindow * lw;
+    AnalogGyro * gyro;
+    Targeting *targeting;
+    Relay *light;
+    DigitalOutput * osciliscope1;
+    DigitalOutput * osciliscope2;
+    //variables
     bool triggerToggle;
     bool lastTrigger;
     bool isForward;
-
-
-    std::string profile = "everything";
-    char * nope = '\0';
-
-    uint32_t jim = false;//This is stupid
-
-
     bool getPos = false;
-
-    float autoPanP;
-    float encoderTicksPerDegree;
     int bottomHardLimit;
     int DegreesToZero;
-    //string *nope = NULL;
-
-    //std::string GRIP_ARGS = "java -jar /home/lvuser/GRIP.jar /home/lvuser/" + profile + ".grip";
-
+    float autoPanP;
+    float encoderTicksPerDegree;
+    char * nope = '\0';
+    std::string profile = "everything";
+    uint32_t jim = false;//This is stupid
 public:
 	Robot()
 	{
-		absenc = NULL;
-		aimLoop = NULL;
-		Index = NULL;
+		//controllers
+		driver = NULL;
 		op = NULL;
-		score = NULL;
-		lin = NULL;
-		rin = NULL;
-		aimer = NULL;
-		puncher = NULL;
-		osciliscope1 = NULL;
-		osciliscope2 = NULL;
-        driver = NULL;
+		//drivetrain
 		motorFL = NULL;
 		motorFR = NULL;
 		motorBL = NULL;
 		motorBR = NULL;
+		drive = NULL;
+		//scoring
+		absenc = NULL;
+		aimLoop = NULL;
+		Index = NULL;
+		aimer = NULL;
+		puncher = NULL;
+		lin = NULL;
+		rin = NULL;
+		FlyLimit = NULL;
+		score = NULL;
+		//manipulation
 		motorBase = NULL;
 		motorArm = NULL;
-		lw = NULL;
-		//chooser = NULL;
+		ArmLimit = NULL;
+		BaseLimit = NULL;
+		arm = NULL;
+		//logger
 		logger = NULL;
 		logTime = NULL;
-		xServo = NULL;
-		yServo = NULL;
-		arm = NULL;
-		drive = NULL;
-		FlyLimit = NULL;
+		//misc
+		osciliscope1 = NULL;
+		osciliscope2 = NULL;
+		lw = NULL;
 		gyro = new AnalogGyro(1);// = NULL;
 		targeting = NULL;
 		light = NULL;
-		ArmLimit = NULL;
-		BaseLimit = NULL;
 		m_server = NULL;
+		//variables
 		autoPanP = 0;
 		encoderTicksPerDegree = 0;
 		bottomHardLimit = 0;
