@@ -456,21 +456,29 @@ public:
 		score->Update();
 		//score->AngleHomeLoop();
 		arm->Process();
+		if(op->GetBack())
+		{
+			arm->ResetTrain();
+		}
+		if(op->GetStart())
+		{
+			arm->Train();
+		}
 		if(op->GetDPad() == Gamepad::kDown)
 		{
 			arm->Home();
 		}
 		if(op->GetDPad() == Gamepad::kLeft)
 		{
-			arm->GoToAngles(-90,90);
+			arm->Set(0);
 		}
 		if(op->GetDPad() == Gamepad::kRight)
 		{
-			arm->GoToAngles(-175,175);
+			arm->Set(1);
 		}
 		if(op->GetDPad() == Gamepad::kUp)
 		{
-			arm->GoToAngles(-90,60);
+			arm->Set(2);
 		}
 
 		cout << aimLoop->Get() << endl;
