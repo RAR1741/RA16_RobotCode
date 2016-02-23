@@ -142,6 +142,11 @@ public:
 		lw = LiveWindow::GetInstance();
 		light = new Relay(0);
 
+		m_server = CameraServer::GetInstance();
+		m_server->StartAutomaticCapture("cam1");
+		m_server->SetQuality(2);
+		m_server->StartAutomaticCapture();
+
 		driver = new Gamepad(0);
 		op = new Gamepad(1);
 
@@ -237,10 +242,6 @@ public:
 		score->SetPredefinedAngle(4);
 		aimLoop->Disable();
 		//light->Set(Relay::Value::kOn);
-		m_server = CameraServer::GetInstance();
-		m_server->StartAutomaticCapture("cam0");
-		m_server->SetQuality(2);
-		m_server->StartAutomaticCapture();
 		StartLogging("teleop");
 		cout << "thing" << endl;
 
