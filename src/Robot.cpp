@@ -261,7 +261,7 @@ public:
 //		yServo->Set((driver->GetRightY() + 1) / 2);
 		if(driver->GetRightBumper())
 		{
-			drive->HaloDrive(Deadband(driver->GetLeftX())* 0.7, forward(Deadband(driver->GetLeftY())));
+			drive->HaloDrive(Deadband(driver->GetRightX())* 0.7, forward(Deadband(driver->GetLeftY())));
 		}
 		else if(driver->GetLeftBumper())
 		{
@@ -287,7 +287,7 @@ public:
 		}
 		else
 		{
-			drive->HaloDrive(Deadband(driver->GetLeftX()) * 0.7, forward(Deadband(driver->GetLeftY() * 0.6)));
+			drive->HaloDrive(Deadband(driver->GetRightX()) * 0.7, forward(Deadband(driver->GetLeftY() * 0.6)));
 		}
 
 		if(DeadbandCheck(driver->GetRightX()) || forward(DeadbandCheck(driver->GetLeftY())))
@@ -457,13 +457,19 @@ public:
 		//score->AngleHomeLoop();
 		arm->Process();
 
-		if(fabs(op->GetRightY())>.1)
+		cout << "Arm angles:\n";
+		cout << "base: " << arm->BaseAngle() << endl;
+		cout << "arm:  " << arm->ArmAngle() << endl;
+
+		if(fabs(op->GetRightY())>.1 && !(fabs(op->GetLeftY())>.1))
 		{
-			arm->GoToAngles(arm->BaseAngle() + (op->GetRightY() * .5),arm->ArmAngle());
+			cout << "Derp0\n";
+			arm->GoToAngles(arm->BaseAngle() + (op->GetRightY() * 10),arm->ArmAngle());
 		}
-		if(fabs(op->GetLeftY())>.1)
+		if(fabs(op->GetLeftY())>.1 && !(fabs(op->GetRightY())>.1))
 		{
-			arm->GoToAngles(arm->BaseAngle(),arm->ArmAngle() + (op->GetLeftY() * .5));
+			cout << "Derp1\n";
+			arm->GoToAngles(arm->BaseAngle(),arm->ArmAngle() + (op->GetLeftY() * 15));
 		}
 
 		if(op->GetBack())
