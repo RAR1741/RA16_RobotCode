@@ -456,6 +456,16 @@ public:
 		score->Update();
 		//score->AngleHomeLoop();
 		arm->Process();
+
+		if(fabs(op->GetRightY())>.1)
+		{
+			arm->GoToAngles(arm->BaseAngle() + (op->GetRightY() * .5),arm->ArmAngle());
+		}
+		if(fabs(op->GetLeftY())>.1)
+		{
+			arm->GoToAngles(arm->BaseAngle(),arm->ArmAngle() + (op->GetLeftY() * .5));
+		}
+
 		if(op->GetBack())
 		{
 			arm->ResetTrain();
