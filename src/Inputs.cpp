@@ -10,32 +10,60 @@
 Inputs::Inputs(Gamepad * d, Gamepad * o)
 {
 	driver = d;
-	opertator = o;
+	op = o;
 }
 
-void Inputs::AddButtonMap(int index, void(*f)(void))
+void Inputs::AddButtonMap(int controller, int button, void(*f)(void))
 {
-	ButtonMap[index] = f;
+	ButtonMap[controller][button] = f;
 }
 
-void Inputs::AddAxisMap(int index, void(*f)(float))
+void Inputs::AddAxisMap(int controller, int axisnum, void(*f)(float))
 {
-	AxisMap[index] = f;
+	AxisMap[controller][axisnum] = f;
 }
 
 void Inputs::Update()
 {
-	typedef std::map<int, void(*)()>::iterator it_type_void;
-	for(it_type_void iterator = ButtonMap.begin(); iterator != ButtonMap.end(); iterator++)
+	for(auto const &ent1 : ButtonMap)
 	{
-		if(driver->GetNumberedButton(iterator->first))
+		if(ent1.first == 0)
 		{
-			iterator->second();
+			for(auto const &ent2 : ent1.second)
+			{
+				if(driver->GetNumberedButton(ent2.first))
+				{
+					ent2.second();
+				}
+			}
+		}
+		else
+		{
+			for(auto const &ent2 : ent1.second)
+			{
+				if(op->GetNumberedButton(ent2.first))
+				{
+					ent2.second();
+				}
+			}
 		}
 	}
-	typedef std::map<int, void(*)(float)>::iterator it_type_float;
-	for(it_type_float iterator = AxisMap.begin(); iterator != AxisMap.end(); iterator++)
+
+	for(auto const &ent1 : AxisMap)
 	{
-		iterator->second(driver->GetRawAxis(iterator->first));
+		if(ent1.first == 0)
+		{
+			for(auto const &ent2 : ent1.second)
+			{
+				ent2.second(driver->GetRawAxis(ent2.first));
+			}
+		}
+		else
+		{
+			for(auto const &ent2 : ent1.second)
+			{
+				ent2.second(op->GetRawAxis(ent2.first));
+			}
+		}
 	}
 }

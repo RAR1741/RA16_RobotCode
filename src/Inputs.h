@@ -16,14 +16,14 @@ class Inputs
 {
 public:
 	Inputs(Gamepad * d, Gamepad * o);
-	void AddButtonMap(int index, void(*f)(void));
-	void AddAxisMap(int index, void(*f)(float));
+	void AddButtonMap(int controller, int button, void(*f)(void));
+	void AddAxisMap(int controller, int axisnum, void(*f)(float));
 	void Update();
 private:
-	map < int, void (*)(void) > ButtonMap;
-	map < int, void (*)(float) > AxisMap;
+	map < int, map < int, void (*)(void) > > ButtonMap;
+	map < int, map < int, void (*)(float) > > AxisMap;
 	Gamepad * driver;
-	Gamepad * opertator;
+	Gamepad * op;
 };
 
 
