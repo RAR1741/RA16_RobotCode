@@ -188,16 +188,6 @@ public:
 		logthing->Troll(cout);
 	}
 
-
-	/**
-	 * This autonomous (along with the chooser code above) shows how to select between different autonomous modes
-	 * using the dashboard. The sendable chooser code works with the Java SmartDashboard. If you prefer the LabVIEW
-	 * Dashboard, remove all of the chooser code and uncomment the GetString line to get the auto name from the text box
-	 * below the Gyro
-	 *
-	 * You can add additional auto modes by adding additional comparisons to the if-else structure below with additional strings.
-	 * If using the SendableChooser make sure to add them to the chooser code above as well.
-	 */
 	void AutonomousInit()
 	{
 		StartLogging("auto");
@@ -210,14 +200,11 @@ public:
 
 	void TeleopInit()
 	{
-		score->SetPredefinedAngle(4);
+		score->SetPredefinedAngle(3);
 		aimLoop->Disable();
 		//light->Set(Relay::Value::kOn);
 		StartLogging("teleop");
-		cout << "thing" << endl;
-
-		score->ReloadConfig();
-		arm->ReloadConfig();
+		ReloadConfig();
 	}
 
 	void DisabledInit()
@@ -444,27 +431,12 @@ public:
 
 	void Log()
 	{
-		drive->Log(logger);
-
 		logger->Log("Time", logTime->Get());
-#if !TESTBED
 		drive->Log(logger);
 		score->Log(logger);
 		arm->Log(logger);
 		logger->Log("AbsEnc", absenc->GetVoltage());
-#endif
 		logger->WriteLine();
-		//cout << logTime->Get() << endl;
-	}
-
-	void OsciliscopeBeginning()
-	{
-		//osciliscope1->Set(jim);
-	}
-
-	void OsciliscopeEnd()
-	{
-
 	}
 
 	void ReloadConfig()
@@ -475,6 +447,8 @@ public:
 		encoderTicksPerDegree = Config::GetSetting("encodeTicksPerDegree", 10.78);
 		bottomHardLimit = Config::GetSetting("bottomHardLimit", 3635);
 		DegreesToZero = Config::GetSetting("degreesToZero", 10);
+		arm->ReloadConfig();
+		score->ReloadConfig();
 	}
 
 	bool DeadbandCheck(float in, float dead = 0.1)
