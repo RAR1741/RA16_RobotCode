@@ -542,22 +542,10 @@ public:
 	void SetupLogging()
 	{
 		logger->AddAttribute("Time");
-		logger->AddAttribute("FLpos");
-		logger->AddAttribute("FRpos");
-		logger->AddAttribute("BLpos");
-		logger->AddAttribute("BRpos");
-		logger->AddAttribute("FLCurrent");
-		logger->AddAttribute("FRCurrent");
-		logger->AddAttribute("BLCurrent");
-		logger->AddAttribute("BRCurrent");
-		logger->AddAttribute("AimPos");
-		logger->AddAttribute("AbsEnc");
-		logger->AddAttribute("AimTarget");
-		logger->AddAttribute("PunchPos");
-		logger->AddAttribute("AimCurrent");
-		logger->AddAttribute("PunchCurrent");
-		logger->AddAttribute("getPos");
+		drive->SetupLogging(logger);
+		score->SetupLogging(logger);
 		arm->SetupLogging(logger);
+		logger->AddAttribute("AbsEnc");
 		logger->WriteAttributes();
 	}
 
@@ -567,22 +555,10 @@ public:
 
 		logger->Log("Time", logTime->Get());
 #if !TESTBED
-		logger->Log("FLpos", motorFL->GetEncPosition());
-		logger->Log("FRpos", motorFR->GetEncPosition());
-		logger->Log("BLpos", motorBL->GetEncPosition());
-		logger->Log("BRpos", motorBR->GetEncPosition());
-		logger->Log("FLCurrent", motorFL->GetOutputCurrent());
-		logger->Log("FRCurrent", motorFR->GetOutputCurrent());
-		logger->Log("BLCurrent", motorBL->GetOutputCurrent());
-		logger->Log("BRCurrent", motorBR->GetOutputCurrent());
-		logger->Log("AimPos", aimer->GetEncPosition());
-		logger->Log("AbsEnc", absenc->GetVoltage());
-		logger->Log("AimTarget", aimLoop->GetSetpoint());
-		logger->Log("PunchPos", puncher->GetEncPosition());
-		logger->Log("AimCurrent", aimer->GetOutputCurrent());
-		logger->Log("PunchCurrent", puncher->GetOutputCurrent());
-		logger->Log("getPos", getPos);
+		drive->Log(logger);
+		score->Log(logger);
 		arm->Log(logger);
+		logger->Log("AbsEnc", absenc->GetVoltage());
 #endif
 		logger->WriteLine();
 		//cout << logTime->Get() << endl;
