@@ -131,19 +131,8 @@ public:
 
 	void RobotInit()
 	{
-		lw = LiveWindow::GetInstance();
-		light = new Relay(0);
-
-//		m_server = CameraServer::GetInstance();
-//		m_server->StartAutomaticCapture("cam1");
-//		m_server->SetQuality(2);
-//		m_server->StartAutomaticCapture();
-
-		driver = new Gamepad(0);
-		op = new Gamepad(1);
-
-#if !TESTBED
-
+		cout << "Initializing Drivetrain..." << endl;
+		//Initialize drive motors
 		motorFL = new CANTalon(7);
 		motorFL->SetStatusFrameRateMs(CANTalon::StatusFrameRate::StatusFrameRateQuadEncoder,6);
 		motorBL = new CANTalon(9);
@@ -154,39 +143,25 @@ public:
 		motorBR->SetControlMode(CANTalon::ControlMode::kFollower);
 
 		drive = new Drive(motorFR, motorBR, motorFL, motorBL);
+		cout << "Drivetrain initialized!" << endl;
 
-		targeting = new Targeting();
-#else
-		osciliscope1 = new DigitalOutput(8);
-		osciliscope2 = new DigitalOutput(9);
-#endif
-
-
-		//xServo = new Servo(0);
-		//yServo = new Servo(1);
-
-		logTime = new Timer;
-		logTime->Start();
-		logger = new Logger();
-
-
+		cout << "Initializing scoring..." << endl;
 		Index = new DigitalInput(0);
 		FlyLimit = new DigitalInput(1);
+		absenc = new AnalogInput(0);
 
 		puncher = new CANTalon(4);
 		puncher->SetControlMode(CANTalon::kPercentVbus);
-		//puncher->SetAllowableClosedLoopErr(5000);
 		puncher->EnableZeroSensorPositionOnIndex(true, false);
-		//puncher->SetPID(.1,0,0);
 		puncher->SetStatusFrameRateMs(CANTalon::StatusFrameRate::StatusFrameRateQuadEncoder, 6);
 		puncher->Enable();
+
 		aimer = new CANTalon(3);
 		aimer->SetInverted(false);
 		aimer->SetControlMode(CANTalon::kPercentVbus);
+
 		rin = new Victor(0);
 		lin = new Victor(1);
-
-		absenc = new AnalogInput(0);
 
 		aimLoop = new PIDController(19, 2, 0, absenc, aimer ,0.05);
 		aimLoop->SetContinuous(false);
@@ -196,16 +171,36 @@ public:
 		aimLoop->Disable();
 
 		score = new Scoring(aimer,puncher,lin,rin,Index,aimLoop,NULL,NULL);
+		cout << "Scoring initialized!" << endl;
 
-		cout << "Arm initializing";
+		cout << "Initalizing arm..." << endl;
 		motorBase = new CANTalon(2);
 		motorArm = new CANTalon(1);
 		ArmLimit = new DigitalInput(6);
 		BaseLimit = new DigitalInput(3);
 		arm = new Manipulation(motorBase, motorArm, BaseLimit, ArmLimit);
-		cout << "done" << endl;
+		cout << "Arm initialized!" << endl;
+
+//		cout << "Initializing USB camera" << endl;
+//		m_server = CameraServer::GetInstance();
+//		m_server->StartAutomaticCapture("cam1");
+//		m_server->SetQuality(2);
+//		m_server->StartAutomaticCapture();
+//		cout << "Camera initialized!" << endl;
+
+		cout << "Finishing up...";
+		light = new Relay(0);
+		driver = new Gamepad(0);
+		op = new Gamepad(1);
+		targeting = new Targeting();
+
+		cout << "Initializing logger..." << endl;
+		logTime = new Timer;
+		logTime->Start();
+		logger = new Logger();
 		ReloadConfig();
-		//StartLogging("init");
+		cout << "Logger Initialized!" << endl;
+
 		logthing->Troll(cout);
 	}
 
