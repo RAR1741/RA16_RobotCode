@@ -8,6 +8,7 @@
 #ifndef SRC_SCORING_H_
 #define SRC_SCORING_H_
 #include "WPILib.h"
+#include "Logger.h"
 
 class Scoring
 {
@@ -47,6 +48,8 @@ public:
 	void Load();
 	void Fire();
 	void ReloadConfig();
+	void SetupLogging(Logger * logger);
+	void Log(Logger * logger);
 private:
 	State state;
 	HomeState homeState;

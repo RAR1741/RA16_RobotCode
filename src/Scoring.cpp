@@ -331,3 +331,21 @@ void Scoring::ReloadConfig()
 	holdInc = Config::GetSetting("holdInc", -25000);
 	holdFire = Config::GetSetting("holdFire", -20000);
 }
+
+void Scoring::SetupLogging(Logger * logger)
+{
+	logger->AddAttribute("AimPos");
+	logger->AddAttribute("AimTarget");
+	logger->AddAttribute("PunchPos");
+	logger->AddAttribute("AimCurrent");
+	logger->AddAttribute("PunchCurrent");
+}
+
+void Scoring::Log(Logger * logger)
+{
+	logger->Log("AimPos", AngleMotor->GetEncPosition());
+	logger->Log("AimTarget", AimLoop->GetSetpoint());
+	logger->Log("PunchPos", TensionMotor->GetEncPosition());
+	logger->Log("AimCurrent", AngleMotor->GetOutputCurrent());
+	logger->Log("PunchCurrent", TensionMotor->GetOutputCurrent());
+}
