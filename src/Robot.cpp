@@ -188,16 +188,6 @@ public:
 		logthing->Troll(cout);
 	}
 
-	void AutonomousInit()
-	{
-		StartLogging("auto");
-	}
-
-	void AutonomousPeriodic()
-	{
-		Log();
-	}
-
 	void TeleopInit()
 	{
 		score->SetPredefinedAngle(3);
@@ -205,12 +195,6 @@ public:
 		//light->Set(Relay::Value::kOn);
 		StartLogging("teleop");
 		ReloadConfig();
-	}
-
-	void DisabledInit()
-	{
-		light->Set(Relay::Value::kOff);
-		logger->Close();
 	}
 
 	void TeleopPeriodic()
@@ -379,6 +363,22 @@ public:
 		cout << "AbsEncVolt: " << absenc->GetVoltage() << "\n";
 		cout << "BaseEnc: " << motorBase->GetEncPosition() << endl;
 
+		Log();
+	}
+
+	void DisabledInit()
+	{
+		light->Set(Relay::Value::kOff);
+		logger->Close();
+	}
+
+	void AutonomousInit()
+	{
+		StartLogging("auto");
+	}
+
+	void AutonomousPeriodic()
+	{
 		Log();
 	}
 
