@@ -5,15 +5,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <ctime>
-#include "Logger.h"
-#include "Gamepad.h"
-#include "Manipulation.h"
-#include "Drive.h"
-#include "Targeting.h"
-#include "Config.h"
-#include "Scoring.h"
-#include "outputlog.h"
-#include "Targeting.h"
+#include "RobotHeader.h"
 
 using namespace std;
 
