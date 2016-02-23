@@ -6,6 +6,7 @@
  */
 
 #include "WPILib.h"
+#include "Inputs.h"
 
 Inputs::Inputs()
 {
