@@ -349,3 +349,15 @@ void Scoring::Log(Logger * logger)
 	logger->Log("AimCurrent", AngleMotor->GetOutputCurrent());
 	logger->Log("PunchCurrent", TensionMotor->GetOutputCurrent());
 }
+
+void Scoring::EnablePID(bool e)
+{
+	if(e)
+	{
+		AimLoop->Enable();
+	}
+	else
+	{
+		AimLoop->Disable();
+	}
+}

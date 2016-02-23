@@ -50,6 +50,7 @@ public:
 	void ReloadConfig();
 	void SetupLogging(Logger * logger);
 	void Log(Logger * logger);
+	void EnablePID(bool enabled);
 private:
 	State state;
 	HomeState homeState;
