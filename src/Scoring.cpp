@@ -64,9 +64,9 @@ void Scoring::Update()
 		case Scoring::State::kLoading:
 			TensionMotor->SetControlMode(CANTalon::kPercentVbus);
 			TensionMotor->Set(-.65);//just past the Index
-			if(IndexSensor->Get())// && fabs( TensionMotor->GetEncPosition() ) <= 1000 0change to a range
+			if(TensionMotor->GetPinStateQuadIdx() == 1)// && fabs( TensionMotor->GetEncPosition() ) <= 1000 0change to a range
 			{
-				TensionMotor->SetEncPosition(0);
+				TensionMotor->SetPosition(0);
 				cout << TensionMotor->GetEncPosition() << endl;
 				//TensionMotor->EnableZeroSensorPositionOnIndex(false, false);
 				//TensionMotor->SetControlMode(CANTalon::kPosition);
