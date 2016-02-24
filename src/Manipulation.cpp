@@ -43,6 +43,8 @@ void Manipulation::SetupLogging(Logger * logger)
 	logger->AddAttribute("ManipState");
 	logger->AddAttribute("ManipBaseHome");
 	logger->AddAttribute("ManipArmHome");
+	logger->AddAttribute("ManipBaseVoltage");
+	logger->AddAttribute("ManipArmVolatge");
 }
 
 void Manipulation::Log(Logger * logger)
@@ -72,6 +74,7 @@ void Manipulation::Log(Logger * logger)
 	}
 
 	logger->Log("ManipState", stateName);
+	logger->Log("ManipBaseVolatage", BaseMotor->GetOutputVoltage());
 }
 
 void Manipulation::GoToXY(float x, float y) {
