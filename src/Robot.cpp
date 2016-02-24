@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <ctime>
+#include <cstdlib>
 #include "RobotHeader.h"
 
 using namespace std;
@@ -185,7 +186,21 @@ public:
 		ReloadConfig();
 		cout << "Logger Initialized!" << endl;
 
-		logthing->Troll(cout);
+		srand(time(NULL));
+		switch(rand() % 3) {
+		case 0:
+			logthing->Troll(cout);
+			break;
+		case 1:
+			logthing->Mesa(cout);
+			break;
+		case 2:
+			logthing->Aperture(cout);
+			break;
+		default:
+			logthing->Troll(cout);
+			break;
+		}
 	}
 
 	void TeleopInit()
@@ -353,15 +368,15 @@ public:
 		arm->Process();
 
 		//testing
-		cout << "Arm angles:\n";
-		cout << "base: " << arm->BaseAngle() << endl;
-		cout << "arm:  " << arm->ArmAngle() << endl;
-		cout << aimLoop->Get() << endl;
-		cout << "EncValue: " << aimer->GetEncPosition() << endl;
-		cout << "Setpoint: " << aimLoop->GetSetpoint() << endl;
-		cout << "AbsEncValue: " << absenc->GetVoltage()* 800.0F << "\n";
-		cout << "AbsEncVolt: " << absenc->GetVoltage() << "\n";
-		cout << "BaseEnc: " << motorBase->GetEncPosition() << endl;
+//		cout << "Arm angles:\n";
+//		cout << "base: " << arm->BaseAngle() << endl;
+//		cout << "arm:  " << arm->ArmAngle() << endl;
+//		cout << aimLoop->Get() << endl;
+//		cout << "EncValue: " << aimer->GetEncPosition() << endl;
+//		cout << "Setpoint: " << aimLoop->GetSetpoint() << endl;
+//		cout << "AbsEncValue: " << absenc->GetVoltage()* 800.0F << "\n";
+//		cout << "AbsEncVolt: " << absenc->GetVoltage() << "\n";
+//		cout << "BaseEnc: " << motorBase->GetEncPosition() << endl;
 
 		Log();
 	}

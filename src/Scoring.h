@@ -71,6 +71,7 @@ private:
 	float PP;
 	float PI;
 	float PD;
+	float offset;
 	int encPos1;
 	int encPos2;
 	int encPos3;

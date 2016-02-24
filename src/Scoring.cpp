@@ -8,6 +8,7 @@
 #include "WPILib.h"
 #include "Scoring.h"
 #include "Config.h"
+#include "outputlog.h"
 #include <iostream>
 
 using namespace std;
@@ -38,6 +39,7 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	PI = Config::GetSetting("S_P_I", 2);
 	PD = Config::GetSetting("S_P_D", 0);
 	AimLoop->SetPID(PP,PI,PD);
+	offset = Config::GetSetting("S_offset", 200);
 	encPos1 = Config::GetSetting("AnglePos1", 2750);
 	encPos2 = Config::GetSetting("AnglePos2", 2900);
 	encPos3 = Config::GetSetting("AnglePos3", 3250);
@@ -173,6 +175,8 @@ void Scoring::SetFlySpeed(float speed)
 void Scoring::SetAngle(float angle)
 {
 	//AngleMotor->Set(angle);
+	OutputLog * jim = new OutputLog();
+	jim->Troll(cout);
 }
 
 void Scoring::Home()
@@ -271,17 +275,17 @@ void Scoring::SetPredefinedAngle(int posNum)
 {
 	switch(posNum)
 	{
+	case 0:
+		AimLoop->SetSetpoint(ValueToVoltage(encPos1 + offset));
+		break;
 	case 1:
-		AimLoop->SetSetpoint(ValueToVoltage(encPos1));
+		AimLoop->SetSetpoint(ValueToVoltage(encPos2 + offset));
 		break;
 	case 2:
-		AimLoop->SetSetpoint(ValueToVoltage(encPos2));
+		AimLoop->SetSetpoint(ValueToVoltage(encPos3 + offset));
 		break;
 	case 3:
-		AimLoop->SetSetpoint(ValueToVoltage(encPos3));
-		break;
-	case 4:
-		AimLoop->SetSetpoint(ValueToVoltage(encPos4));
+		AimLoop->SetSetpoint(ValueToVoltage(encPos4 + offset));
 		break;
 	default:
 		break;
@@ -318,6 +322,7 @@ void Scoring::ReloadConfig()
 	PI = Config::GetSetting("S_P_I", 2);
 	PD = Config::GetSetting("S_P_D", 0);
 	AimLoop->SetPID(PP,PI,PD);
+	offset = Config::GetSetting("S_offset", 200);
 	encPos1 = Config::GetSetting("AnglePos1", 1800);
 	encPos2 = Config::GetSetting("AnglePos2", 2000);
 	encPos3 = Config::GetSetting("AnglePos3", 2400);
