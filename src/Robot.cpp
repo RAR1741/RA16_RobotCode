@@ -63,7 +63,7 @@ private:
     float encoderTicksPerDegree;
     char * nope = '\0';
     std::string profile = "everything";
-    uint32_t jim = false;//This is stupid
+    uint8_t jim = false;//This is stupid
 public:
 	Robot()
 	{
