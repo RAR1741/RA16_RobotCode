@@ -208,7 +208,7 @@ public:
 		score->SetPredefinedAngle(3);
 		aimLoop->Disable();
 		//light->Set(Relay::Value::kOn);
-		StartLogging("teleop");
+		StartLogging("teleop", logger);
 		ReloadConfig();
 	}
 
@@ -389,7 +389,7 @@ public:
 
 	void AutonomousInit()
 	{
-		StartLogging("auto");
+		StartLogging("auto", logger);
 	}
 
 	void AutonomousPeriodic()
@@ -399,7 +399,7 @@ public:
 
 	void TestInit()
 	{
-		StartLogging("test");
+		StartLogging("test", logger);
 	}
 
 	void TestPeriodic()
@@ -407,9 +407,9 @@ public:
 		Log();
 	}
 
-	void StartLogging(string mode)
+	void StartLogging(string mode, Logger * l)
 	{
-		logger->Close();
+		l->Close();
 		time_t t = time(0);
 		struct tm *now = localtime(&t);
 		//don't touch it
@@ -430,7 +430,7 @@ public:
 				std::to_string(now->tm_hour) + "-\0" +
 				std::to_string(now->tm_min) + "-\0" + std::to_string(now->tm_sec) + mode + ".csv";
 		cout << name << endl;
-		logger->Open(name);
+		l->Open(name);
 		SetupLogging();
 	}
 
