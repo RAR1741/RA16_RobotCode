@@ -50,6 +50,9 @@ public:
 	void SetupLogging(Logger * logger);
 	void Log(Logger * logger);
 
+	float X();
+	float Y();
+
 
 private:
 	// Utility methods to convert between revolutions and degrees
@@ -57,6 +60,25 @@ private:
 	float BaseDegreesByEncoder(int encoderTicks);
 	float ArmEncoderByDegrees(float degrees);
 	int ArmDegreesByEncoder(int encoderTicks);
+
+	float DegreesToRadians(float degrees);
+	float RadiansToDegrees(float radians);
+
+	float BaseLength() {
+		return _base_length;
+	}
+
+	float ArmLength() {
+		return _arm_length;
+	}
+
+	float X0() {
+		return _x0;
+	}
+
+	float Y0() {
+		return _y0;
+	}
 
 	bool ReadMotion(int in);
 	void ReadPostions();
@@ -76,6 +98,11 @@ private:
 	const float kEncoderTicksPerDegree = 19.91111111;
 	const float kRevolutionsPerDegree = 0.71111111;
 
+	float _x0;
+	float _y0;
+
+	float _arm_length;
+	float _base_length;
 };
 
 #endif /* SRC_MANIPULATION_H_ */

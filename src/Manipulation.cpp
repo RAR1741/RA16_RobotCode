@@ -10,6 +10,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <cmath>
 using namespace std;
 
 Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLimit, DigitalInput *aLimit)
@@ -90,10 +91,40 @@ void Manipulation::Log(Logger * logger)
 
 	logger->Log("ManipState", stateName);
 	logger->Log("ManipBaseVolatage", BaseMotor->GetOutputVoltage());
+	logger->Log("ManipHandX", X());
+	logger->Log("ManipHandY", Y());
+}
+
+float Manipulation::DegreesToRadians(float degrees)
+{
+	return degrees * ::acos(-1) / 180.0;
+}
+
+float Manipulation::RadiansToDegrees(float radians)
+{
+	return radians * 180.0 / ::acos(-1);
+}
+
+float Manipulation::X() {
+	float theta = BaseAngle();
+	float phi   = ArmAngle();
+
+	return X0() - BaseLength() * ::cos(DegreesToRadians(theta)) +
+			    ArmLength()  * ::cos(DegreesToRadians(phi - theta));
+}
+
+float Manipulation::Y() {
+	float theta = BaseAngle();
+	float phi   = ArmAngle();
+
+	return Y() + BaseLength() * ::sin(DegreesToRadians(theta)) +
+			     ArmLength()  * ::sin(phi - theta);
+
 }
 
 void Manipulation::GoToXY(float x, float y) {
 	// todo: calculate
+
 	float baseDegrees = 0;
 	float armDegrees = 0;
 
@@ -338,4 +369,10 @@ void Manipulation::ReloadConfig()
 		Config::GetSetting("manip_arm_p", 5.0),
 		Config::GetSetting("manip_arm_i", 0.001),
 		Config::GetSetting("manip_arm_d", 0));
+
+	_base_length = Config::GetSetting("manip_base_length", 15);
+	_arm_length =  Config::GetSetting("manip_arm_length", 15);
+
+	_x0 = Config::GetSetting("manip_x0", 6.5);
+	_y0 = Config::GetSetting("manip_y0", 11.5);
 }

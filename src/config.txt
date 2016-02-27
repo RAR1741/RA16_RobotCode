@@ -33,5 +33,11 @@ manip_arm_d  = 0
 
 manip_base_home_speed = 0.5
 manip_arm_home_speed  = -0.5
+
+manip_x0 = 6.5
+# or .5
+manip_y0 = 11
+manip_base_length = 15
+manip_arm_length  = 15
 #819200
 #2671
