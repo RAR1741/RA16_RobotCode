@@ -32,10 +32,10 @@ public:
 		kHomed = 3,
 		kReady = 4
 	}HomeState;
-	Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *indexSensor,PIDController * aimLoop,DigitalInput *homeSensor,DigitalInput *forwardEnd);
+	Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *indexSensor, AnalogInput* absenc);
 	void Update();
 	void SetAngle(float angle);
-	void AngleHomeLoop();
+	//void AngleHomeLoop();
 	void Home();
 	void SetPreIncrementalPos(int posNum);
 	void SetPredefinedAngle(int posNum);
@@ -58,11 +58,10 @@ private:
 	CANTalon *TensionMotor;
 	Victor *LFlyMotor;
 	Victor *RFlyMotor;
-	DigitalInput * ForwardEnd;
-	DigitalInput * HomeAngle;
 	Timer * homingTimer;
 	DigitalInput *IndexSensor;
 	PIDController * AimLoop;
+	AnalogInput *AngleEncoder;
 	Timer * fireTimer;
 	float ChooChooLoaded;
 	float SP;

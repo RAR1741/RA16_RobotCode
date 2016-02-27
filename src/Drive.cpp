@@ -16,6 +16,11 @@ Drive::Drive(CANTalon * fr, CANTalon * br, CANTalon * fl, CANTalon * bl)
 	FL = fl;
 	BL = bl;
 
+	FL->SetStatusFrameRateMs(CANTalon::StatusFrameRate::StatusFrameRateQuadEncoder,6);
+	BL->SetControlMode(CANTalon::ControlMode::kFollower);
+
+	FL->SetStatusFrameRateMs(CANTalon::StatusFrameRate::StatusFrameRateQuadEncoder, 6);
+	BR->SetControlMode(CANTalon::ControlMode::kFollower);
 }
 
 void Drive::HaloDrive(float x, float y)

@@ -13,20 +13,18 @@
 
 using namespace std;
 
-Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *indexSensor,PIDController * aimLoop,DigitalInput *homeSensor,DigitalInput *forwardEnd)
+Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMotor, DigitalInput *indexSensor,AnalogInput *absenc)
 {
-	AimLoop = aimLoop;
 	AngleMotor = aMotor;
 	TensionMotor = tMotor;
 	LFlyMotor = lMotor;
 	RFlyMotor = rMotor;
+	AngleEncoder = absenc;
 	AngleMotor->SetControlMode(CANTalon::kPercentVbus);
+	AngleMotor->SetInverted(false);
 	AngleMotor->SetPID(0,0,0);
-	TensionMotor->SetControlMode(CANTalon::kPercentVbus);
 	IndexSensor = indexSensor;
-	HomeAngle = homeSensor;
 	homingTimer = new Timer();
-	ForwardEnd = forwardEnd;
 	state = State::kWaiting;
 	homeState = HomeState::kReady;
 	fireTimer = new Timer();
@@ -38,7 +36,6 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	PP = Config::GetSetting("S_P_P", 19);
 	PI = Config::GetSetting("S_P_I", 2);
 	PD = Config::GetSetting("S_P_D", 0);
-	AimLoop->SetPID(PP,PI,PD);
 	offset = Config::GetSetting("S_offset", 200);
 	encPos1 = Config::GetSetting("AnglePos1", 2750);
 	encPos2 = Config::GetSetting("AnglePos2", 2900);
@@ -52,6 +49,23 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	holdStart = Config::GetSetting("holdStart", -97000);
 	holdInc = Config::GetSetting("holdInc", -25000);
 	holdFire = Config::GetSetting("holdFire", -20000);
+
+	// Set up tension motor
+	TensionMotor->SetControlMode(CANTalon::kPercentVbus);
+	TensionMotor->EnableZeroSensorPositionOnIndex(true, false);
+	TensionMotor->SetStatusFrameRateMs(CANTalon::StatusFrameRate::StatusFrameRateQuadEncoder, 6);
+	TensionMotor->Enable();
+
+
+	// Initialize PID Controller
+	AimLoop = new PIDController(19, 2, 0, AngleEncoder, AngleMotor ,0.05);
+	AimLoop->SetPID(PP,PI,PD);
+	AimLoop->SetContinuous(false);
+	AimLoop->SetPIDSourceType(PIDSourceType::kDisplacement);
+	AimLoop->SetInputRange(0,4.8);
+	AimLoop->SetOutputRange(-.9,.9);
+	AimLoop->Disable();
+
 }
 
 void Scoring::Update()
@@ -187,6 +201,7 @@ void Scoring::Home()
 	}
 }
 
+#if 0
 void Scoring::AngleHomeLoop()
 {
 	switch(homeState)
@@ -249,6 +264,7 @@ void Scoring::AngleHomeLoop()
 
 	}
 }
+#endif
 
 void Scoring::SetPreIncrementalPos(int posNum)
 {
@@ -344,6 +360,7 @@ void Scoring::SetupLogging(Logger * logger)
 	logger->AddAttribute("PunchPos");
 	logger->AddAttribute("AimCurrent");
 	logger->AddAttribute("PunchCurrent");
+	logger->AddAttribute("AbsEnc");
 }
 
 void Scoring::Log(Logger * logger)
@@ -353,6 +370,7 @@ void Scoring::Log(Logger * logger)
 	logger->Log("PunchPos", TensionMotor->GetEncPosition());
 	logger->Log("AimCurrent", AngleMotor->GetOutputCurrent());
 	logger->Log("PunchCurrent", TensionMotor->GetOutputCurrent());
+	logger->Log("AbsEnc", AngleEncoder->GetVoltage());
 }
 
 void Scoring::EnablePID(bool e)

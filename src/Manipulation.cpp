@@ -34,6 +34,21 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 	ArmMotor->SetControlMode(CANTalon::kPosition);
 	ArmMotor->SetEncPosition(0);
 	ArmMotor->Set(0);
+	// Wait for reload config to fix the PID constants.
+}
+
+int Manipulation::BaseEncoderByDegrees(float degrees) {
+	return (int) degrees * kEncoderTicksPerDegree;
+}
+float Manipulation::BaseDegreesByEncoder(int encoderTicks) {
+	return encoderTicks / kEncoderTicksPerDegree;
+}
+
+float Manipulation::ArmEncoderByDegrees(float degrees) {
+	return (int) degrees * kEncoderTicksPerDegree;
+}
+int Manipulation::ArmDegreesByEncoder(int encoderTicks) {
+	return encoderTicks / kEncoderTicksPerDegree;
 }
 
 void Manipulation::SetupLogging(Logger * logger)
@@ -320,7 +335,7 @@ void Manipulation::ReloadConfig()
 		Config::GetSetting("manip_base_d", 0));
 
 	ArmMotor->SetPID(
-		Config::GetSetting("manip_arm_p", 1),
-		Config::GetSetting("manip_arm_i", 0),
+		Config::GetSetting("manip_arm_p", 5.0),
+		Config::GetSetting("manip_arm_i", 0.001),
 		Config::GetSetting("manip_arm_d", 0));
 }

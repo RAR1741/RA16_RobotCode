@@ -119,13 +119,9 @@ public:
 		cout << "Initializing Drivetrain..." << endl;
 		//Initialize drive motors
 		motorFL = new CANTalon(7);
-		motorFL->SetStatusFrameRateMs(CANTalon::StatusFrameRate::StatusFrameRateQuadEncoder,6);
 		motorBL = new CANTalon(9);
-		motorBL->SetControlMode(CANTalon::ControlMode::kFollower);
-
 		motorFR = new CANTalon(8);
 		motorBR = new CANTalon(10);
-		motorBR->SetControlMode(CANTalon::ControlMode::kFollower);
 
 		drive = new Drive(motorFR, motorBR, motorFL, motorBL);
 		cout << "Drivetrain initialized!" << endl;
@@ -136,26 +132,12 @@ public:
 		absenc = new AnalogInput(0);
 
 		puncher = new CANTalon(4);
-		puncher->SetControlMode(CANTalon::kPercentVbus);
-		puncher->EnableZeroSensorPositionOnIndex(true, false);
-		puncher->SetStatusFrameRateMs(CANTalon::StatusFrameRate::StatusFrameRateQuadEncoder, 6);
-		puncher->Enable();
-
 		aimer = new CANTalon(3);
-		aimer->SetInverted(false);
-		aimer->SetControlMode(CANTalon::kPercentVbus);
 
 		rin = new Victor(0);
 		lin = new Victor(1);
 
-		aimLoop = new PIDController(19, 2, 0, absenc, aimer ,0.05);
-		aimLoop->SetContinuous(false);
-		aimLoop->SetPIDSourceType(PIDSourceType::kDisplacement);
-		aimLoop->SetInputRange(0,4.8);
-		aimLoop->SetOutputRange(-.9,.9);
-		aimLoop->Disable();
-
-		score = new Scoring(aimer,puncher,lin,rin,Index,aimLoop,NULL,NULL);
+		score = new Scoring(aimer,puncher,lin,rin,Index,absenc);
 		cout << "Scoring initialized!" << endl;
 
 		cout << "Initalizing arm..." << endl;
@@ -174,17 +156,27 @@ public:
 //		cout << "Camera initialized!" << endl;
 
 		cout << "Finishing up...";
+		cout << "Initializing targeting..." << endl;
 		light = new Relay(0);
+		targeting = new Targeting();
+		cout << "Targeting initialized" << endl;
+
+		cout << "Initializing driver/op input..." << endl;
 		driver = new Gamepad(0);
 		op = new Gamepad(1);
-		targeting = new Targeting();
+		cout << "driver/op input initialized" << endl;;
 
 		cout << "Initializing logger..." << endl;
 		logTime = new Timer;
 		logTime->Start();
 		logger = new Logger();
-		ReloadConfig();
 		cout << "Logger Initialized!" << endl;
+
+		cout << "Reloading configuration..." << endl;
+		ReloadConfig();
+		cout << "Config reloaded." << endl;
+
+		cout << "Done!" << endl;
 
 		srand(time(NULL));
 		switch(rand() % 3) {
@@ -206,7 +198,7 @@ public:
 	void TeleopInit()
 	{
 		score->SetPredefinedAngle(3);
-		aimLoop->Disable();
+		score->EnablePID(false);
 		//light->Set(Relay::Value::kOn);
 		StartLogging("teleop", logger);
 		ReloadConfig();
@@ -440,7 +432,6 @@ public:
 		drive->SetupLogging(logger);
 		score->SetupLogging(logger);
 		arm->SetupLogging(logger);
-		logger->AddAttribute("AbsEnc");
 		logger->WriteAttributes();
 	}
 
@@ -450,7 +441,6 @@ public:
 		drive->Log(logger);
 		score->Log(logger);
 		arm->Log(logger);
-		logger->Log("AbsEnc", absenc->GetVoltage());
 		logger->WriteLine();
 	}
 

@@ -53,19 +53,10 @@ public:
 
 private:
 	// Utility methods to convert between revolutions and degrees
-	int BaseEncoderByDegrees(float degrees) {
-		return (int) degrees * kDegreesPerEncoderTick;
-	}
-	float BaseDegreesByEncoder(int encoderTicks) {
-		return encoderTicks / kDegreesPerEncoderTick;
-	}
-
-	float ArmEncoderByDegrees(float degrees) {
-		return (int) degrees * kDegreesPerEncoderTick;
-	}
-	int ArmDegreesByEncoder(int encoderTicks) {
-		return encoderTicks / kDegreesPerEncoderTick;
-	}
+	int BaseEncoderByDegrees(float degrees);
+	float BaseDegreesByEncoder(int encoderTicks);
+	float ArmEncoderByDegrees(float degrees);
+	int ArmDegreesByEncoder(int encoderTicks);
 
 	bool ReadMotion(int in);
 	void ReadPostions();
@@ -82,7 +73,7 @@ private:
 	float absZeroPos;
 	float absToInc;
 	AnalogInput *BaseAbs;
-	const float kDegreesPerEncoderTick = 19.91111111;
+	const float kEncoderTicksPerDegree = 19.91111111;
 	const float kRevolutionsPerDegree = 0.71111111;
 
 };
