@@ -209,6 +209,9 @@ public:
 		StartLogging("teleop", logger);
 		StartLogging("driver", DriverLog);
 		StartLogging("operator", OpLog);
+		SetupLogging();
+		SetupControllerLog(DriverLog);
+		SetupControllerLog(OpLog);
 		ReloadConfig();
 	}
 
@@ -433,7 +436,6 @@ public:
 				std::to_string(now->tm_min) + "-\0" + std::to_string(now->tm_sec) + "-\0" + mode + ".csv";
 		cout << name << endl;
 		l->Open(name);
-		SetupLogging();
 	}
 
 	void SetupLogging()
