@@ -42,6 +42,8 @@ private:
     Manipulation *arm;
     //logging
     Logger *logger;
+    Logger * DriverLog;
+    Logger * OpLog;
     Timer *logTime;
     //misc
     OutputLog * logthing = new OutputLog();
@@ -94,6 +96,8 @@ public:
 		arm = NULL;
 		//logger
 		logger = NULL;
+		DriverLog = NULL;
+		OpLog = NULL;
 		logTime = NULL;
 		//misc
 		osciliscope1 = NULL;
@@ -170,6 +174,8 @@ public:
 		logTime = new Timer;
 		logTime->Start();
 		logger = new Logger();
+		DriverLog = new Logger();
+		OpLog = new Logger();
 		cout << "Logger Initialized!" << endl;
 
 		cout << "Reloading configuration..." << endl;
@@ -201,6 +207,8 @@ public:
 		score->EnablePID(false);
 		//light->Set(Relay::Value::kOn);
 		StartLogging("teleop", logger);
+		StartLogging("driver", DriverLog);
+		StartLogging("operator", OpLog);
 		ReloadConfig();
 	}
 
@@ -371,6 +379,8 @@ public:
 //		cout << "BaseEnc: " << motorBase->GetEncPosition() << endl;
 
 		Log();
+		LogController(DriverLog, driver);
+		LogController(OpLog, op);
 	}
 
 	void DisabledInit()
@@ -420,7 +430,7 @@ public:
 				std::to_string(now->tm_mon + 1) +
 				"-\0" + std::to_string(now->tm_mday) + "_\0" +
 				std::to_string(now->tm_hour) + "-\0" +
-				std::to_string(now->tm_min) + "-\0" + std::to_string(now->tm_sec) + mode + ".csv";
+				std::to_string(now->tm_min) + "-\0" + std::to_string(now->tm_sec) + "-\0" + mode + ".csv";
 		cout << name << endl;
 		l->Open(name);
 		SetupLogging();
@@ -442,6 +452,50 @@ public:
 		score->Log(logger);
 		arm->Log(logger);
 		logger->WriteLine();
+	}
+
+	void SetupControllerLog(Logger * l)
+	{
+		l->AddAttribute("LeftXAxis");
+		l->AddAttribute("LeftYAxis");
+		l->AddAttribute("RightXAxis");
+		l->AddAttribute("RightYAxis");
+		l->AddAttribute("LTriggerAxis");
+		l->AddAttribute("RTriggerAxis");
+		l->AddAttribute("A");
+		l->AddAttribute("B");
+		l->AddAttribute("X");
+		l->AddAttribute("Y");
+		l->AddAttribute("LBumper");
+		l->AddAttribute("RBumper");
+		l->AddAttribute("Back");
+		l->AddAttribute("Start");
+		l->AddAttribute("LStickButton");
+		l->AddAttribute("RStickButton");
+		l->AddAttribute("Dpad");
+		l->WriteAttributes();
+	}
+
+	void LogController(Logger * l, Gamepad * g)
+	{
+		l->Log("LeftXAxis", g->GetLeftX());
+		l->Log("LeftYAxis", g->GetLeftY());
+		l->Log("RightXAxis", g->GetRightX());
+		l->Log("RightYAxis", g->GetRightY());
+		l->Log("LTriggerAxis", g->GetLTriggerAxis());
+		l->Log("RTriggerAxis", g->GetRTriggerAxis());
+		l->Log("A", g->GetA());
+		l->Log("B", g->GetB());
+		l->Log("X", g->GetX());
+		l->Log("Y", g->GetY());
+		l->Log("LBumper", g->GetLeftBumper());
+		l->Log("RBumper", g->GetRightBumper());
+		l->Log("Back", g->GetBack());
+		l->Log("Start", g->GetStart());
+		l->Log("LStickButton", g->GetLeftPush());
+		l->Log("RStickButton", g->GetRightPush());
+		l->Log("Dpad", g->GetPOV());
+		l->WriteLine();
 	}
 
 	void ReloadConfig()
