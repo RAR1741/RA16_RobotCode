@@ -20,11 +20,12 @@ public:
 	void Log(Logger * logger);
 	void SetupLogging(Logger * logger);
 
-private:
 	CANTalon * FL;
 	CANTalon * BL;
 	CANTalon * FR;
 	CANTalon * BR;
+private:
+
 };
 
 #endif /* SRC_DRIVE_H_ */
