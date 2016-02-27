@@ -63,6 +63,7 @@ private:
     int DegreesToZero;
     float autoPanP;
     float encoderTicksPerDegree;
+    float tempLogTime;
     char * nope = '\0';
     std::string profile = "everything";
     uint8_t jim = false;//This is stupid
@@ -112,6 +113,7 @@ public:
 		encoderTicksPerDegree = 0;
 		bottomHardLimit = 0;
 		DegreesToZero = 0;
+		tempLogTime = 0;
 		triggerToggle = false;
 		lastTrigger = false;
 		isForward = true;
@@ -380,10 +382,10 @@ public:
 //		cout << "AbsEncValue: " << absenc->GetVoltage()* 800.0F << "\n";
 //		cout << "AbsEncVolt: " << absenc->GetVoltage() << "\n";
 //		cout << "BaseEnc: " << motorBase->GetEncPosition() << endl;
-
-		Log();
-		LogController(DriverLog, driver);
-		LogController(OpLog, op);
+		tempLogTime = logTime->Get();
+		Log(tempLogTime);
+		LogController(DriverLog, driver, tempLogTime);
+		LogController(OpLog, op, tempLogTime);
 	}
 
 	void DisabledInit()
@@ -399,7 +401,8 @@ public:
 
 	void AutonomousPeriodic()
 	{
-		Log();
+		tempLogTime = logTime->Get();
+		Log(tempLogTime);
 	}
 
 	void TestInit()
@@ -409,7 +412,8 @@ public:
 
 	void TestPeriodic()
 	{
-		Log();
+		tempLogTime = logTime->Get();
+		Log(tempLogTime);
 	}
 
 	void StartLogging(string mode, Logger * l)
@@ -447,9 +451,9 @@ public:
 		logger->WriteAttributes();
 	}
 
-	void Log()
+	void Log(float time)
 	{
-		logger->Log("Time", logTime->Get());
+		logger->Log("Time", time);
 		drive->Log(logger);
 		score->Log(logger);
 		arm->Log(logger);
@@ -458,6 +462,7 @@ public:
 
 	void SetupControllerLog(Logger * l)
 	{
+		l->AddAttribute("Time");
 		l->AddAttribute("LeftXAxis");
 		l->AddAttribute("LeftYAxis");
 		l->AddAttribute("RightXAxis");
@@ -478,8 +483,9 @@ public:
 		l->WriteAttributes();
 	}
 
-	void LogController(Logger * l, Gamepad * g)
+	void LogController(Logger * l, Gamepad * g, float time)
 	{
+		l->Log("Time", time);
 		l->Log("LeftXAxis", g->GetLeftX());
 		l->Log("LeftYAxis", g->GetLeftY());
 		l->Log("RightXAxis", g->GetRightX());
