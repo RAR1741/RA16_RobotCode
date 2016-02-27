@@ -29,8 +29,8 @@ public:
 
 	void ReloadConfig();
 
-	//void SetupLogging(Logger *Log); //starts logging
-	void Log(); //logs
+	void SetupLogging(Logger *Log); //starts logging
+	void Log(Logger * log); //logs
 
 private:
 	Drive * drive;

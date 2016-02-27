@@ -58,14 +58,16 @@ void Autonomous::ReloadConfig()
 	autonum = Config::GetSetting("autonum", 0);
 }
 
-void Log()
+void Autonomous::Log(Logger * log)
 {
-
+	log->Log("autonum", autonum);
+	log->Log("AutoState", autonomousState);
 }
-//void Autonomous::SetupLogging(Logger *Log)
-//{
-//	//todo change all attributes
-//
-//}
-//
+
+void Autonomous::SetupLogging(Logger *Log)
+{
+	Log->AddAttribute("autonum");
+	Log->AddAttribute("AutoState");
+}
+
 
