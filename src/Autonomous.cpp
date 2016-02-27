@@ -4,16 +4,10 @@
  *  Created on: Feb 28, 2015
  *      Author: programmer
  */
-#include "Autonomous.h"
-#include "RobotHeader.h"
-//#include "Robot.cpp"
-//#include "Config.h"
-//#include "Lift.h"
-//#include "DriveTrain.h"
-//#include "ContainerPlacer.h"
+
 #include "DigitalInput.h"
-//#include "Collection.h"
 #include "WPILib.h"
+#include "RobotHeader.h"
 #include <cstdlib>
 #include <fstream>
 #include <iostream>

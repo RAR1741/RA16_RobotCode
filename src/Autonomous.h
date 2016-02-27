@@ -8,20 +8,13 @@
 #ifndef SRC_AUTONOMOUS_H_
 #define SRC_AUTONOMOUS_H_
 #include "WPILib.h"
-//#include "Lift.h"
-//#include "DriveTrain.h"
-//#include "ContainerPlacer.h"
-#include "DigitalInput.h"
-//#include "Collection.h"
+#include "Drive.h"
+#include "Manipulation.h"
+#include "Scoring.h"
+#include "Logger.h"
 #include <ctime>
 #include <iostream>
 #include <fstream>
-//#include "Robot.cpp"
-//#include "Config.h"
-#include "Drive.h"
-#include "Scoring.h"
-#include "Manipulation.h"
-#include "Logger.h"
 
 using namespace std;
 
