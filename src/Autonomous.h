@@ -46,8 +46,8 @@ private:
 	Logger * logger;
 	Timer * logtimer;
 
-	string autonomousState;
-
+	string autonomousState = "start";
+	int autonum;
 };
 
 
