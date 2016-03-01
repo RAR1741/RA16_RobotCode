@@ -43,7 +43,7 @@ void Autonomous::RunAuto()
 				drive->FL->SetPosition(0);
 			}
 		}
-		else if(autonomousState == "start")
+		else if(autonomousState == "done")
 		{
 			drive->TankDrive(0,0);
 		}
