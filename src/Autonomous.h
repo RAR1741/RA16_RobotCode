@@ -33,6 +33,7 @@ public:
 	void Log(Logger * log); //logs
 
 private:
+	bool State(string state);
 	Drive * drive;
 	Manipulation * manipulation;
 	Scoring * scoring;

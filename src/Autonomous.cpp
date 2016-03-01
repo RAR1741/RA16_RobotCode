@@ -33,7 +33,7 @@ void Autonomous::RunAuto()
 	switch(autonum)
 	{
 	case 1:
-		if(autonomousState == "start")
+		if(State("start"))
 		{
 			drive->TankDrive(-0.6, -0.6);
 			scoring->SetPredefinedAngle(3);
@@ -43,7 +43,7 @@ void Autonomous::RunAuto()
 				drive->FL->SetPosition(0);
 			}
 		}
-		else if(autonomousState == "done")
+		else if(State("done"))
 		{
 			drive->TankDrive(0,0);
 		}
@@ -73,6 +73,21 @@ void Autonomous::SetupLogging(Logger *Log)
 {
 	Log->AddAttribute("autonum");
 	Log->AddAttribute("AutoState");
+}
+
+bool Autonomous::State(string state)
+{
+	string lAuto = autonomousState;
+	transform(lAuto.begin(), lAuto.end(), lAuto.begin(), ::tolower);
+	transform(state.begin(), state.end(), state.begin(), ::tolower);
+	if(autonomousState == state)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 
