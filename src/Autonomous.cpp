@@ -36,17 +36,22 @@ void Autonomous::RunAuto()
 		if(autonomousState == "start")
 		{
 			drive->TankDrive(-0.6, -0.6);
+			scoring->SetPredefinedAngle(3);
 			if(drive->FL->GetEncPosition() < 2000)
 			{
-				autonomousState = "turn";
+				autonomousState = "done";
 				drive->FL->SetPosition(0);
 			}
 		}
-		else if(autonomousState == "turn")
+		else if(autonomousState == "start")
 		{
-			drive->TankDrive(0.6, -0.6);
+			drive->TankDrive(0,0);
 		}
-		break;
+//		else if(autonomousState == "turn")
+//		{
+//			drive->TankDrive(0.6, -0.6);
+//		}
+//		break;
 	default:
 		cout << "bad auto" << endl;
 		break;
