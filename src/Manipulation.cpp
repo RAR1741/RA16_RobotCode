@@ -117,7 +117,7 @@ float Manipulation::Y() {
 	float theta = BaseAngle();
 	float phi   = ArmAngle();
 
-	return Y() + BaseLength() * ::sin(DegreesToRadians(theta)) +
+	return Y0() + BaseLength() * ::sin(DegreesToRadians(theta)) +
 			     ArmLength()  * ::sin(phi - theta);
 
 }
