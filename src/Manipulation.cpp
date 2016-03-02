@@ -26,12 +26,14 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 	ReadPostions();
 	BaseMotor->SetPID(5,.0001,0);
 	BaseMotor->Set(0);
+	BaseMotor->SetInverted(false);
 	BaseMotor->SetControlMode(CANTalon::kPosition);
 	BaseMotor->SetEncPosition(0);
 	BaseMotor->Set(0);
 
 	ArmMotor->SetPID(5,.0001,0);
 	ArmMotor->Set(0);
+	ArmMotor->SetInverted(false);
 	ArmMotor->SetControlMode(CANTalon::kPosition);
 	ArmMotor->SetEncPosition(0);
 	ArmMotor->Set(0);
@@ -277,7 +279,7 @@ bool Manipulation::IsArmHome() {
 }
 
 bool Manipulation::IsBaseHome() {
-	return !(BaseMotor->GetPinStateQuadIdx());
+	return !(BaseLimit->Get());
 }
 
 void Manipulation::Process()
@@ -339,6 +341,8 @@ void Manipulation::Process()
 	case Manipulation::kHomed:
 		ArmMotor->SetControlMode(CANTalon::ControlMode::kPosition);
 		BaseMotor->SetControlMode(CANTalon::ControlMode::kPosition);
+		BaseMotor->Set(0);
+		ArmMotor->Set(0);
 		state = Manipulation::kReady;
 		break;
 	case Manipulation::kReady:
@@ -346,7 +350,8 @@ void Manipulation::Process()
 	}
 }
 
-void Manipulation::ManualDrive(float base, float arm) {
+void Manipulation::ManualDrive(float base, float arm)
+{
 	BaseMotor->Set(base);
 	ArmMotor->Set(arm);
 }

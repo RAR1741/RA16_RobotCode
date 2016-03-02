@@ -361,7 +361,8 @@ public:
 		}
 		if(op->GetDPad() == Gamepad::kRight)
 		{
-			arm->Set(1);
+			//arm->Set(1);
+			arm->GoToAngles(-20,20);
 		}
 		if(op->GetDPad() == Gamepad::kUp)
 		{
