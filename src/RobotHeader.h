@@ -18,5 +18,6 @@
 #include "Scoring.h"
 #include "Target.h"
 #include "Targeting.h"
+#include "EdgeDetect.h"
 
 #endif /* SRC_ROBOTHEADER_H_ */
