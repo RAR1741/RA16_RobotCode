@@ -24,14 +24,14 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 	state = kReady;
 	homingTimer = new Timer();
 	ReadPostions();
-	BaseMotor->SetPID(5,.0001,0);
+	BaseMotor->SetPID(5,0,0);
 	BaseMotor->Set(0);
 	BaseMotor->SetInverted(false);
 	BaseMotor->SetControlMode(CANTalon::kPosition);
 	BaseMotor->SetEncPosition(0);
 	BaseMotor->Set(0);
 
-	ArmMotor->SetPID(5,.0001,0);
+	ArmMotor->SetPID(5,0,0);
 	ArmMotor->Set(0);
 	ArmMotor->SetInverted(false);
 	ArmMotor->SetControlMode(CANTalon::kPosition);
