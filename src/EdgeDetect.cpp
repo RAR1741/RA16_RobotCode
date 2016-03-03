@@ -4,6 +4,7 @@
  *  Created on: Mar 1, 2016
  *      Author: taylo
  */
+#include "EdgeDetect.h"
 
 EdgeDetect::EdgeDetect()
 {

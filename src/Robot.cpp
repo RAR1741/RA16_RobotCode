@@ -59,6 +59,7 @@ private:
     bool lastTrigger;
     bool isForward;
     bool getPos = false;
+    bool trainTrigger = true;
     int bottomHardLimit;
     int DegreesToZero;
     float autoPanP;
@@ -276,12 +277,12 @@ public:
 		}
 
 		//load scoring
-		if(driver->GetA())
+		if(driver->GetX())
 		{
 			score->Load();
 		}
 		//fire scoring
-		if(driver->GetB())
+		if(driver->GetRTriggerAxis()>=.5)
 		{
 			score->Fire();
 		}
@@ -345,9 +346,14 @@ public:
 		}
 
 		//create a trained point
-		if(op->GetStart())
+		if(op->GetStart() && trainTrigger == true)
 		{
 			arm->Train();
+			trainTrigger = false;
+		}
+		if(!(op->GetStart()))
+		{
+			trainTrigger = true;
 		}
 
 		//manipulation setpoints
@@ -380,8 +386,8 @@ public:
 //		cout << aimLoop->Get() << endl;
 //		cout << "EncValue: " << aimer->GetEncPosition() << endl;
 //		cout << "Setpoint: " << aimLoop->GetSetpoint() << endl;
-//		cout << "AbsEncValue: " << absenc->GetVoltage()* 800.0F << "\n";
-//		cout << "AbsEncVolt: " << absenc->GetVoltage() << "\n";
+		cout << "AbsEncValue: " << absenc->GetVoltage()* 800.0F << "\n";
+		cout << "AbsEncVolt: " << absenc->GetVoltage() << "\n";
 //		cout << "BaseEnc: " << motorBase->GetEncPosition() << endl;
 		tempLogTime = logTime->Get();
 		Log(tempLogTime);

@@ -5,8 +5,8 @@ holdInc = -25000
 holdFire = -23000
 AnglePos4 = 2810
 AnglePos3 = 2650
-AnglePos2 = 2100
-AnglePos1 = 1400
+AnglePos2 = 2150
+AnglePos1 = 1350
 AngleDeg1 = 5
 AngleDeg2 = 10
 AngleDeg3 = 15
@@ -15,7 +15,7 @@ AngleHomedPos = 820000
 S_P_P = 5.27
 S_P_I = 0
 S_P_D = 0
-S_offset = 0
+S_offset = -70
 encoderTicksPerDegree = 10.78
 bottomHardLimit = 3635
 degreesToZero = 10
@@ -23,8 +23,8 @@ AutoAimP = 0.04
 #819200
 
 # Arm Base
-manip_base_p = 5
-manip_base_i = 0.001
+manip_base_p = 4
+manip_base_i = 0
 manip_base_d = 0
 
 manip_arm_p  = 4
