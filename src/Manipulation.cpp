@@ -63,6 +63,8 @@ void Manipulation::SetupLogging(Logger * logger)
 	logger->AddAttribute("ManipArmHome");
 	logger->AddAttribute("ManipBaseVoltage");
 	logger->AddAttribute("ManipArmVolatge");
+	logger->AddAttribute("ManipHandX");
+	logger->AddAttribute("ManipHandY");
 }
 
 void Manipulation::Log(Logger * logger)

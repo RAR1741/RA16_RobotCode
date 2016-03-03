@@ -18,7 +18,9 @@ Vagrant.configure(2) do |config|
     sim.vm.provision "shell", path: "setup_gazebo.sh"
     
     sim.vm.provider "virtualbox" do |v|
-      v.gui = true
+      v.gui    = true
+      v.memory = 4096
+      v.cpus   = 2
     end
   end
 
