@@ -18,6 +18,7 @@ private:
 	//controllers
 	Gamepad *driver;
 	Gamepad *op;
+	EdgeDetect * trainTrigger;
 	//drivetrain
 	CANTalon * motorFL;
 	CANTalon * motorFR;
@@ -59,7 +60,6 @@ private:
     bool lastTrigger;
     bool isForward;
     bool getPos = false;
-    bool trainTrigger = true;
     int bottomHardLimit;
     int DegreesToZero;
     float autoPanP;
@@ -68,12 +68,14 @@ private:
     char * nope = '\0';
     std::string profile = "everything";
     uint8_t jim = false;//This is stupid
+    int portmotion[] = {9,10,11,12,13,14};
 public:
 	Robot()
 	{
 		//controllers
 		driver = NULL;
 		op = NULL;
+		trainTrigger = new EdgeDetect();
 		//drivetrain
 		motorFL = NULL;
 		motorFR = NULL;
@@ -153,6 +155,9 @@ public:
 		ArmLimit = new DigitalInput(6);
 		BaseLimit = new DigitalInput(3);
 		arm = new Manipulation(motorBase, motorArm, BaseLimit, ArmLimit);
+
+		arm->CreateMotion(portmotion, 6);
+
 		cout << "Arm initialized!" << endl;
 
 //		cout << "Initializing USB camera" << endl;
@@ -346,14 +351,9 @@ public:
 		}
 
 		//create a trained point
-		if(op->GetStart() && trainTrigger == true)
+		if(trainTrigger->Check(op->GetStart()))
 		{
 			arm->Train();
-			trainTrigger = false;
-		}
-		if(!(op->GetStart()))
-		{
-			trainTrigger = true;
 		}
 
 		//manipulation setpoints
