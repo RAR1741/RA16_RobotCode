@@ -37,6 +37,7 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 	ArmMotor->SetControlMode(CANTalon::kPosition);
 	ArmMotor->SetEncPosition(0);
 	ArmMotor->Set(0);
+	movementRunning = false;
 	// Wait for reload config to fix the PID constants.
 }
 
@@ -255,14 +256,22 @@ void Manipulation::StartMotion(int index)
 	place = 0;
 	currentMov = index;
 	Set(movements.at(currentMov).at(place));
+	movementRunning = true;
 }
 
 void Manipulation::ContinueMotion()
 {
-	place++;
-	if(movements.at(place).size() >= (unsigned)place)
+	if(movementRunning)
 	{
-		Set(movements.at(currentMov).at(place));
+		place++;
+		if(movements.at(currentMov).size() >= (unsigned)place)
+		{
+			Set(movements.at(currentMov).at(place));
+		}
+		else
+		{
+			movementRunning = false;
+		}
 	}
 }
 
@@ -382,4 +391,16 @@ void Manipulation::ReloadConfig()
 
 	_x0 = Config::GetSetting("manip_x0", 6.5);
 	_y0 = Config::GetSetting("manip_y0", 11.5);
+}
+
+bool Manipulation::isNear()
+{
+	if(abs(BaseMotor->GetEncPosition() - BaseMotor->Get()) < 30 && abs(ArmMotor->GetEncPosition() - ArmMotor->Get()) < 30)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

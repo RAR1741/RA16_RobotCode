@@ -53,7 +53,8 @@ public:
 	float X();
 	float Y();
 
-
+	bool isNear();
+	bool movementRunning;
 private:
 	// Utility methods to convert between revolutions and degrees
 	int BaseEncoderByDegrees(float degrees);

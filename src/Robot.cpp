@@ -375,6 +375,16 @@ public:
 			arm->Set(2);
 		}
 
+		if(op->GetBack())
+		{
+			arm->StartMotion(0);
+		}
+
+		if(arm->movementRunning && arm->isNear())
+		{
+			arm->ContinueMotion();
+		}
+
 		//update scoring and manipulation
 		score->Update();
 		arm->Process();
