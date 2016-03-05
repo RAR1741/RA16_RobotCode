@@ -65,6 +65,7 @@ private:
     float autoPanP;
     float encoderTicksPerDegree;
     float tempLogTime;
+    int autoAimOffset;
     char * nope = '\0';
     std::string profile = "everything";
     uint8_t jim = false;//This is stupid
@@ -117,6 +118,7 @@ public:
 		bottomHardLimit = 0;
 		DegreesToZero = 0;
 		tempLogTime = 0;
+		autoAimOffset = 0;
 		triggerToggle = false;
 		lastTrigger = false;
 		isForward = true;
@@ -245,7 +247,7 @@ public:
 					}
 				}
 				drive->HaloDrive(-autoPanP * closest.Pan(), 0);
-				//aimLoop->SetSetpoint(targetDegreeToTicks(closest.Tilt()) / 800);
+				//aimLoop->SetSetpoint(targetDegreeToTicks(closest.Tilt()) / 800 + autoAimOffset);
 			}
 			else
 			{
@@ -531,6 +533,7 @@ public:
 		encoderTicksPerDegree = Config::GetSetting("encodeTicksPerDegree", 10.78);
 		bottomHardLimit = Config::GetSetting("bottomHardLimit", 3635);
 		DegreesToZero = Config::GetSetting("degreesToZero", 10);
+		autoAimOffset = Config::GetSetting("autoAimOffset", 0);
 		arm->ReloadConfig();
 		score->ReloadConfig();
 	}
