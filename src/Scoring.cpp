@@ -94,22 +94,22 @@ void Scoring::Update()
 			if(TensionMotor->GetEncPosition() > start)
 			{
 				cout << TensionMotor->GetEncPosition() << endl;
-				TensionMotor->Set(-.55);
+				TensionMotor->Set(-.75);
 			}
 			else if(TensionMotor->GetEncPosition() > start + inc)
 			{
 				cout << "2: " << TensionMotor->GetEncPosition() << endl;
-				TensionMotor->Set(-.45);
+				TensionMotor->Set(-.65);
 			}
 			else if(TensionMotor->GetEncPosition() > start + (2 * inc))
 			{
 				cout << "3: " << TensionMotor->GetEncPosition() << endl;
-				TensionMotor->Set(-.4);
+				TensionMotor->Set(-.55);
 			}
 			else if(TensionMotor->GetEncPosition() < start + (3 * inc))
 			{
 				cout << "4: " << TensionMotor->GetEncPosition() << endl;
-				TensionMotor->Set(-.3);
+				TensionMotor->Set(-.45);
 			}
 			//TensionMotor->Set(.35);//Get to Exact Position
 			if(TensionMotor->GetEncPosition() < start + (3 * inc))
@@ -138,7 +138,7 @@ void Scoring::Update()
 			}
 			else
 			{
-				TensionMotor->Set(-.5);
+				TensionMotor->Set(-.75);
 			}
 			//TensionMotor->Set(200000);//Just past Trigger point
 
@@ -360,7 +360,9 @@ void Scoring::SetupLogging(Logger * logger)
 	logger->AddAttribute("PunchPos");
 	logger->AddAttribute("AimCurrent");
 	logger->AddAttribute("PunchCurrent");
+	logger->AddAttribute("puncherState");
 	logger->AddAttribute("AbsEnc");
+	logger->AddAttribute("PuncherIndex");
 }
 
 void Scoring::Log(Logger * logger)
@@ -370,7 +372,9 @@ void Scoring::Log(Logger * logger)
 	logger->Log("PunchPos", TensionMotor->GetEncPosition());
 	logger->Log("AimCurrent", AngleMotor->GetOutputCurrent());
 	logger->Log("PunchCurrent", TensionMotor->GetOutputCurrent());
+	logger->Log("puncherState", state);
 	logger->Log("AbsEnc", AngleEncoder->GetVoltage());
+	logger->Log("PuncherIndex", TensionMotor->GetPinStateQuadIdx());
 }
 
 void Scoring::EnablePID(bool e)

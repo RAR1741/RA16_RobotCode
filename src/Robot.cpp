@@ -69,7 +69,7 @@ private:
     char * nope = '\0';
     std::string profile = "everything";
     uint8_t jim = false;//This is stupid
-    int portmotion[] = {9,10,11,12,13,14};
+    int portmotion[6] = {9,10,11,12,13,14};
 public:
 	Robot()
 	{
@@ -377,15 +377,15 @@ public:
 			arm->Set(2);
 		}
 
-		if(op->GetBack())
-		{
-			arm->StartMotion(0);
-		}
-
-		if(arm->movementRunning && arm->isNear())
-		{
-			arm->ContinueMotion();
-		}
+//		if(op->GetBack())
+//		{
+//			arm->StartMotion(0);
+//		}
+//
+//		if(arm->movementRunning && arm->isNear())
+//		{
+//			arm->ContinueMotion();
+//		}
 
 		//update scoring and manipulation
 		score->Update();
@@ -398,9 +398,10 @@ public:
 //		cout << aimLoop->Get() << endl;
 //		cout << "EncValue: " << aimer->GetEncPosition() << endl;
 //		cout << "Setpoint: " << aimLoop->GetSetpoint() << endl;
-		cout << "AbsEncValue: " << absenc->GetVoltage()* 800.0F << "\n";
-		cout << "AbsEncVolt: " << absenc->GetVoltage() << "\n";
+//		cout << "AbsEncValue: " << absenc->GetVoltage()* 800.0F << "\n";
+//		cout << "AbsEncVolt: " << absenc->GetVoltage() << "\n";
 //		cout << "BaseEnc: " << motorBase->GetEncPosition() << endl;
+		cout << "thing: " << puncher->GetPinStateQuadIdx() << endl;
 		tempLogTime = logTime->Get();
 		Log(tempLogTime);
 		LogController(DriverLog, driver, tempLogTime);
