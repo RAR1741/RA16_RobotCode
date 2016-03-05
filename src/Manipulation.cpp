@@ -63,6 +63,7 @@ void Manipulation::SetupLogging(Logger * logger)
 	logger->AddAttribute("ManipBaseHome");
 	logger->AddAttribute("ManipArmHome");
 	logger->AddAttribute("ManipBaseVoltage");
+	logger->AddAttribute("ManipArmVoltge");
 	logger->AddAttribute("ManipArmVolatge");
 	logger->AddAttribute("ManipHandX");
 	logger->AddAttribute("ManipHandY");
@@ -95,7 +96,10 @@ void Manipulation::Log(Logger * logger)
 	}
 
 	logger->Log("ManipState", stateName);
-	logger->Log("ManipBaseVolatage", BaseMotor->GetOutputVoltage());
+	logger->Log("ManipBaseVoltage", BaseMotor->GetOutputVoltage());
+	logger->Log("ManipArmVoltage", ArmMotor->GetOutputVoltage());
+	logger->Log("ManipBaseEncoder", BaseMotor->GetEncPosition());
+	logger->Log("ManipArmEncoder", ArmMotor->GetEncPosition());
 	logger->Log("ManipHandX", X());
 	logger->Log("ManipHandY", Y());
 }
