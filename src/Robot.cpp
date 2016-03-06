@@ -359,23 +359,37 @@ public:
 		}
 
 		//manipulation setpoints
-		if(op->GetDPad() == Gamepad::kDown) //home
-		{
-			arm->Home();
-		}
-		if(op->GetDPad() == Gamepad::kLeft)
-		{
-			arm->Set(3);
-		}
-		if(op->GetDPad() == Gamepad::kRight)
-		{
-			arm->Set(1);
-			//arm->GoToAngles(-140,70);
-		}
-		if(op->GetDPad() == Gamepad::kUp)
-		{
-			arm->Set(2);
-		}
+//		if(arm->movementRunning)
+//		{
+			if(op->GetDPad() == Gamepad::kDown) //home
+			{
+				arm->Home();
+			}
+			if(op->GetDPad() == Gamepad::kLeft)
+			{
+				arm->Set(3);
+			}
+			if(op->GetDPad() == Gamepad::kRight)
+			{
+				arm->Set(1);
+				//arm->GoToAngles(-140,70);
+			}
+			if(op->GetDPad() == Gamepad::kUp)
+			{
+				arm->Set(2);
+			}
+			if(op->GetBack())
+			{
+				arm->StartMotion(0);
+			}
+//		}
+//		else
+//		{
+//			if(arm->movementRunning && arm->isNear())
+//			{
+//				arm->ContinueMotion();
+//			}
+//		}
 
 //		if(op->GetBack())
 //		{
@@ -386,6 +400,7 @@ public:
 //		{
 //			arm->ContinueMotion();
 //		}
+
 
 		//update scoring and manipulation
 		score->Update();
