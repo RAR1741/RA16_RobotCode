@@ -20,6 +20,7 @@ Autonomous::Autonomous(Drive * d, Manipulation * m, Scoring * s, Logger * l, Tim
 	scoring = s;
 	logger = l;
 	logtimer = t;
+	autoTime = new Timer();
 	ReloadConfig();
 }
 
@@ -35,12 +36,21 @@ void Autonomous::RunAuto()
 	case 1:
 		if(State("start"))
 		{
-			drive->TankDrive(-0.6, -0.6);
-			scoring->SetPredefinedAngle(3);
-			if(drive->FL->GetEncPosition() < 2000)
+			autoTime->Reset();
+			autoTime->Start();
+			drive->HaloDrive(0, -0.6);
+			scoring->SetPredefinedAngle(1);
+			scoring->EnablePID(true);
+			autonomousState = "going";
+		}
+		else if(State("going"))
+		{
+			drive->HaloDrive(0, -0.6);
+			if(autoTime->Get()>= 3)
 			{
 				autonomousState = "done";
-				drive->FL->SetPosition(0);
+				scoring->EnablePID(false);
+				//drive->FL->SetPosition(0);
 			}
 		}
 		else if(State("done"))
@@ -51,7 +61,65 @@ void Autonomous::RunAuto()
 //		{
 //			drive->TankDrive(0.6, -0.6);
 //		}
-//		break;
+		break;
+	case 2:
+		if(State("start"))
+		{
+			autoTime->Reset();
+			autoTime->Start();
+			drive->HaloDrive(0, -0.85);
+			scoring->SetPredefinedAngle(1);
+			scoring->EnablePID(true);
+			autonomousState = "going";
+		}
+		else if(State("going"))
+		{
+			drive->HaloDrive(0, -0.85);
+			if(autoTime->Get()>= 2)
+			{
+				autonomousState = "done";
+				scoring->EnablePID(false);
+				//drive->FL->SetPosition(0);
+			}
+		}
+		else if(State("done"))
+		{
+			drive->TankDrive(0,0);
+		}
+//		else if(autonomousState == "turn")
+//		{
+//			drive->TankDrive(0.6, -0.6);
+//		}
+		break;
+	case 3:
+		if(State("start"))
+		{
+			autoTime->Reset();
+			autoTime->Start();
+			drive->HaloDrive(0, -0.45);
+			scoring->SetPredefinedAngle(2);
+			scoring->EnablePID(true);
+			autonomousState = "going";
+		}
+		else if(State("going"))
+		{
+			drive->HaloDrive(0, -0.45);
+			if(autoTime->Get()>= 4)
+			{
+				autonomousState = "done";
+				scoring->EnablePID(false);
+				//drive->FL->SetPosition(0);
+			}
+		}
+		else if(State("done"))
+		{
+			drive->TankDrive(0,0);
+		}
+//		else if(autonomousState == "turn")
+//		{
+//			drive->TankDrive(0.6, -0.6);
+//		}
+		break;
 	default:
 		cout << "bad auto" << endl;
 		break;
@@ -88,6 +156,12 @@ bool Autonomous::State(string state)
 	{
 		return false;
 	}
+}
+
+void Autonomous::ResetTime()
+{
+	autoTime->Reset();
+	autoTime->Start();
 }
 
 

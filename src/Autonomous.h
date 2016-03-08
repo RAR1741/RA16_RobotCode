@@ -28,6 +28,7 @@ public:
 	void RunAuto();
 
 	void ReloadConfig();
+	void ResetTime();
 
 	void SetupLogging(Logger *Log); //starts logging
 	void Log(Logger * log); //logs
@@ -39,6 +40,7 @@ private:
 	Scoring * scoring;
 	Logger * logger;
 	Timer * logtimer;
+	Timer * autoTime;
 
 	string autonomousState = "start";
 	int autonum;

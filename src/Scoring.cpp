@@ -94,22 +94,22 @@ void Scoring::Update()
 			if(TensionMotor->GetEncPosition() > start)
 			{
 				cout << TensionMotor->GetEncPosition() << endl;
-				TensionMotor->Set(-.75);
+				TensionMotor->Set(-.6);
 			}
 			else if(TensionMotor->GetEncPosition() > start + inc)
 			{
 				cout << "2: " << TensionMotor->GetEncPosition() << endl;
-				TensionMotor->Set(-.65);
+				TensionMotor->Set(-.55);
 			}
 			else if(TensionMotor->GetEncPosition() > start + (2 * inc))
 			{
 				cout << "3: " << TensionMotor->GetEncPosition() << endl;
-				TensionMotor->Set(-.55);
+				TensionMotor->Set(-.45);
 			}
 			else if(TensionMotor->GetEncPosition() < start + (3 * inc))
 			{
 				cout << "4: " << TensionMotor->GetEncPosition() << endl;
-				TensionMotor->Set(-.45);
+				TensionMotor->Set(-.3);
 			}
 			//TensionMotor->Set(.35);//Get to Exact Position
 			if(TensionMotor->GetEncPosition() < start + (3 * inc))

@@ -15,6 +15,7 @@ using namespace std;
 class Robot: public IterativeRobot
 {
 private:
+	Autonomous * Auto;
 	//controllers
 	Gamepad *driver;
 	Gamepad *op;
@@ -73,6 +74,7 @@ private:
 public:
 	Robot()
 	{
+		Auto = NULL;
 		//controllers
 		driver = NULL;
 		op = NULL;
@@ -209,6 +211,7 @@ public:
 			logthing->Troll(cout);
 			break;
 		}
+		Auto = new Autonomous(drive,arm,score,logger,logTime);
 	}
 
 	void TeleopInit()
@@ -432,10 +435,12 @@ public:
 	void AutonomousInit()
 	{
 		StartLogging("auto", logger);
+		Auto->ResetTime();
 	}
 
 	void AutonomousPeriodic()
 	{
+		Auto->RunAuto();
 		tempLogTime = logTime->Get();
 		Log(tempLogTime);
 	}
