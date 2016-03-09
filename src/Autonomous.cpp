@@ -94,6 +94,19 @@ void Autonomous::RunAuto()
 	case 3:
 		if(State("start"))
 		{
+			manipulation->Home();
+			autonomousState = "homing";
+		}
+		if(State("homing"))
+		{
+			manipulation->Process();
+			if(manipulation->GetState() == 3)
+			{
+				autonomousState = "drive";
+			}
+		}
+		if(State("drive"))
+		{
 			autoTime->Reset();
 			autoTime->Start();
 			drive->HaloDrive(0, -0.45);
@@ -105,6 +118,36 @@ void Autonomous::RunAuto()
 		{
 			drive->HaloDrive(0, -0.45);
 			if(autoTime->Get()>= 4)
+			{
+				autonomousState = "done";
+				scoring->EnablePID(false);
+				//drive->FL->SetPosition(0);
+			}
+		}
+		else if(State("done"))
+		{
+			drive->TankDrive(0,0);
+		}
+//		else if(autonomousState == "turn")
+//		{
+//			drive->TankDrive(0.6, -0.6);
+//		}
+		break;
+	case 4:
+		if(State("start"))
+		{
+			autoTime->Reset();
+			autoTime->Start();
+			drive->HaloDrive(0, -0.35);
+			scoring->SetPredefinedAngle(2);
+			scoring->EnablePID(true);
+			autonomousState = "going";
+		}
+		else if(State("going"))
+		{
+			manipulation->Set(1);
+			drive->HaloDrive(0, -0.35);
+			if(autoTime->Get()>= 1.8)
 			{
 				autonomousState = "done";
 				scoring->EnablePID(false);
