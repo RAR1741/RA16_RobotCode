@@ -36,7 +36,6 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	PP = Config::GetSetting("S_P_P", 19);
 	PI = Config::GetSetting("S_P_I", 2);
 	PD = Config::GetSetting("S_P_D", 0);
-	offset = Config::GetSetting("S_offset", 200);
 	encPos1 = Config::GetSetting("AnglePos1", 2750);
 	encPos2 = Config::GetSetting("AnglePos2", 2900);
 	encPos3 = Config::GetSetting("AnglePos3", 3250);
@@ -50,6 +49,10 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	holdInc = Config::GetSetting("holdInc", -25000);
 	holdFire = Config::GetSetting("holdFire", -20000);
 	isPrototype = !Config::GetSetting("isPrototype", 0) == 0;
+	if(isPrototype)
+		offset = Config::GetSetting("S_offset_proto", 200);
+	else
+		offset = Config::GetSetting("S_offset_comp", 200);
 
 	// Set up tension motor
 	TensionMotor->SetControlMode(CANTalon::kPercentVbus);
