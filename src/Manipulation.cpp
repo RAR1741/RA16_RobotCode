@@ -117,7 +117,18 @@ float Manipulation::RadiansToDegrees(float radians)
 	return radians * 180.0 / ::acos(-1);
 }
 
-float Manipulation::X() {
+float Manipulation::BaseOK()
+{
+	return BaseLength() * ::sin(BaseAngle()) + ArmLength() * ::sin(ArmAngle() - BaseAngle());
+}
+
+float Manipulation::ArmOK()
+{
+	return -ArmLength() * ::sin(ArmAngle() - BaseAngle());
+}
+
+float Manipulation::X()
+{
 	float theta = BaseAngle();
 	float phi   = ArmAngle();
 
@@ -125,7 +136,8 @@ float Manipulation::X() {
 			    ArmLength()  * ::cos(DegreesToRadians(phi - theta));
 }
 
-float Manipulation::Y() {
+float Manipulation::Y()
+{
 	float theta = BaseAngle();
 	float phi   = ArmAngle();
 
@@ -134,7 +146,8 @@ float Manipulation::Y() {
 
 }
 
-void Manipulation::GoToXY(float x, float y) {
+void Manipulation::GoToXY(float x, float y)
+{
 	// todo: calculate
 
 	float baseDegrees = 0;
@@ -143,7 +156,8 @@ void Manipulation::GoToXY(float x, float y) {
 	GoToAngles(baseDegrees, armDegrees);
 }
 
-void Manipulation::GoToAngles(float baseDegrees, float armDegrees) {
+void Manipulation::GoToAngles(float baseDegrees, float armDegrees)
+{
 	BaseMotor->Set(BaseEncoderByDegrees(baseDegrees));
 	ArmMotor->Set(ArmEncoderByDegrees(armDegrees));
 }
@@ -364,6 +378,26 @@ void Manipulation::Process()
 		state = Manipulation::kReady;
 		break;
 	case Manipulation::kReady:
+		if(X() > 13 + 6.5) //soft limit + distance to bumpers
+		{
+			if(BaseOK() > 0 && BaseMotor->GetSetpoint() - BaseMotor->GetEncPosition() > 0)
+			{
+				BaseMotor->Set(BaseMotor->GetEncPosition());
+			}
+			else if(BaseOK() < 0 && BaseMotor->GetSetpoint() - BaseMotor->GetEncPosition() < 0)
+			{
+				BaseMotor->Set(BaseMotor->GetEncPosition());
+			}
+
+			if(ArmOK() > 0 && ArmMotor->GetSetpoint() - ArmMotor->GetEncPosition() > 0)
+			{
+				ArmMotor->Set(ArmMotor->GetEncPosition());
+			}
+			else if(ArmOK() < 0 && ArmMotor->GetSetpoint() - ArmMotor->GetEncPosition() < 0)
+			{
+				ArmMotor->Set(ArmMotor->GetEncPosition());
+			}
+		}
 		break;
 	}
 }

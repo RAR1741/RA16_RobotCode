@@ -65,6 +65,9 @@ private:
 	float DegreesToRadians(float degrees);
 	float RadiansToDegrees(float radians);
 
+	float BaseOK();
+	float ArmOK();
+
 	float BaseLength() {
 		return _base_length;
 	}
