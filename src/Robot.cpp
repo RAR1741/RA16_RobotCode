@@ -458,6 +458,7 @@ public:
 
 	void StartLogging(string mode, Logger * l)
 	{
+		string robot = !(Config::GetSetting("isPrototype", 0) == 0) ? "_proto" : "_comp";
 		l->Close();
 		time_t t = time(0);
 		struct tm *now = localtime(&t);
@@ -477,7 +478,7 @@ public:
 				std::to_string(now->tm_mon + 1) +
 				"-\0" + std::to_string(now->tm_mday) + "_\0" +
 				std::to_string(now->tm_hour) + "-\0" +
-				std::to_string(now->tm_min) + "-\0" + std::to_string(now->tm_sec) + "-\0" + mode + ".csv";
+				std::to_string(now->tm_min) + "-\0" + std::to_string(now->tm_sec) + "-\0" + mode + robot + ".csv";
 		cout << name << endl;
 		l->Open(name);
 	}
