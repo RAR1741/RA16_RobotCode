@@ -68,6 +68,8 @@ private:
 	float BaseOK();
 	float ArmOK();
 
+	bool isManual;
+
 	float BaseLength() {
 		return _base_length;
 	}

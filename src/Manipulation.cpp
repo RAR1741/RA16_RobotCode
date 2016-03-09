@@ -158,6 +158,7 @@ void Manipulation::GoToXY(float x, float y)
 
 void Manipulation::GoToAngles(float baseDegrees, float armDegrees)
 {
+	isManual = true;
 	BaseMotor->Set(BaseEncoderByDegrees(baseDegrees));
 	ArmMotor->Set(ArmEncoderByDegrees(armDegrees));
 }
@@ -205,6 +206,7 @@ void Manipulation::Train()
 
 void Manipulation::Set(int in)
 {
+	isManual = false;
 	vector<float> pos;
 	if((unsigned)in < positions.size() && in >= 0)
 	{
@@ -378,7 +380,17 @@ void Manipulation::Process()
 		state = Manipulation::kReady;
 		break;
 	case Manipulation::kReady:
-		if(X() >= 13 + 6.5) //soft limit + distance to bumpers
+		float limit;
+		if(isManual)
+		{
+			limit = 13;
+		}
+		else
+		{
+			limit = 14;
+		}
+
+		if(X() >= limit) //soft limit + distance to bumpers
 		{
 			if(BaseOK() > 0 && BaseMotor->GetSetpoint() - BaseMotor->GetEncPosition() > 0)
 			{
