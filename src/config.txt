@@ -42,9 +42,9 @@ manip_y0 = 11
 manip_base_length = 15
 manip_arm_length  = 15
 
-autonum =3
+autonum = 3
 
-
+isPrototype = 1
 
 #819200
 #2671

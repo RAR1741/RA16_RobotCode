@@ -49,6 +49,7 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	holdStart = Config::GetSetting("holdStart", -97000);
 	holdInc = Config::GetSetting("holdInc", -25000);
 	holdFire = Config::GetSetting("holdFire", -20000);
+	isPrototype = !Config::GetSetting("isPrototype", 0) == 0;
 
 	// Set up tension motor
 	TensionMotor->SetControlMode(CANTalon::kPercentVbus);
@@ -351,6 +352,7 @@ void Scoring::ReloadConfig()
 	holdStart = Config::GetSetting("holdStart", -97000);
 	holdInc = Config::GetSetting("holdInc", -25000);
 	holdFire = Config::GetSetting("holdFire", -20000);
+	isPrototype = !Config::GetSetting("isPrototype", 0) == 0;
 }
 
 void Scoring::SetupLogging(Logger * logger)

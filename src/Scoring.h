@@ -83,6 +83,7 @@ private:
 	int holdStart;
 	int holdInc;
 	int holdFire;
+	bool isPrototype;
 };
 
 #endif /* SRC_SCORING_H_ */
