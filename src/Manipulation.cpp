@@ -378,7 +378,7 @@ void Manipulation::Process()
 		state = Manipulation::kReady;
 		break;
 	case Manipulation::kReady:
-		if(X() > 13 + 6.5) //soft limit + distance to bumpers
+		if(X() >= 13 + 6.5) //soft limit + distance to bumpers
 		{
 			if(BaseOK() > 0 && BaseMotor->GetSetpoint() - BaseMotor->GetEncPosition() > 0)
 			{
