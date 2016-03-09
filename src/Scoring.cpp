@@ -49,11 +49,12 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	holdInc = Config::GetSetting("holdInc", -25000);
 	holdFire = Config::GetSetting("holdFire", -20000);
 	isPrototype = !Config::GetSetting("isPrototype", 0) == 0;
-	if(isPrototype)
-		offset = Config::GetSetting("S_offset_proto", 200);
-	else
-		offset = Config::GetSetting("S_offset_comp", 200);
-
+	{
+		if(isPrototype)
+			offset = Config::GetSetting("S_offset_proto", 200);
+		else
+			offset = Config::GetSetting("S_offset_comp", 200);
+	}
 	// Set up tension motor
 	TensionMotor->SetControlMode(CANTalon::kPercentVbus);
 	TensionMotor->EnableZeroSensorPositionOnIndex(true, false);
