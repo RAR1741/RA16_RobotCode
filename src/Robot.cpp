@@ -416,7 +416,7 @@ public:
 //		cout << aimLoop->Get() << endl;
 //		cout << "EncValue: " << aimer->GetEncPosition() << endl;
 //		cout << "Setpoint: " << aimLoop->GetSetpoint() << endl;
-//		cout << "AbsEncValue: " << absenc->GetVoltage()* 800.0F << "\n";
+		cout << "AbsEncValue: " << absenc->GetVoltage()* 800.0F << "\n";
 //		cout << "AbsEncVolt: " << absenc->GetVoltage() << "\n";
 //		cout << "BaseEnc: " << motorBase->GetEncPosition() << endl;
 		cout << "thing: " << puncher->GetPinStateQuadIdx() << endl;
