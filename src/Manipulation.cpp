@@ -119,12 +119,12 @@ float Manipulation::RadiansToDegrees(float radians)
 
 float Manipulation::BaseOK()
 {
-	return BaseLength() * ::sin(BaseAngle()) + ArmLength() * ::sin(ArmAngle() - BaseAngle());
+	return BaseLength() * ::sin(DegreesToRadians(BaseAngle())) + ArmLength() * ::sin(DegreesToRadians(ArmAngle() - BaseAngle()));
 }
 
 float Manipulation::ArmOK()
 {
-	return -ArmLength() * ::sin(ArmAngle() - BaseAngle());
+	return -ArmLength() * ::sin(DegreesToRadians(ArmAngle() - BaseAngle()));
 }
 
 float Manipulation::X()
@@ -389,28 +389,30 @@ void Manipulation::Process()
 		{
 			limit = 14;
 		}
-
-		if(X() >= limit) //soft limit + distance to bumpers
-		{
-			if(BaseOK() > 0 && BaseMotor->GetSetpoint() - BaseMotor->GetEncPosition() > 0)
-			{
-				BaseMotor->Set(BaseMotor->GetEncPosition());
-			}
-			else if(BaseOK() < 0 && BaseMotor->GetSetpoint() - BaseMotor->GetEncPosition() < 0)
-			{
-				BaseMotor->Set(BaseMotor->GetEncPosition());
-			}
-
-			if(ArmOK() > 0 && ArmMotor->GetSetpoint() - ArmMotor->GetEncPosition() > 0)
-			{
-				ArmMotor->Set(ArmMotor->GetEncPosition());
-			}
-			else if(ArmOK() < 0 && ArmMotor->GetSetpoint() - ArmMotor->GetEncPosition() < 0)
-			{
-				ArmMotor->Set(ArmMotor->GetEncPosition());
-			}
-		}
-		break;
+		cout << "x: " << X() << "\n";
+		cout << "limit: " << BaseOK() << "\n";
+		cout << BaseAngle() << " , " << ArmAngle() << "\n";
+//		if(X() >= limit) //soft limit + distance to bumpers
+//		{
+//			if(BaseOK() > 0 && BaseMotor->GetSetpoint() - BaseMotor->GetEncPosition() > 0)
+//			{
+//				BaseMotor->Set(BaseMotor->GetEncPosition());
+//			}
+//			else if(BaseOK() < 0 && BaseMotor->GetSetpoint() - BaseMotor->GetEncPosition() < 0)
+//			{
+//				BaseMotor->Set(BaseMotor->GetEncPosition());
+//			}
+//
+//			if(ArmOK() > 0 && ArmMotor->GetSetpoint() - ArmMotor->GetEncPosition() > 0)
+//			{
+//				ArmMotor->Set(ArmMotor->GetEncPosition());
+//			}
+//			else if(ArmOK() < 0 && ArmMotor->GetSetpoint() - ArmMotor->GetEncPosition() < 0)
+//			{
+//				ArmMotor->Set(ArmMotor->GetEncPosition());
+//			}
+//		}
+//		break;
 	}
 }
 
