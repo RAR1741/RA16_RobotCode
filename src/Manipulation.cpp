@@ -119,17 +119,17 @@ float Manipulation::RadiansToDegrees(float radians)
 
 float Manipulation::BaseOK()
 {
-	return BaseLength() * ::sin(DegreesToRadians(BaseAngle())) + ArmLength() * ::sin(DegreesToRadians(ArmAngle() - BaseAngle()));
+	return BaseLength() * ::sin(DegreesToRadians(-BaseAngle())) + ArmLength() * ::sin(DegreesToRadians(ArmAngle() - -BaseAngle()));
 }
 
 float Manipulation::ArmOK()
 {
-	return -ArmLength() * ::sin(DegreesToRadians(ArmAngle() - BaseAngle()));
+	return -ArmLength() * ::sin(DegreesToRadians(ArmAngle() - -BaseAngle()));
 }
 
 float Manipulation::X()
 {
-	float theta = BaseAngle();
+	float theta = -BaseAngle();
 	float phi   = ArmAngle();
 
 	return X0() - BaseLength() * ::cos(DegreesToRadians(theta)) +
@@ -392,27 +392,31 @@ void Manipulation::Process()
 		cout << "x: " << X() << "\n";
 		cout << "limit: " << BaseOK() << "\n";
 		cout << BaseAngle() << " , " << ArmAngle() << "\n";
-//		if(X() >= limit) //soft limit + distance to bumpers
+//		if(!ArmLimit->Get() && ArmMotor->GetEncVel() <= 0)
 //		{
-//			if(BaseOK() > 0 && BaseMotor->GetSetpoint() - BaseMotor->GetEncPosition() > 0)
-//			{
-//				BaseMotor->Set(BaseMotor->GetEncPosition());
-//			}
-//			else if(BaseOK() < 0 && BaseMotor->GetSetpoint() - BaseMotor->GetEncPosition() < 0)
-//			{
-//				BaseMotor->Set(BaseMotor->GetEncPosition());
-//			}
-//
-//			if(ArmOK() > 0 && ArmMotor->GetSetpoint() - ArmMotor->GetEncPosition() > 0)
-//			{
-//				ArmMotor->Set(ArmMotor->GetEncPosition());
-//			}
-//			else if(ArmOK() < 0 && ArmMotor->GetSetpoint() - ArmMotor->GetEncPosition() < 0)
-//			{
-//				ArmMotor->Set(ArmMotor->GetEncPosition());
-//			}
+//			ArmMotor->Set(ArmMotor->GetEncPosition());
 //		}
-//		break;
+		if(X() >= limit) //soft limit + distance to bumpers
+		{
+			if(BaseOK() > 0 && BaseMotor->GetSetpoint() - BaseMotor->GetEncPosition() <= 0)
+			{
+				BaseMotor->Set(BaseMotor->GetEncPosition());
+			}
+			else if(BaseOK() < 0 && BaseMotor->GetSetpoint() - BaseMotor->GetEncPosition() >= 0)
+			{
+				BaseMotor->Set(BaseMotor->GetEncPosition());
+			}
+
+			if(ArmOK() > 0 && ArmMotor->GetSetpoint() - ArmMotor->GetEncPosition() >= 0)
+			{
+				ArmMotor->Set(ArmMotor->GetEncPosition());
+			}
+			else if(ArmOK() < 0 && ArmMotor->GetSetpoint() - ArmMotor->GetEncPosition() <= 0)
+			{
+				ArmMotor->Set(ArmMotor->GetEncPosition());
+			}
+		}
+		break;
 	}
 }
 
