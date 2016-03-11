@@ -383,14 +383,14 @@ void Manipulation::Process()
 		float limit;
 		if(isManual)
 		{
-			limit = 13;
+			limit = 12.5;
 		}
 		else
 		{
 			limit = 14;
 		}
 		cout << "x: " << X() << "\n";
-		cout << "limit: " << BaseOK() << "\n";
+		cout << "limit: " << limit << "\n";
 		cout << BaseAngle() << " , " << ArmAngle() << "\n";
 //		if(!ArmLimit->Get() && ArmMotor->GetEncVel() <= 0)
 //		{
