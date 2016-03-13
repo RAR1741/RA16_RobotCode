@@ -39,14 +39,14 @@ void Autonomous::RunAuto()
 			autoTime->Reset();
 			autoTime->Start();
 			drive->HaloDrive(0, -0.6);
-			scoring->SetPredefinedAngle(1);
-			scoring->EnablePID(true);
+			//scoring->SetPredefinedAngle(1);
+			//scoring->EnablePID(true);
 			autonomousState = "going";
 		}
 		else if(State("going"))
 		{
 			drive->HaloDrive(0, -0.6);
-			if(autoTime->Get()>= 3)
+			if(autoTime->Get()>= 2)
 			{
 				autonomousState = "done";
 				scoring->EnablePID(false);
@@ -68,8 +68,8 @@ void Autonomous::RunAuto()
 			autoTime->Reset();
 			autoTime->Start();
 			drive->HaloDrive(0, -0.85);
-			scoring->SetPredefinedAngle(1);
-			scoring->EnablePID(true);
+			//scoring->SetPredefinedAngle(1);
+			//scoring->EnablePID(true);
 			autonomousState = "going";
 		}
 		else if(State("going"))

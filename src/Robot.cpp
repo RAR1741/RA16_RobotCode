@@ -361,6 +361,7 @@ public:
 			arm->Train();
 		}
 
+
 		//manipulation setpoints
 //		if(arm->movementRunning)
 //		{
