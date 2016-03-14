@@ -206,14 +206,17 @@ void Manipulation::Train()
 
 void Manipulation::Set(int in)
 {
-	isManual = false;
-	vector<float> pos;
-	if((unsigned)in < positions.size() && in >= 0)
+	if(this->GetState() == 4)
 	{
-		pos = positions.at(in);
-		cout << "pos: " << pos.at(0) << pos.at(1) << endl;
-		BaseMotor->Set(pos.at(0));
-		ArmMotor->Set(pos.at(1));
+		isManual = false;
+		vector<float>  pos;
+		if((unsigned)in < positions.size() && in >= 0)
+		{
+			pos = positions.at(in);
+			cout << "pos: " << pos.at(0) << pos.at(1) << endl;
+			BaseMotor->Set(pos.at(0));
+			ArmMotor->Set(pos.at(1));
+		}
 	}
 }
 
