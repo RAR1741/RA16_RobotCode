@@ -24,14 +24,20 @@ Manipulation::Manipulation(CANTalon *bMotor, CANTalon *aMotor, DigitalInput *bLi
 	state = kReady;
 	homingTimer = new Timer();
 	ReadPostions();
-	BaseMotor->SetPID(5,0,0);
+	BaseMotor->SetP(5);
+	BaseMotor->SetI(0);
+	BaseMotor->SetD(0);
+	//BaseMotor->SetPID(5,0,0);
 	BaseMotor->Set(0);
 	BaseMotor->SetInverted(false);
 	BaseMotor->SetControlMode(CANTalon::kPosition);
 	BaseMotor->SetEncPosition(0);
 	BaseMotor->Set(0);
 
-	ArmMotor->SetPID(5,0,0);
+	ArmMotor->SetP(5);
+	ArmMotor->SetI(0);
+	ArmMotor->SetD(0);
+	//ArmMotor->SetPID(5,0,0);
 	ArmMotor->Set(0);
 	ArmMotor->SetInverted(false);
 	ArmMotor->SetControlMode(CANTalon::kPosition);
@@ -438,15 +444,13 @@ Manipulation::State Manipulation::GetState()
 void Manipulation::ReloadConfig()
 {
 	ReadPostions(); // XD
-	BaseMotor->SetPID(
-		Config::GetSetting("manip_base_p", 5.0),
-		Config::GetSetting("manip_base_i", 0.001),
-		Config::GetSetting("manip_base_d", 0));
+	BaseMotor->SetP(Config::GetSetting("manip_base_p", 5.0));
+	BaseMotor->SetI(Config::GetSetting("manip_base_i", 0.001));
+	BaseMotor->SetD(Config::GetSetting("manip_base_d", 0));
 
-	ArmMotor->SetPID(
-		Config::GetSetting("manip_arm_p", 5.0),
-		Config::GetSetting("manip_arm_i", 0.001),
-		Config::GetSetting("manip_arm_d", 0));
+	ArmMotor->SetP(Config::GetSetting("manip_arm_p", 5.0));
+	ArmMotor->SetI(Config::GetSetting("manip_arm_i", 0.001));
+	ArmMotor->SetD(Config::GetSetting("manip_arm_d", 0));
 
 	_base_length = Config::GetSetting("manip_base_length", 15);
 	_arm_length =  Config::GetSetting("manip_arm_length", 15);
