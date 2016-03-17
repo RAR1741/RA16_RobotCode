@@ -164,9 +164,13 @@ void Manipulation::GoToXY(float x, float y)
 
 void Manipulation::GoToAngles(float baseDegrees, float armDegrees)
 {
-	isManual = true;
-	BaseMotor->Set(BaseEncoderByDegrees(baseDegrees));
-	ArmMotor->Set(ArmEncoderByDegrees(armDegrees));
+	if(state == Manipulation::kReady)
+	{
+		isManual = true;
+		BaseMotor->Set(BaseEncoderByDegrees(baseDegrees));
+		ArmMotor->Set(ArmEncoderByDegrees(armDegrees));
+	}
+	else { cout << "no don't move" << endl; }
 }
 
 void Manipulation::ReadPostions()
@@ -224,6 +228,7 @@ void Manipulation::Set(int in)
 			ArmMotor->Set(pos.at(1));
 		}
 	}
+	else { cout << "no don't move" << endl; }
 }
 
 void Manipulation::ResetTrain()
@@ -319,6 +324,7 @@ void Manipulation::Home()
 
 bool Manipulation::IsArmHome() {
 	return !(ArmLimit->Get());
+	//return ArmMotor->IsRevLimitSwitchClosed();
 }
 
 bool Manipulation::IsBaseHome() {
