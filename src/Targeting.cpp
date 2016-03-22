@@ -37,6 +37,7 @@
 Targeting::Targeting()
 {
 	m_Server = NULL;
+	trackingBlob = "No data";
 	m_Grip =  NetworkTable::GetTable("Targeting");
 }
 
@@ -46,7 +47,7 @@ std::vector<Target> Targeting::GetTargets()
 	//std::vector<double> xs     = m_Grip->GetNumberArray("myContoursReport/x",    llvm::ArrayRef<double>());
 	//std::vector<double> ys     = m_Grip->GetNumberArray("myContoursReport/y",    llvm::ArrayRef<double>());
 	//std::vector<double> widths = m_Grip->GetNumberArray("myContourReport/width", llvm::ArrayRef<double>());
-
+	trackingBlob = t;
 	std::vector<Target> targets;
 
 	std::stringstream test(t);
@@ -59,4 +60,22 @@ std::vector<Target> Targeting::GetTargets()
 	   targets.push_back(target);
 	}
 	return targets;
+}
+
+void Targeting::SetupLogging(Logger * log)
+{
+	log->AddAttribute("TrackingbBlob");
+}
+
+void Targeting::Log(Logger * log)
+{
+	trackingBlob = m_Grip->GetString("targets", "");
+	if(trackingBlob != "")
+	{
+		log->Log("TrackingBlob", trackingBlob);
+	}
+	else
+	{
+		log->Log("TrackingBlob", "No data");
+	}
 }

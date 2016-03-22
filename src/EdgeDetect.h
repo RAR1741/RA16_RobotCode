@@ -13,6 +13,7 @@ class EdgeDetect
 public:
 	EdgeDetect();
 	bool Check(bool in);
+	bool Check(int in, int expected);
 private:
 	bool state;
 };

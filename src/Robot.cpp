@@ -54,6 +54,7 @@ private:
     AnalogGyro * gyro;
     Targeting *targeting;
     Relay *light;
+    Relay *flashlight;
     DigitalOutput * osciliscope1;
     DigitalOutput * osciliscope2;
     //variables
@@ -61,6 +62,7 @@ private:
     bool lastTrigger;
     bool isForward;
     bool getPos = false;
+    bool flashlightstate = false;
     int bottomHardLimit;
     int DegreesToZero;
     float autoPanP;
@@ -113,6 +115,7 @@ public:
 		gyro = new AnalogGyro(1);// = NULL;
 		targeting = NULL;
 		light = NULL;
+		flashlight = NULL;
 		m_server = NULL;
 		//variables
 		autoPanP = 0;
@@ -174,6 +177,7 @@ public:
 		cout << "Finishing up...";
 		cout << "Initializing targeting..." << endl;
 		light = new Relay(0);
+		flashlight = new Relay(1);
 		targeting = new Targeting();
 		cout << "Targeting initialized" << endl;
 
@@ -211,7 +215,7 @@ public:
 			logthing->Troll(cout);
 			break;
 		}
-		Auto = new Autonomous(drive,arm,score,logger,logTime);
+		Auto = new Autonomous(drive,arm,score,logger,logTime,targeting);
 	}
 
 	void TeleopInit()
@@ -356,10 +360,10 @@ public:
 		}
 
 		//create a trained point
-		if(trainTrigger->Check(op->GetStart()))
-		{
-			arm->Train();
-		}
+//		if(trainTrigger->Check(op->GetStart()))
+//		{
+//			arm->Train();
+//		}
 
 
 		//manipulation setpoints
@@ -405,10 +409,28 @@ public:
 //			arm->ContinueMotion();
 //		}
 
+		if(trainTrigger->Check(driver->GetA()))
+		{
+			flashlightstate = !flashlightstate;
+		}
+
+		if(flashlightstate)
+		{
+			flashlight->Set(Relay::kForward);
+			light->Set(Relay::kForward);
+		}
+		else
+		{
+			flashlight->Set(Relay::kReverse);
+			light->Set(Relay::kReverse);
+		}
 
 		//update scoring and manipulation
 		score->Update();
 		arm->Process();
+
+		//flashlight->Set(Relay::kForward);
+		//->Set(Relay::kForward);
 
 		//testing
 //		cout << "Arm angles:\n";
@@ -430,6 +452,7 @@ public:
 	void DisabledInit()
 	{
 		light->Set(Relay::Value::kOff);
+		flashlight->Set(Relay::kOff);
 		logger->Close();
 	}
 
@@ -490,6 +513,7 @@ public:
 		drive->SetupLogging(logger);
 		score->SetupLogging(logger);
 		arm->SetupLogging(logger);
+		targeting->SetupLogging(logger);
 		logger->WriteAttributes();
 	}
 
@@ -499,6 +523,7 @@ public:
 		drive->Log(logger);
 		score->Log(logger);
 		arm->Log(logger);
+		targeting->Log(logger);
 		logger->WriteLine();
 	}
 

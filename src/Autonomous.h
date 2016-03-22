@@ -12,6 +12,7 @@
 #include "Manipulation.h"
 #include "Scoring.h"
 #include "Logger.h"
+#include "Targeting.h"
 #include <ctime>
 #include <iostream>
 #include <fstream>
@@ -21,7 +22,7 @@ using namespace std;
 class Autonomous
 {
 public:
-	Autonomous(Drive * d, Manipulation * m, Scoring * s, Logger * l, Timer * t);
+	Autonomous(Drive * d, Manipulation * m, Scoring * s, Logger * l, Timer * t, Targeting * tar);
 	~Autonomous();
 
 
@@ -41,6 +42,7 @@ private:
 	Logger * logger;
 	Timer * logtimer;
 	Timer * autoTime;
+	Targeting * targeting;
 
 	string autonomousState = "start";
 	int autonum;

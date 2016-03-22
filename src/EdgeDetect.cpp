@@ -33,3 +33,8 @@ bool EdgeDetect::Check(bool in)
 	}
 	return out;
 }
+
+bool EdgeDetect::Check(int in, int expected)
+{
+
+}

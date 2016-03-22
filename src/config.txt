@@ -5,7 +5,7 @@ holdInc = -25000
 holdFire = -23000
 AnglePos4 = 2810
 AnglePos3 = 2650
-AnglePos2 = 2150
+AnglePos2 = 2135
 AnglePos1 = 1310
 AngleDeg1 = 5
 AngleDeg2 = 10
@@ -47,8 +47,8 @@ manip_arm_length  = 16.5
 autonum = 2
 #1 = terrain
 #2 = moat 
-#3 = DONT RUN
-#4 = low bar
+#3 = low bar
+#4 = DONT RUN
 
 isPrototype = 1
 
