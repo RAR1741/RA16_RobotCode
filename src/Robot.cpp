@@ -73,6 +73,9 @@ private:
     std::string profile = "everything";
     uint8_t jim = false;//This is stupid
     int portmotion[6] = {9,10,11,12,13,14};
+    FakePIDSource *cameraSource;
+    FakePIDOutput *driveOutput;
+    PIDController *driveAimer;
 public:
 	Robot()
 	{
@@ -127,6 +130,8 @@ public:
 		triggerToggle = false;
 		lastTrigger = false;
 		isForward = true;
+
+
 		//targeting = NULL;
 	};
 
@@ -198,6 +203,15 @@ public:
 		ReloadConfig();
 		cout << "Config reloaded." << endl;
 
+		cameraSource = new FakePIDSource();
+		driveOutput = new FakePIDOutput();
+		driveAimer = new PIDController(Config::GetSetting("AutoAimP", 0.04),
+									   Config::GetSetting("AutoAimI", 0.00),
+									   Config::GetSetting("AutoAimD", 0.00),
+									   cameraSource,
+									   driveOutput
+				);
+
 		cout << "Done!" << endl;
 
 		srand(time(NULL));
@@ -238,6 +252,9 @@ public:
 		if(driver->GetRightBumper())//Full speed mode
 		{
 			drive->HaloDrive(Deadband(driver->GetRightX())* 0.7, forward(Deadband(driver->GetLeftY())));
+			if (driveAimer->IsEnabled()) {
+				driveAimer->Disable();
+			}
 		}
 		else if(driver->GetLeftBumper())//Targeting mode
 		{
@@ -245,6 +262,9 @@ public:
 			targets = targeting->GetTargets();
 			if(targets.size() != 0)
 			{
+				if (!driveAimer->IsEnabled()) {
+					driveAimer->Enable();
+				}
 				Target closest = targets.at(0);
 				for (unsigned int i = 0; i < targets.size(); i++)
 				{
@@ -253,11 +273,16 @@ public:
 						closest = targets.at(i);
 					}
 				}
-				drive->HaloDrive(-autoPanP * closest.Pan(), 0);
+				cameraSource->PIDSet(closest.Pan());
+				float output = driveOutput->PIDGet();
+				drive->HaloDrive(output, 0);
 				//aimLoop->SetSetpoint(targetDegreeToTicks(closest.Tilt()) / 800 + autoAimOffset);
 			}
 			else
 			{
+				if (driveAimer->IsEnabled()) {
+					driveAimer->Disable();
+				}
 				drive->HaloDrive(0,0);
 			}
 		}

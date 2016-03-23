@@ -19,5 +19,7 @@
 #include "Target.h"
 #include "Targeting.h"
 #include "EdgeDetect.h"
+#include "FakePIDOutput.h"
+#include "FakePIDSource.h"
 
 #endif /* SRC_ROBOTHEADER_H_ */
