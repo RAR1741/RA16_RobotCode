@@ -22,9 +22,9 @@ autoAimOffset = 0
 encoderTicksPerDegree = 10.78
 bottomHardLimit = 3635
 degreesToZero = 10
-AutoAimP = 0.04
+AutoAimP = 0.11
 AutoAimI = 0.00
-AutoAimD = 0.00
+AutoAimD = 0.000
 #819200
 
 # Arm Base

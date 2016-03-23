@@ -57,6 +57,8 @@ private:
     Relay *flashlight;
     DigitalOutput * osciliscope1;
     DigitalOutput * osciliscope2;
+    //Targeting
+    PIDController * autoLR;
     //variables
     bool triggerToggle;
     bool lastTrigger;
@@ -133,6 +135,7 @@ public:
 
 
 		//targeting = NULL;
+		autoLR = NULL;
 	};
 
 	void RobotInit()
@@ -211,6 +214,9 @@ public:
 									   cameraSource,
 									   driveOutput
 				);
+		driveAimer->SetInputRange(-24,24);
+		driveAimer->SetOutputRange(-.3,.3);
+		driveAimer->SetAbsoluteTolerance(.5);
 
 		cout << "Done!" << endl;
 
@@ -275,7 +281,7 @@ public:
 				}
 				cameraSource->PIDSet(closest.Pan());
 				float output = driveOutput->PIDGet();
-				drive->HaloDrive(output, 0);
+				drive->TankDrive(output, 0);
 				//aimLoop->SetSetpoint(targetDegreeToTicks(closest.Tilt()) / 800 + autoAimOffset);
 			}
 			else
