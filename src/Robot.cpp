@@ -136,9 +136,8 @@ public:
 		triggerToggle = false;
 		lastTrigger = false;
 		isForward = true;
-
-
 		//targeting = NULL;
+		driveAimer = NULL;
 	};
 
 	void RobotInit()
@@ -507,10 +506,12 @@ public:
 	void TestInit()
 	{
 		StartLogging("test", logger);
+		light->Set(Relay::Value::kForward);
 	}
 
 	void TestPeriodic()
 	{
+		light->Set(Relay::Value::kForward);
 		tempLogTime = logTime->Get();
 		Log(tempLogTime);
 	}

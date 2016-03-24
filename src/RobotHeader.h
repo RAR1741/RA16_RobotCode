@@ -21,5 +21,6 @@
 #include "EdgeDetect.h"
 #include "FakePIDOutput.h"
 #include "FakePIDSource.h"
+#include "Dashboard.h"
 
 #endif /* SRC_ROBOTHEADER_H_ */
