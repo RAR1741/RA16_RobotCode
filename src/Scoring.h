@@ -77,6 +77,7 @@ private:
 	int encPos2;
 	int encPos3;
 	int encPos4;
+	int encPos5;
 	int degPos1;
 	int degPos2;
 	int degPos3;

@@ -175,12 +175,12 @@ void Autonomous::RunAuto()
 			autoTime->Start();
 			drive->HaloDrive(0,0);
 			scoring->EnablePID(false);
-			scoring->SetPredefinedAngle(1);
+			scoring->SetPredefinedAngle(4);
 			autonomousState = "going";
 		}
 		else if(State("going"))
 		{
-			scoring->SetPredefinedAngle(1);
+			scoring->SetPredefinedAngle(4);
 			scoring->EnablePID(true);
 			if(autoTime->Get() >= 4)
 			{
@@ -192,7 +192,7 @@ void Autonomous::RunAuto()
 		}
 		else if(State("firing"))
 		{
-			scoring->SetPredefinedAngle(1);
+			scoring->SetPredefinedAngle(4);
 			scoring->EnablePID(true);
 			scoring->Load();
 			if(autoTime->Get() >= 2)

@@ -3,6 +3,8 @@ flyWheelRatio = 4
 holdStart = -92000
 holdInc = -25000
 holdFire = -23000
+#angle 5 is 41 degrees
+AnglePos5 = 2220
 AnglePos4 = 2810
 AnglePos3 = 2650
 AnglePos2 = 2135

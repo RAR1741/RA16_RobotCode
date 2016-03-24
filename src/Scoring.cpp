@@ -40,6 +40,7 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	encPos2 = Config::GetSetting("AnglePos2", 2900);
 	encPos3 = Config::GetSetting("AnglePos3", 3250);
 	encPos4 = Config::GetSetting("AnglePos4", 3480);
+	encPos5 = Config::GetSetting("AnglePos5", 2140);
 	degPos1 = Config::GetSetting("AngleDeg1", 2750);
 	degPos2 = Config::GetSetting("AngleDeg2", 2900);
 	degPos3 = Config::GetSetting("AngleDeg3", 3250);
@@ -318,6 +319,9 @@ void Scoring::SetPredefinedAngle(int posNum)
 	case 3:
 		AimLoop->SetSetpoint(ValueToVoltage(encPos4 + offset));
 		break;
+	case 4:
+		AimLoop->SetSetpoint(ValueToVoltage(encPos5 + offset));
+		break;
 	default:
 		break;
 	}
@@ -358,6 +362,7 @@ void Scoring::ReloadConfig()
 	encPos2 = Config::GetSetting("AnglePos2", 2000);
 	encPos3 = Config::GetSetting("AnglePos3", 2400);
 	encPos4 = Config::GetSetting("AnglePos4", 2680);
+	encPos5 = Config::GetSetting("AnglePos5", 2140);
 	degPos1 = Config::GetSetting("AngleDeg1", 2750);
 	degPos2 = Config::GetSetting("AngleDeg2", 2900);
 	degPos3 = Config::GetSetting("AngleDeg3", 3250);
