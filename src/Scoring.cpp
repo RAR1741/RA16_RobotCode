@@ -169,6 +169,16 @@ void Scoring::Update()
 	}
 }
 
+void Scoring::SetEncPos(int encPos)
+{
+	TensionMotor->SetPosition(encPos);
+}
+
+void Scoring::SetFireState(Scoring::State State)
+{
+	state = State;
+}
+
 void Scoring::Load()
 {
 	if(state == kWaiting)

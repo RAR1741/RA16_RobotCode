@@ -46,12 +46,12 @@ manip_y0 = 11
 manip_base_length = 19
 manip_arm_length  = 16.5
 
-autonum = 2
+autonum = 5
 #1 = terrain
 #2 = moat 
 #3 = low bar
 #4 = DONT RUN
-
+#5 = spybox Fire sit still
 isPrototype = 1
 
 #819200

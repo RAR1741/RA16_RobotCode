@@ -13,6 +13,9 @@
 #include "Scoring.h"
 #include "Logger.h"
 #include "Targeting.h"
+#include "RobotHeader.h"
+#include "FakePIDOutput.h"
+#include "FakePIDSource.h"
 #include <ctime>
 #include <iostream>
 #include <fstream>
@@ -22,7 +25,7 @@ using namespace std;
 class Autonomous
 {
 public:
-	Autonomous(Drive * d, Manipulation * m, Scoring * s, Logger * l, Timer * t, Targeting * tar);
+	Autonomous(Drive * d, Manipulation * m, Scoring * s, Logger * l, Timer * t, Targeting * tar, FakePIDOutput * fpido, FakePIDSource * fpids, PIDController * pidc);
 	~Autonomous();
 
 
@@ -36,6 +39,9 @@ public:
 
 private:
 	bool State(string state);
+	FakePIDOutput * FPIDO;
+	FakePIDSource * FPIDS;
+	PIDController * PIDC;
 	Drive * drive;
 	Manipulation * manipulation;
 	Scoring * scoring;

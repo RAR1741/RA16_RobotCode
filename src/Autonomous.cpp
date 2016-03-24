@@ -13,8 +13,11 @@
 #include <iostream>
 using namespace std;
 
-Autonomous::Autonomous(Drive * d, Manipulation * m, Scoring * s, Logger * l, Timer * t, Targeting * tar)
+Autonomous::Autonomous(Drive * d, Manipulation * m, Scoring * s, Logger * l, Timer * t, Targeting * tar, FakePIDOutput * fpido, FakePIDSource * fpids, PIDController * pidc)
 {
+	FPIDO = fpido;
+	FPIDS = fpids;
+	PIDC = pidc;
 	drive = d;
 	manipulation = m;
 	scoring = s;
@@ -32,6 +35,7 @@ Autonomous::~Autonomous()
 
 void Autonomous::RunAuto()
 {
+	scoring->Update();
 	switch(autonum)
 	{
 	case 1:
@@ -165,6 +169,43 @@ void Autonomous::RunAuto()
 //		}
 		break;
 	case 5:
+		if(State("start"))
+		{
+			autoTime->Reset();
+			autoTime->Start();
+			drive->HaloDrive(0,0);
+			scoring->EnablePID(false);
+			scoring->SetPredefinedAngle(1);
+			autonomousState = "going";
+		}
+		else if(State("going"))
+		{
+			scoring->SetPredefinedAngle(1);
+			scoring->EnablePID(true);
+			if(autoTime->Get() >= 4)
+			{
+				scoring->Load();
+				autonomousState = "firing";
+				autoTime->Reset();
+				autoTime->Start();
+			}
+		}
+		else if(State("firing"))
+		{
+			scoring->SetPredefinedAngle(1);
+			scoring->EnablePID(true);
+			scoring->Load();
+			if(autoTime->Get() >= 2)
+			{
+				autonomousState = "done";
+			}
+		}
+		else if(State("done"))
+		{
+			drive->HaloDrive(0,0);
+		}
+		break;
+	case 6:
 			if(State("start"))
 			{
 				autoTime->Reset();
@@ -179,7 +220,7 @@ void Autonomous::RunAuto()
 				drive->HaloDrive(0, -0.6);
 				if(autoTime->Get()>= 2)
 				{
-					autonomousState = "done";
+					autonomousState = "tracking";
 					scoring->EnablePID(false);
 					//drive->FL->SetPosition(0);
 				}
@@ -187,24 +228,33 @@ void Autonomous::RunAuto()
 			else if(State("tracking"))
 			{
 				vector<Target> targets;
-							targets = targeting->GetTargets();
-							if(targets.size() != 0)
-							{
-								Target closest = targets.at(0);
-								for (unsigned int i = 0; i < targets.size(); i++)
-								{
-									if(targets.at(i).Distance() < closest.Distance())
-									{
-										closest = targets.at(i);
-									}
-								}
-								drive->HaloDrive(-0.04 * closest.Pan(), 0);
-								//aimLoop->SetSetpoint(targetDegreeToTicks(closest.Tilt()) / 800 + autoAimOffset);
-							}
-							else
-							{
-								drive->HaloDrive(0,0);
-							}
+				targets = targeting->GetTargets();
+				if(targets.size() != 0)
+				{
+					if (!PIDC->IsEnabled())
+					{
+						PIDC->Enable();
+					}
+					Target closest = targets.at(0);
+					for (unsigned int i = 0; i < targets.size(); i++)
+					{
+						if(targets.at(i).Distance() < closest.Distance())
+						{
+							closest = targets.at(i);
+						}
+					}
+					FPIDS->PIDSet(closest.Pan());
+					float output = FPIDO->PIDGet();
+					drive->TankDrive(output, 0);
+					//aimLoop->SetSetpoint(targetDegreeToTicks(closest.Tilt()) / 800 + autoAimOffset);
+				}
+				else
+				{
+					if (PIDC->IsEnabled()) {
+						PIDC->Disable();
+					}
+					drive->HaloDrive(0,0);
+				}
 			}
 			else if(State("tracking"))
 			{

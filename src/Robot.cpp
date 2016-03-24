@@ -58,7 +58,7 @@ private:
     DigitalOutput * osciliscope1;
     DigitalOutput * osciliscope2;
     //Targeting
-    PIDController * autoLR;
+    BuiltInAccelerometer * acceler;
     //variables
     bool triggerToggle;
     bool lastTrigger;
@@ -81,6 +81,9 @@ private:
 public:
 	Robot()
 	{
+		cameraSource = NULL;
+		driveOutput = NULL;
+		driveAimer = NULL;
 		Auto = NULL;
 		//controllers
 		driver = NULL;
@@ -122,6 +125,7 @@ public:
 		light = NULL;
 		flashlight = NULL;
 		m_server = NULL;
+		acceler = NULL;
 		//variables
 		autoPanP = 0;
 		encoderTicksPerDegree = 0;
@@ -135,7 +139,6 @@ public:
 
 
 		//targeting = NULL;
-		autoLR = NULL;
 	};
 
 	void RobotInit()
@@ -212,11 +215,12 @@ public:
 									   Config::GetSetting("AutoAimI", 0.00),
 									   Config::GetSetting("AutoAimD", 0.00),
 									   cameraSource,
-									   driveOutput
-				);
+									   driveOutput);
 		driveAimer->SetInputRange(-24,24);
 		driveAimer->SetOutputRange(-.3,.3);
 		driveAimer->SetAbsoluteTolerance(.5);
+
+		acceler = new BuiltInAccelerometer();
 
 		cout << "Done!" << endl;
 
@@ -235,7 +239,7 @@ public:
 			logthing->Troll(cout);
 			break;
 		}
-		Auto = new Autonomous(drive,arm,score,logger,logTime,targeting);
+		Auto = new Autonomous(drive,arm,score,logger,logTime,targeting,driveOutput,cameraSource,driveAimer);
 	}
 
 	void TeleopInit()
@@ -541,6 +545,9 @@ public:
 	void SetupLogging()
 	{
 		logger->AddAttribute("Time");
+		logger->AddAttribute("AccX");
+		logger->AddAttribute("AccY");
+		logger->AddAttribute("AccZ");
 		drive->SetupLogging(logger);
 		score->SetupLogging(logger);
 		arm->SetupLogging(logger);
@@ -551,6 +558,9 @@ public:
 	void Log(float time)
 	{
 		logger->Log("Time", time);
+		logger->Log("AccX", acceler->GetX());
+		logger->Log("AccY", acceler->GetY());
+		logger->Log("AccZ", acceler->GetZ());
 		drive->Log(logger);
 		score->Log(logger);
 		arm->Log(logger);

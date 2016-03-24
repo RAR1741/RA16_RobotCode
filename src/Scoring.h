@@ -45,6 +45,8 @@ public:
 	float ValueToVoltage(float value);
 	float DegreeToEnc(float value);
 	void SetFlySpeed(float speed);
+	void SetFireState(Scoring::State State);
+	void SetEncPos(int encPos);
 	void Load();
 	void Fire();
 	void ReloadConfig();
