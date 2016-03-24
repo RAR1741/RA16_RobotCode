@@ -38,7 +38,7 @@ Targeting::Targeting()
 {
 	m_Server = NULL;
 	trackingBlob = "No data";
-	m_Grip =  NetworkTable::GetTable("Targeting");
+	m_Grip = NetworkTable::GetTable("Targeting");
 }
 
 std::vector<Target> Targeting::GetTargets()
