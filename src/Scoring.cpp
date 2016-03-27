@@ -58,7 +58,7 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	}
 	// Set up tension motor
 	TensionMotor->SetControlMode(CANTalon::kPercentVbus);
-	TensionMotor->EnableZeroSensorPositionOnIndex(true, false);
+	TensionMotor->EnableZeroSensorPositionOnIndex(false, true);
 	TensionMotor->SetStatusFrameRateMs(CANTalon::StatusFrameRate::StatusFrameRateQuadEncoder, 6);
 	TensionMotor->Enable();
 
@@ -112,13 +112,13 @@ void Scoring::Update()
 				cout << "3: " << TensionMotor->GetEncPosition() << endl;
 				TensionMotor->Set(-.45);
 			}
-			else if(TensionMotor->GetEncPosition() < start + (3 * inc))
+			else if(TensionMotor->GetEncPosition() > start + (3 * inc))
 			{
 				cout << "4: " << TensionMotor->GetEncPosition() << endl;
 				TensionMotor->Set(-.3);
 			}
 			//TensionMotor->Set(.35);//Get to Exact Position
-			if(TensionMotor->GetEncPosition() < start + (3 * inc))
+			else if(TensionMotor->GetEncPosition() < start + (3 * inc))
 			{
 				cout << "switched" << endl;
 				TensionMotor->Set(0);
@@ -152,7 +152,7 @@ void Scoring::Update()
 			break;
 		case Scoring::State::kFiring:
 			TensionMotor->Set(0);
-			if(fireTimer->Get() >= 1.5)//wait 1.5 seconds to go to next state
+			if(fireTimer->Get() >= 0.5)//wait 1.5 seconds to go to next state
 			{
 				state = kReset;
 			}

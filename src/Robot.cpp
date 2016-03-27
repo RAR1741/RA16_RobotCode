@@ -19,6 +19,7 @@ private:
 	//controllers
 	Gamepad *driver;
 	Gamepad *op;
+	EdgeDetect * trig;
 	EdgeDetect * trainTrigger;
 	//drivetrain
 	CANTalon * motorFL;
@@ -71,6 +72,7 @@ private:
     float encoderTicksPerDegree;
     float tempLogTime;
     int autoAimOffset;
+    bool lightCam;
     char * nope = '\0';
     std::string profile = "everything";
     uint8_t jim = false;//This is stupid
@@ -81,6 +83,7 @@ private:
 public:
 	Robot()
 	{
+		trig = NULL;
 		cameraSource = NULL;
 		driveOutput = NULL;
 		driveAimer = NULL;
@@ -136,6 +139,7 @@ public:
 		triggerToggle = false;
 		lastTrigger = false;
 		isForward = true;
+		lightCam = true;
 		//targeting = NULL;
 		driveAimer = NULL;
 	};
@@ -189,6 +193,7 @@ public:
 		light = new Relay(0);
 		flashlight = new Relay(1);
 		targeting = new Targeting();
+		trig = new EdgeDetect();
 		cout << "Targeting initialized" << endl;
 
 		cout << "Initializing driver/op input..." << endl;
@@ -261,17 +266,21 @@ public:
 		if(driver->GetRightBumper())//Full speed mode
 		{
 			drive->HaloDrive(Deadband(driver->GetRightX())* 0.7, forward(Deadband(driver->GetLeftY())));
-			if (driveAimer->IsEnabled()) {
+			if (driveAimer->IsEnabled())
+			{
 				driveAimer->Disable();
 			}
 		}
 		else if(driver->GetLeftBumper())//Targeting mode
 		{
+			cout << "Thing 1" << endl;
+			//light->Set(Relay::kForward);
 			vector<Target> targets;
 			targets = targeting->GetTargets();
 			if(targets.size() != 0)
 			{
-				if (!driveAimer->IsEnabled()) {
+				if (!driveAimer->IsEnabled())
+				{
 					driveAimer->Enable();
 				}
 				Target closest = targets.at(0);
@@ -282,14 +291,18 @@ public:
 						closest = targets.at(i);
 					}
 				}
-				cameraSource->PIDSet(closest.Pan());
+				cout << closest.Distance() << closest.Pan() << endl;
+				cameraSource->PIDSet(closest.Pan() + autoAimOffset);
+				cout << "Spam" << endl;
 				float output = driveOutput->PIDGet();
 				drive->TankDrive(output, 0);
 				//aimLoop->SetSetpoint(targetDegreeToTicks(closest.Tilt()) / 800 + autoAimOffset);
 			}
 			else
 			{
-				if (driveAimer->IsEnabled()) {
+				//light->Set(Relay::kReverse);
+				if (driveAimer->IsEnabled())
+				{
 					driveAimer->Disable();
 				}
 				drive->HaloDrive(0,0);
@@ -297,6 +310,7 @@ public:
 		}
 		else //normal drive mode
 		{
+			//light->Set(Relay::kReverse);
 			drive->HaloDrive(Deadband(driver->GetRightX()) * 0.7, forward(Deadband(driver->GetLeftY() * 0.6)));
 		}
 
@@ -388,10 +402,10 @@ public:
 		}
 
 		//reset training
-		if(op->GetBack())
-		{
-			arm->ResetTrain();
-		}
+//		if(op->GetBack())
+//		{
+//			arm->ResetTrain();
+//		}
 
 		//create a trained point
 //		if(trainTrigger->Check(op->GetStart()))
@@ -447,16 +461,29 @@ public:
 		{
 			flashlightstate = !flashlightstate;
 		}
-
+		if(trig->Check(driver->GetY()))
+		{
+			lightCam = !lightCam;
+		}
 		if(flashlightstate)
 		{
 			flashlight->Set(Relay::kForward);
-			light->Set(Relay::kForward);
+			//light->Set(Relay::kForward);
 		}
 		else
 		{
 			flashlight->Set(Relay::kReverse);
+			//light->Set(Relay::kReverse);
+		}
+		if(lightCam)
+		{
+			light->Set(Relay::kForward);
+			//light->Set(Relay::kForward);
+		}
+		else
+		{
 			light->Set(Relay::kReverse);
+			//light->Set(Relay::kReverse);
 		}
 
 		//update scoring and manipulation

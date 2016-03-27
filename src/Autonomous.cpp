@@ -188,13 +188,13 @@ void Autonomous::RunAuto()
 				autonomousState = "firing";
 				autoTime->Reset();
 				autoTime->Start();
+				//scoring->Load();
 			}
 		}
 		else if(State("firing"))
 		{
 			scoring->SetPredefinedAngle(4);
 			scoring->EnablePID(true);
-			scoring->Load();
 			if(autoTime->Get() >= 2)
 			{
 				autonomousState = "done";
