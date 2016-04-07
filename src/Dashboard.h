@@ -17,6 +17,10 @@ public:
 	void WriteBool(string name, bool write);
 	void WriteString(string name, string write);
 	void WriteDouble(string name, double write);
+	bool ReadBool(string name, bool rDefault);
+	string ReadString(string name, string rDefault);
+	double ReadDouble(string number, double rDefault);
+	bool CheckTrigger(string name);
 private:
 	std::shared_ptr<NetworkTable> station;
 };
