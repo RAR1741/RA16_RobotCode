@@ -48,7 +48,7 @@ bool Dashboard::CheckTrigger(string name)
 {
 	if(station->GetBoolean(name, false))
 	{
-		station->PutBoolean(name, true);
+		station->PutBoolean(name, false);
 		return true;
 	}
 	else
