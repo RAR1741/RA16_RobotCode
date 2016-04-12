@@ -49,6 +49,8 @@ private:
     Logger * OpLog;
     Timer *logTime;
     //misc
+    CANTalon * winch;
+    CANTalon * climbAngle;
     OutputLog * logthing = new OutputLog();
     CameraServer * m_server;
 	LiveWindow * lw;
@@ -58,6 +60,7 @@ private:
     Relay *flashlight;
     DigitalOutput * osciliscope1;
     DigitalOutput * osciliscope2;
+    Servo * servo;
     //Targeting
     BuiltInAccelerometer * acceler;
     //variables
@@ -83,6 +86,9 @@ private:
 public:
 	Robot()
 	{
+		climbAngle = NULL;
+		servo = NULL;
+		winch = NULL;
 		trig = NULL;
 		cameraSource = NULL;
 		driveOutput = NULL;
@@ -146,6 +152,9 @@ public:
 
 	void RobotInit()
 	{
+		climbAngle = new CANTalon(21);
+		servo = new Servo(3);
+		servo->Set(-1);
 		cout << "Initializing Drivetrain..." << endl;
 		//Initialize drive motors
 		motorFL = new CANTalon(7);
@@ -194,6 +203,7 @@ public:
 		flashlight = new Relay(1);
 		targeting = new Targeting();
 		trig = new EdgeDetect();
+		winch = new CANTalon(20);
 		cout << "Targeting initialized" << endl;
 
 		cout << "Initializing driver/op input..." << endl;
@@ -370,7 +380,18 @@ public:
 //		{
 //			aimer->Set(0);
 //		}
-
+		if(driver->GetDPad() == Gamepad::kLeft)
+		{
+			winch->Set(.9);
+		}
+		else if(driver->GetDPad() == Gamepad::kRight)
+		{
+			winch->Set(-.9);
+		}
+		else
+		{
+			winch->Set(0);
+		}
 		//set scoring to predefined positions 0-3
 		if(op->GetA())
 		{
@@ -486,6 +507,28 @@ public:
 			//light->Set(Relay::kReverse);
 		}
 
+		if(op->GetStart())
+		{
+			climbAngle->Set(0.2);
+		}
+		else if(op->GetBack())
+		{
+			climbAngle->Set(-0.2);
+		}
+		else
+		{
+			climbAngle->Set(0);
+		}
+
+		if(op->GetLeftBumper())
+		{
+			servo->Set(1);
+		}
+		else
+		{
+			servo->Set(-1);
+		}
+
 		//update scoring and manipulation
 		score->Update();
 		arm->Process();
@@ -511,6 +554,7 @@ public:
 	}
 
 	void DisabledInit()
+
 	{
 		light->Set(Relay::Value::kOff);
 		flashlight->Set(Relay::kOff);
