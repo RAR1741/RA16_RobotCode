@@ -208,21 +208,52 @@ void Autonomous::RunAuto()
 	case 6:
 			if(State("start"))
 			{
+				drive->ResetEnc();
 				autoTime->Reset();
 				autoTime->Start();
-				drive->HaloDrive(0, -0.6);
-				//scoring->SetPredefinedAngle(1);
-				//scoring->EnablePID(true);
+				drive->HaloDrive(0, -0.4);
+				scoring->SetPredefinedAngle(3);
+				scoring->EnablePID(true);
 				autonomousState = "going";
 			}
 			else if(State("going"))
 			{
-				drive->HaloDrive(0, -0.6);
-				if(autoTime->Get()>= 2)
+				drive->HaloDrive(0, -.4);
+				if(drive->GetFREnc() >= 6200)
+				{
+					autonomousState = "turning";
+					scoring->EnablePID(false);
+					autoTime->Reset();
+					autoTime->Start();
+				}
+			}
+			else if(State("turning"))
+			{
+				drive->TankDrive(0, 0.5);
+				if(drive->GetFREnc() >= 7700)
+				{
+					autonomousState = "turning2";
+					scoring->SetPredefinedAngle(1);
+					scoring->EnablePID(true);
+				}
+			}
+			else if(State("turning2"))
+			{
+				drive->TankDrive(0.8, 0.8);
+				if(drive->GetFREnc() >= 8100)
+				{
+					autonomousState = "raising";
+					scoring->SetPredefinedAngle(1);
+					scoring->EnablePID(true);
+				}
+			}
+			else if(State("raising"))
+			{
+				drive->TankDrive(0, 0);
+				if(autoTime->Get()>= 3)
 				{
 					autonomousState = "tracking";
 					scoring->EnablePID(false);
-					//drive->FL->SetPosition(0);
 				}
 			}
 			else if(State("tracking"))
@@ -246,28 +277,26 @@ void Autonomous::RunAuto()
 					FPIDS->PIDSet(closest.Pan());
 					float output = FPIDO->PIDGet();
 					drive->TankDrive(output, 0);
+					if(closest.Pan() <= (Config::GetSetting("autoAimOffset", -2) + 0.5) && closest.Pan() >= (Config::GetSetting("autoAimOffset", -2) - 0.5))
+					{
+						scoring->Load();
+						autonomousState = "done";
+					}
 					//aimLoop->SetSetpoint(targetDegreeToTicks(closest.Tilt()) / 800 + autoAimOffset);
 				}
 				else
 				{
-					if (PIDC->IsEnabled()) {
+					if (PIDC->IsEnabled())
+					{
 						PIDC->Disable();
 					}
 					drive->HaloDrive(0,0);
 				}
 			}
-			else if(State("tracking"))
-			{
-
-			}
 			else if(State("done"))
 			{
 				drive->TankDrive(0,0);
 			}
-	//		else if(autonomousState == "turn")
-	//		{
-	//			drive->TankDrive(0.6, -0.6);
-	//		}
 			break;
 	default:
 		cout << "bad auto" << endl;

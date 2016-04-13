@@ -19,6 +19,8 @@ public:
 	void TankDrive(float l, float r);
 	void Log(Logger * logger);
 	void SetupLogging(Logger * logger);
+	void ResetEnc();
+	double GetFREnc();
 
 	CANTalon * FL;
 	CANTalon * BL;

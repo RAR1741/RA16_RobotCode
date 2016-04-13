@@ -563,12 +563,20 @@ public:
 
 	void AutonomousInit()
 	{
+		motorFR->SetPosition(0);
+		motorFL->SetPosition(0);
+		light->Set(Relay::kForward);
+		flashlight->Set(Relay::kOff);
+		//SetupLogging();
 		StartLogging("auto", logger);
+		SetupLogging();
 		Auto->ResetTime();
 	}
 
 	void AutonomousPeriodic()
 	{
+		light->Set(Relay::kForward);
+		flashlight->Set(Relay::kOff);
 		Auto->RunAuto();
 		tempLogTime = logTime->Get();
 		Log(tempLogTime);
@@ -624,6 +632,7 @@ public:
 		score->SetupLogging(logger);
 		arm->SetupLogging(logger);
 		targeting->SetupLogging(logger);
+		Auto->SetupLogging(logger);
 		logger->WriteAttributes();
 	}
 

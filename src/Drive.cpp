@@ -23,6 +23,17 @@ Drive::Drive(CANTalon * fr, CANTalon * br, CANTalon * fl, CANTalon * bl)
 	BR->SetControlMode(CANTalon::ControlMode::kFollower);
 }
 
+void Drive::ResetEnc()
+{
+	FR->SetPosition(0);
+	FL->SetPosition(0);
+}
+
+double Drive::GetFREnc()
+{
+	return FR->GetEncPosition();
+}
+
 void Drive::HaloDrive(float x, float y)
 {
 	float left = y + x;
