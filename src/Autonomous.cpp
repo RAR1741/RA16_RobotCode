@@ -219,8 +219,9 @@ void Autonomous::RunAuto()
 			else if(State("going"))
 			{
 				drive->HaloDrive(0, -.4);
-				if(drive->GetFREnc() >= 6200)
+				if(drive->GetFREnc() >= 6900)
 				{
+					drive->ResetEnc();
 					autonomousState = "turning";
 					scoring->EnablePID(false);
 					autoTime->Reset();
@@ -230,8 +231,9 @@ void Autonomous::RunAuto()
 			else if(State("turning"))
 			{
 				drive->TankDrive(0, 0.5);
-				if(drive->GetFREnc() >= 7700)
+				if(drive->GetFREnc() >= 100)
 				{
+					drive->ResetEnc();
 					autonomousState = "turning2";
 					scoring->SetPredefinedAngle(1);
 					scoring->EnablePID(true);
@@ -240,8 +242,9 @@ void Autonomous::RunAuto()
 			else if(State("turning2"))
 			{
 				drive->TankDrive(0.8, 0.8);
-				if(drive->GetFREnc() >= 8100)
+				if(drive->GetFREnc() <= -960)
 				{
+					drive->ResetEnc();
 					autonomousState = "raising";
 					scoring->SetPredefinedAngle(1);
 					scoring->EnablePID(true);
@@ -280,7 +283,6 @@ void Autonomous::RunAuto()
 					if(closest.Pan() <= (Config::GetSetting("autoAimOffset", -2) + 0.5) && closest.Pan() >= (Config::GetSetting("autoAimOffset", -2) - 0.5))
 					{
 						scoring->Load();
-						autonomousState = "done";
 					}
 					//aimLoop->SetSetpoint(targetDegreeToTicks(closest.Tilt()) / 800 + autoAimOffset);
 				}
@@ -295,6 +297,7 @@ void Autonomous::RunAuto()
 			}
 			else if(State("done"))
 			{
+				autonomousState = "done";
 				drive->TankDrive(0,0);
 			}
 			break;
