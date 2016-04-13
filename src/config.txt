@@ -55,7 +55,7 @@ autonum = 6
 #4 = DONT RUN
 #5 = spybox Fire sit still
 #6 = Low bar head first high goal
-isPrototype = 1
+isPrototype = 0
 
 #819200
 #2671
