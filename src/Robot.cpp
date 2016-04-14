@@ -563,6 +563,8 @@ public:
 
 	void AutonomousInit()
 	{
+
+		Auto = new Autonomous(drive,arm,score,logger,logTime,targeting,driveOutput,cameraSource,driveAimer);
 		motorFR->SetPosition(0);
 		motorFL->SetPosition(0);
 		light->Set(Relay::kForward);

@@ -25,6 +25,7 @@ Autonomous::Autonomous(Drive * d, Manipulation * m, Scoring * s, Logger * l, Tim
 	logtimer = t;
 	targeting = tar;
 	autoTime = new Timer();
+	autonomousState = "start";
 	ReloadConfig();
 }
 
@@ -242,7 +243,103 @@ void Autonomous::RunAuto()
 			else if(State("turning2"))
 			{
 				drive->TankDrive(0.8, 0.8);
-				if(drive->GetFREnc() <= -960)
+				if(drive->GetFREnc() <= -930)
+				{
+					drive->ResetEnc();
+					autonomousState = "raising";
+					scoring->SetPredefinedAngle(1);
+					scoring->EnablePID(true);
+				}
+			}
+			else if(State("raising"))
+			{
+				drive->TankDrive(0, 0);
+				if(autoTime->Get()>= 3)
+				{
+					autonomousState = "tracking";
+					scoring->EnablePID(false);
+				}
+			}
+			else if(State("tracking"))
+			{
+				vector<Target> targets;
+				targets = targeting->GetTargets();
+				if(targets.size() != 0)
+				{
+					if (!PIDC->IsEnabled())
+					{
+						PIDC->Enable();
+					}
+					Target closest = targets.at(0);
+					for (unsigned int i = 0; i < targets.size(); i++)
+					{
+						if(targets.at(i).Distance() < closest.Distance())
+						{
+							closest = targets.at(i);
+						}
+					}
+					FPIDS->PIDSet(closest.Pan());
+					float output = FPIDO->PIDGet();
+					drive->TankDrive(output, 0);
+					if(closest.Pan() <= (Config::GetSetting("autoAimOffset", -2) + 0.5) && closest.Pan() >= (Config::GetSetting("autoAimOffset", -2) - 0.5))
+					{
+						scoring->Load();
+					}
+					//aimLoop->SetSetpoint(targetDegreeToTicks(closest.Tilt()) / 800 + autoAimOffset);
+				}
+				else
+				{
+					if (PIDC->IsEnabled())
+					{
+						PIDC->Disable();
+					}
+					drive->HaloDrive(0,0);
+				}
+			}
+			else if(State("done"))
+			{
+				autonomousState = "done";
+				drive->TankDrive(0,0);
+			}
+			break;
+	case 7:
+			if(State("start"))
+			{
+				drive->ResetEnc();
+				autoTime->Reset();
+				autoTime->Start();
+				drive->HaloDrive(0, -0.4);
+				scoring->SetPredefinedAngle(2);
+				scoring->EnablePID(true);
+				autonomousState = "lower";
+			}
+			else if(State("lower"))
+			{
+				drive->TankDrive(0, 0);
+				if(autoTime->Get()>= 3)
+				{
+					autoTime->Reset();
+					autoTime->Start();
+					autonomousState = "going";
+					scoring->EnablePID(false);
+				}
+			}
+			else if(State("going"))
+			{
+				drive->HaloDrive(0, .45);
+				if(drive->GetFREnc() <= -6900)
+				{
+					drive->ResetEnc();
+					autonomousState = "turning2";
+					scoring->EnablePID(false);
+					autoTime->Reset();
+					autoTime->Start();
+				}
+			}
+			else if(State("turning2"))
+			{
+				drive->TankDrive(0.8, 0.8);
+				if(drive->GetFREnc() <= -600)
 				{
 					drive->ResetEnc();
 					autonomousState = "raising";
