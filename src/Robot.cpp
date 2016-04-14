@@ -648,6 +648,7 @@ public:
 		score->Log(logger);
 		arm->Log(logger);
 		targeting->Log(logger);
+		Auto->Log(logger);
 		logger->WriteLine();
 	}
 

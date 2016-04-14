@@ -334,12 +334,13 @@ void Autonomous::RunAuto()
 					scoring->EnablePID(false);
 					autoTime->Reset();
 					autoTime->Start();
+					drive->TankDrive(-1, -1);
 				}
 			}
 			else if(State("turning2"))
 			{
 				drive->TankDrive(0.8, 0.8);
-				if(drive->GetFREnc() <= -600)
+				if(drive->GetFREnc() <= -1000)
 				{
 					drive->ResetEnc();
 					autonomousState = "raising";
