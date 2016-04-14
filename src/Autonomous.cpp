@@ -330,17 +330,25 @@ void Autonomous::RunAuto()
 				if(drive->GetFREnc() <= -6900)
 				{
 					drive->ResetEnc();
-					autonomousState = "turning2";
+					autonomousState = "raising";
 					scoring->EnablePID(false);
 					autoTime->Reset();
 					autoTime->Start();
-					drive->TankDrive(-1, -1);
+					drive->HaloDrive(0, -1);
+				}
+			}
+			else if(State("raising"))
+			{
+				if(autoTime->Get()>= .25)
+				{
+					autonomousState = "turning2";
+					scoring->EnablePID(false);
 				}
 			}
 			else if(State("turning2"))
 			{
 				drive->TankDrive(0.8, 0.8);
-				if(drive->GetFREnc() <= -1000)
+				if(drive->GetFREnc() <= -1500)
 				{
 					drive->ResetEnc();
 					autonomousState = "raising";
