@@ -33,22 +33,22 @@ Scoring::Scoring(CANTalon *aMotor, CANTalon *tMotor, Victor *lMotor, Victor *rMo
 	SP = Config::GetSetting("S_S_P", 1);
 	SI = Config::GetSetting("S_S_I", 1);
 	SD = Config::GetSetting("S_S_D", 1);
-	PP = Config::GetSetting("S_P_P", 19);
-	PI = Config::GetSetting("S_P_I", 2);
+	PP = Config::GetSetting("S_P_P", 5.27);
+	PI = Config::GetSetting("S_P_I", 0);
 	PD = Config::GetSetting("S_P_D", 0);
-	encPos1 = Config::GetSetting("AnglePos1", 2750);
-	encPos2 = Config::GetSetting("AnglePos2", 2900);
-	encPos3 = Config::GetSetting("AnglePos3", 3250);
-	encPos4 = Config::GetSetting("AnglePos4", 3480);
-	encPos5 = Config::GetSetting("AnglePos5", 2140);
+	encPos1 = Config::GetSetting("AnglePos1", 1590);
+	encPos2 = Config::GetSetting("AnglePos2", 2130);
+	encPos3 = Config::GetSetting("AnglePos3", 2650);
+	encPos4 = Config::GetSetting("AnglePos4", 2810);
+	encPos5 = Config::GetSetting("AnglePos5", 2220);
 	degPos1 = Config::GetSetting("AngleDeg1", 2750);
 	degPos2 = Config::GetSetting("AngleDeg2", 2900);
 	degPos3 = Config::GetSetting("AngleDeg3", 3250);
 	degPos4 = Config::GetSetting("AngleDeg4", 3480);
-	encHomePos = Config::GetSetting("AngleHomedPos", 1);
-	holdStart = Config::GetSetting("holdStart", -97000);
+	encHomePos = Config::GetSetting("AngleHomedPos", 820000);
+	holdStart = Config::GetSetting("holdStart", -92000);
 	holdInc = Config::GetSetting("holdInc", -25000);
-	holdFire = Config::GetSetting("holdFire", -20000);
+	holdFire = Config::GetSetting("holdFire", -23000);
 	isPrototype = !Config::GetSetting("isPrototype", 0) == 0;
 	{
 		if(isPrototype)
@@ -357,7 +357,7 @@ void Scoring::ReloadConfig()
 	PI = Config::GetSetting("S_P_I", 2);
 	PD = Config::GetSetting("S_P_D", 0);
 	AimLoop->SetPID(PP,PI,PD);
-	offset = Config::GetSetting("S_offset", 200);
+	offset = Config::GetSetting("S_offset", -105);
 	encPos1 = Config::GetSetting("AnglePos1", 1800);
 	encPos2 = Config::GetSetting("AnglePos2", 2000);
 	encPos3 = Config::GetSetting("AnglePos3", 2400);

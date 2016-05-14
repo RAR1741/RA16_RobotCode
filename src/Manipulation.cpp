@@ -450,19 +450,19 @@ Manipulation::State Manipulation::GetState()
 void Manipulation::ReloadConfig()
 {
 	ReadPostions(); // XD
-	BaseMotor->SetP(Config::GetSetting("manip_base_p", 5.0));
-	BaseMotor->SetI(Config::GetSetting("manip_base_i", 0.001));
+	BaseMotor->SetP(Config::GetSetting("manip_base_p", 4));
+	BaseMotor->SetI(Config::GetSetting("manip_base_i", 0));
 	BaseMotor->SetD(Config::GetSetting("manip_base_d", 0));
 
-	ArmMotor->SetP(Config::GetSetting("manip_arm_p", 5.0));
-	ArmMotor->SetI(Config::GetSetting("manip_arm_i", 0.001));
+	ArmMotor->SetP(Config::GetSetting("manip_arm_p", 4));
+	ArmMotor->SetI(Config::GetSetting("manip_arm_i", 0));
 	ArmMotor->SetD(Config::GetSetting("manip_arm_d", 0));
 
-	_base_length = Config::GetSetting("manip_base_length", 15);
-	_arm_length =  Config::GetSetting("manip_arm_length", 15);
+	_base_length = Config::GetSetting("manip_base_length", 19);
+	_arm_length =  Config::GetSetting("manip_arm_length", 16.5);
 
 	_x0 = Config::GetSetting("manip_x0", 6.5);
-	_y0 = Config::GetSetting("manip_y0", 11.5);
+	_y0 = Config::GetSetting("manip_y0", 11);
 }
 
 bool Manipulation::isNear()

@@ -8,7 +8,8 @@ AnglePos5 = 2220
 AnglePos4 = 2810
 AnglePos3 = 2650
 AnglePos2 = 2130
-AnglePos1 = 1590
+AnglePos1 = 1400
+#1590
 AngleDeg1 = 5
 AngleDeg2 = 10
 AngleDeg3 = 15
@@ -46,9 +47,9 @@ manip_x0 = -6.5
 # or .5
 manip_y0 = 11
 manip_base_length = 19
-manip_arm_length  = 16.5
+manip_arm_length  = 15.5
 
-autonum = 7
+autonum = 2
 #1 = terrain
 #2 = moat 
 #3 = low bar

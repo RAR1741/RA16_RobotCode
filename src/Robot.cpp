@@ -153,7 +153,7 @@ public:
 	void RobotInit()
 	{
 		climbAngle = new CANTalon(21);
-		servo = new Servo(3);
+		servo = new Servo(9);
 		servo->Set(-1);
 		cout << "Initializing Drivetrain..." << endl;
 		//Initialize drive motors
@@ -225,7 +225,7 @@ public:
 
 		cameraSource = new FakePIDSource();
 		driveOutput = new FakePIDOutput();
-		driveAimer = new PIDController(Config::GetSetting("AutoAimP", 0.04),
+		driveAimer = new PIDController(Config::GetSetting("AutoAimP", 0.12),
 									   Config::GetSetting("AutoAimI", 0.00),
 									   Config::GetSetting("AutoAimD", 0.00),
 									   cameraSource,
@@ -455,10 +455,10 @@ public:
 			{
 				arm->Set(2);
 			}
-			if(op->GetBack())
-			{
-				arm->StartMotion(0);
-			}
+//			if(op->GetBack())
+//			{
+//				arm->StartMotion(0);
+//			}
 //		}
 //		else
 //		{
@@ -509,11 +509,11 @@ public:
 
 		if(op->GetStart())
 		{
-			climbAngle->Set(0.2);
+			climbAngle->Set(0.5);
 		}
 		else if(op->GetBack())
 		{
-			climbAngle->Set(-0.2);
+			climbAngle->Set(-0.5);
 		}
 		else
 		{

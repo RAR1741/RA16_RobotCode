@@ -281,7 +281,7 @@ void Autonomous::RunAuto()
 					FPIDS->PIDSet(closest.Pan());
 					float output = FPIDO->PIDGet();
 					drive->TankDrive(output, 0);
-					if(closest.Pan() <= (Config::GetSetting("autoAimOffset", -2) + 0.5) && closest.Pan() >= (Config::GetSetting("autoAimOffset", -2) - 0.5))
+					if(closest.Pan() <= (Config::GetSetting("autoAimOffset", -3) + 0.5) && closest.Pan() >= (Config::GetSetting("autoAimOffset", -2) - 0.5))
 					{
 						scoring->Load();
 					}
@@ -329,27 +329,31 @@ void Autonomous::RunAuto()
 				drive->HaloDrive(0, .45);
 				if(drive->GetFREnc() <= -6900)
 				{
-					drive->ResetEnc();
-					autonomousState = "raising";
+					autonomousState = "stop";
 					scoring->EnablePID(false);
 					autoTime->Reset();
 					autoTime->Start();
-					drive->HaloDrive(0, -1);
+					drive->HaloDrive(0, 0);
 				}
 			}
-			else if(State("raising"))
+			else if(State("stop"))
 			{
-				if(autoTime->Get()>= .25)
+				drive->ResetEnc();
+				if(autoTime->Get()>= .5)
 				{
+					autoTime->Reset();
+					autoTime->Start();
 					autonomousState = "turning2";
 					scoring->EnablePID(false);
 				}
 			}
 			else if(State("turning2"))
 			{
-				drive->TankDrive(0.8, 0.8);
-				if(drive->GetFREnc() <= -7000)
+				drive->TankDrive(0.6, 0.6);
+				if(drive->GetFREnc() <= -400)
 				{
+					autoTime->Reset();
+					autoTime->Start();
 					drive->ResetEnc();
 					autonomousState = "raising2";
 					scoring->SetPredefinedAngle(1);
@@ -362,6 +366,8 @@ void Autonomous::RunAuto()
 				if(autoTime->Get()>= 3)
 				{
 					autonomousState = "tracking";
+					autoTime->Reset();
+					autoTime->Start();
 					scoring->EnablePID(false);
 				}
 			}
@@ -386,7 +392,7 @@ void Autonomous::RunAuto()
 					FPIDS->PIDSet(closest.Pan());
 					float output = FPIDO->PIDGet();
 					drive->TankDrive(output, 0);
-					if(closest.Pan() <= (Config::GetSetting("autoAimOffset", -2) + 0.5) && closest.Pan() >= (Config::GetSetting("autoAimOffset", -2) - 0.5))
+					if(closest.Pan() <= (Config::GetSetting("autoAimOffset", -3) + 0.5) && closest.Pan() >= (Config::GetSetting("autoAimOffset", -2) - 0.5))
 					{
 						scoring->Load();
 					}
